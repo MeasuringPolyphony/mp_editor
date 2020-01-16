@@ -1,6 +1,9 @@
+/**
+ * This component contains diva.js and has the staff bounding boxes
+ * rendered over it. This is always visible.
+ */
 import { Component, OnInit } from '@angular/core';
 
-//const Diva = require('diva.js');
 //import * as Diva from 'diva.js';
 declare let Diva;
 

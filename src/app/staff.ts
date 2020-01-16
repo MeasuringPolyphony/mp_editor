@@ -1,3 +1,4 @@
+// The voice a staff belongs to
 enum Voice {
   Triplum,
   Motetus,
@@ -5,6 +6,7 @@ enum Voice {
   Contratenor
 }
 
+// Values for modus, tempus, and prolatio
 enum Mensuration {
   Three,
   Two,
@@ -18,6 +20,10 @@ type BoundingBox = {
   lry: Number;
 }
 
+/**
+ * Class representing a staff that is selected on a canvas.
+ * Should contain all the information about a staff that is available.
+ */
 export class Staff {
   // Information about the contents of the staff
   voice: Voice;

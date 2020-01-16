@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { DivaViewComponent } from './diva-view/diva-view.component';
+import { StaffSelectComponent } from './staff-select/staff-select.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DivaViewComponent
+    DivaViewComponent,
+    StaffSelectComponent
   ],
   imports: [
     BrowserModule

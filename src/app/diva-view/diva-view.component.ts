@@ -42,6 +42,14 @@ export class DivaViewComponent implements OnInit {
     if (evt.shiftKey) {
       this.creatingStaff = true;
       console.log("Mouse down! Shift key down!");
+
+      const activeContainer = document.getElementById('editor-container-' + this.diva.getActivePageIndex().toString()).firstElementChild as SVGSVGElement;
+      const clientPoint = activeContainer.createSVGPoint();
+      clientPoint.x = evt.clientX;
+      clientPoint.y = evt.clientY;
+
+      const transformMatrix = activeContainer.getScreenCTM();
+      this.firstPoint = clientPoint.matrixTransform(transformMatrix.inverse());
     }
   }
 
@@ -49,6 +57,27 @@ export class DivaViewComponent implements OnInit {
     if (this.creatingStaff) {
       console.log("Mouse up!");
       this.creatingStaff = false;
+
+      const pageIndex = this.diva.getActivePageIndex();
+
+      const activeContainer = document.getElementById('editor-container-' + pageIndex.toString()).firstElementChild as SVGSVGElement;
+      const clientPoint = activeContainer.createSVGPoint();
+      clientPoint.x = evt.clientX;
+      clientPoint.y = evt.clientY;
+
+      const transformMatrix = activeContainer.getScreenCTM();
+      const secondPoint = clientPoint.matrixTransform(transformMatrix.inverse());
+
+      const newStaff = new Staff(
+        this.firstPoint.x,
+        this.firstPoint.y,
+        secondPoint.x,
+        secondPoint.y,
+        ""
+      );
+      this.indexMap.get(pageIndex).push(newStaff);
+      this.refreshOverlay(pageIndex);
+      this.firstPoint = null;
     }
   }
 

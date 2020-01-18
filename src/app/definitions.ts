@@ -28,6 +28,15 @@ export type IRI = string;
  * Should contain all the information about a staff that is available.
  */
 export class Staff {
+  constructor(ulx: number, uly: number, lrx: number, lry: number, canvas: string) {
+    this.bbox = { ulx: ulx, uly: uly, lrx: lrx, lry: lry };
+    this.canvas = canvas;
+    this.voice = Voice.Triplum;
+    this.modus = Mensuration.NA;
+    this.tempus = Mensuration.NA;
+    this.prolatio = Mensuration.NA;
+  }
+
   // Information about the contents of the staff
   voice: Voice;
   modus: Mensuration;

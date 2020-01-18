@@ -14,10 +14,10 @@ enum Mensuration {
 }
 
 type BoundingBox = {
-  ulx: Number;
-  uly: Number;
-  lrx: Number;
-  lry: Number;
+  ulx: number;
+  uly: number;
+  lrx: number;
+  lry: number;
 }
 
 /** Typedef to show when something is a IIIF manifest IRI */

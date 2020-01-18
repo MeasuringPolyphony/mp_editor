@@ -14,6 +14,7 @@ declare let Diva;
 })
 export class DivaViewComponent implements OnInit {
   diva: any;
+  creatingStaff: boolean = false;
 
   @Input() iiifManifest: string;
 
@@ -24,6 +25,23 @@ export class DivaViewComponent implements OnInit {
     this.diva = new Diva('diva-wrapper', {
       objectData: this.iiifManifest
     });
+
+    this.diva.disableDragScrollable();
+  }
+
+  mousedownHandler(evt: MouseEvent) {
+    if (evt.shiftKey) {
+      this.creatingStaff = true;
+      console.log("Mouse down! Shift key down!");
+    }
+  }
+
+  mouseupHandler(evt: MouseEvent) {
+    if (this.creatingStaff) {
+      console.log("Mouse up!");
+      this.creatingStaff = false;
+      // Create new staff element
+    }
   }
 
 }

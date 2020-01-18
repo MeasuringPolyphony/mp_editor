@@ -4,6 +4,8 @@
  */
 import { Component, OnInit, Input } from '@angular/core';
 
+import { IRI, Staff } from '../definitions';
+
 //import * as Diva from 'diva.js';
 declare let Diva;
 
@@ -14,9 +16,12 @@ declare let Diva;
 })
 export class DivaViewComponent implements OnInit {
   diva: any;
+  canvas: HTMLCanvasElement;
   creatingStaff: boolean = false;
+  staffMap: Map<IRI, Array<Staff>> = new Map();
+  firstPoint: DOMPoint = null;
 
-  @Input() iiifManifest: string;
+  @Input() iiifManifest: IRI;
 
   constructor() {
   }
@@ -25,8 +30,13 @@ export class DivaViewComponent implements OnInit {
     this.diva = new Diva('diva-wrapper', {
       objectData: this.iiifManifest
     });
+    Diva.Events.subscribe('ViewerDidLoad', this.objectLoaded.bind(this), this.diva.settings.ID);
 
     this.diva.disableDragScrollable();
+  }
+
+  objectLoaded() {
+    this.canvas = document.getElementById('diva-wrapper').getElementsByClassName('diva-viewer-canvas')[0] as HTMLCanvasElement;
   }
 
   mousedownHandler(evt: MouseEvent) {
@@ -40,7 +50,6 @@ export class DivaViewComponent implements OnInit {
     if (this.creatingStaff) {
       console.log("Mouse up!");
       this.creatingStaff = false;
-      // Create new staff element
     }
   }
 

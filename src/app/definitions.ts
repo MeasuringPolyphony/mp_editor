@@ -20,6 +20,9 @@ type BoundingBox = {
   lry: Number;
 }
 
+/** Typedef to show when something is a IIIF manifest IRI */
+export type IRI = string;
+
 /**
  * Class representing a staff that is selected on a canvas.
  * Should contain all the information about a staff that is available.

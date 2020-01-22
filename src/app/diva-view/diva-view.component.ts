@@ -51,6 +51,36 @@ export class DivaViewComponent implements OnInit {
 
       const transformMatrix = activeContainer.getScreenCTM();
       this.firstPoint = clientPoint.matrixTransform(transformMatrix.inverse());
+
+      // Create the initial drawing rect
+      let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', this.firstPoint.x.toString());
+      rect.setAttribute('y', this.firstPoint.y.toString());
+      rect.setAttribute('width', '0');
+      rect.setAttribute('height', '0');
+      rect.setAttribute('opacity', '0.25');
+      rect.id = 'drawing-rect';
+
+      activeContainer.appendChild(rect);
+    }
+  }
+
+  mousemoveHandler(evt: MouseEvent) {
+    if (this.creatingStaff) {
+      const drawingRect = document.getElementById('drawing-rect') as unknown as SVGRectElement;
+      if (drawingRect !== null) {
+        const container = drawingRect.viewportElement as SVGSVGElement;
+        const currentPoint = container.createSVGPoint();
+        currentPoint.x = evt.clientX;
+        currentPoint.y = evt.clientY;
+
+        const transformedPoint = currentPoint.matrixTransform(
+          container.getScreenCTM().inverse()
+        );
+
+        drawingRect.setAttribute('width', (transformedPoint.x - this.firstPoint.x).toString());
+        drawingRect.setAttribute('height', (transformedPoint.y - this.firstPoint.y).toString());
+      }
     }
   }
 

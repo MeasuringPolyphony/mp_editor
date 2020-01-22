@@ -34,6 +34,7 @@ export class DivaViewComponent implements OnInit {
 
     Diva.Events.subscribe('ManifestDidLoad', this.parseCanvases.bind(this), this.diva.settings.ID);
     Diva.Events.subscribe('ActivePageDidChange', this.refreshOverlay.bind(this), this.diva.settings.ID);
+    Diva.Events.subscribe('DocumentDidLoad', this.refreshOverlay.bind(this), this.diva.settings.ID);
 
     this.diva.disableDragScrollable();
   }
@@ -120,12 +121,7 @@ export class DivaViewComponent implements OnInit {
     }
 
     for (const staff of this.indexMap.get(pageIndex)) {
-      const bbox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      bbox.setAttribute('x', staff.bbox.ulx.toString());
-      bbox.setAttribute('y', staff.bbox.uly.toString());
-      bbox.setAttribute('width', (staff.bbox.lrx - staff.bbox.ulx).toString());
-      bbox.setAttribute('height', (staff.bbox.lry - staff.bbox.uly).toString());
-      svgParent.appendChild(bbox);
+      svgParent.appendChild(staff.svg);
     }
 
     pageContainer.appendChild(svgParent);

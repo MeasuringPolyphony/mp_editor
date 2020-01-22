@@ -37,6 +37,16 @@ export class Staff {
     this.prolatio = Mensuration.NA;
   }
 
+  get svg() {
+    let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', this.bbox.ulx.toString());
+    rect.setAttribute('y', this.bbox.uly.toString());
+    rect.setAttribute('width', (this.bbox.lrx - this.bbox.ulx).toString());
+    rect.setAttribute('height', (this.bbox.lry - this.bbox.uly).toString());
+    rect.setAttribute('opacity', '0.25');
+    return rect;
+  }
+
   // Information about the contents of the staff
   voice: Voice;
   modus: Mensuration;

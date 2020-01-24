@@ -15,7 +15,7 @@ npm install -g @angular/cli
 
 ### Running the Editor
 
-To run the editor. run `ng serve` from where this README is. Then open [http://localhost:4200](http://localhost:4200) in the browser.
+To run the editor, run `npm install` and then `ng serve` from where this README is. Then open [http://localhost:4200](http://localhost:4200) in the browser.
 
 ## Development server
 

@@ -2,6 +2,21 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.22.
 
+## Trying it Out
+
+To try this out, ensure you have [Node.js](https://nodejs.org/) installed.
+
+### Angular CLI
+
+In the development stage, this uses [Angular CLI](https://github.com/angular/angular-cli) to run. To install it globally (on your entire system), run
+```shell
+npm install -g @angular/cli
+```
+
+### Running the Editor
+
+To run the editor. run `ng serve` from where this README is. Then open [http://localhost:4200](http://localhost:4200) in the browser.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

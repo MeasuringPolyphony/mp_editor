@@ -4,6 +4,7 @@
  */
 import { Component, OnInit, Input } from '@angular/core';
 
+import { StaffService } from '../staff.service';
 import { IRI, Staff } from '../definitions';
 
 //import * as Diva from 'diva.js';
@@ -19,12 +20,9 @@ export class DivaViewComponent implements OnInit {
   creatingStaff: boolean = false;
   firstPoint: DOMPoint = null;
 
-  // Index Map (map 0-indexes to staves)
-  indexMap: Map<number, Array<Staff>>;
-
   @Input() iiifManifest: IRI;
 
-  constructor() {
+  constructor(private staffService: StaffService) {
   }
 
   ngOnInit() {
@@ -37,6 +35,16 @@ export class DivaViewComponent implements OnInit {
     Diva.Events.subscribe('DocumentDidLoad', this.refreshOverlay.bind(this), this.diva.settings.ID);
 
     this.diva.disableDragScrollable();
+  }
+
+  clickHandler(evt: MouseEvent) {
+    const target = evt.target as Element;
+    if (target.tagName === 'rect') {
+      let staff = this.staffService.getStaffById(target.id);
+      if (staff !== null) {
+        this.staffService.selected = staff;
+      }
+    }
   }
 
   mousedownHandler(evt: MouseEvent) {
@@ -106,7 +114,7 @@ export class DivaViewComponent implements OnInit {
         secondPoint.y,
         ""
       );
-      this.indexMap.get(pageIndex).push(newStaff);
+      this.staffService.addStaff(pageIndex, newStaff);
       this.refreshOverlay(pageIndex);
       this.firstPoint = null;
     }
@@ -150,7 +158,7 @@ export class DivaViewComponent implements OnInit {
       pageContainer.firstChild.remove();
     }
 
-    for (const staff of this.indexMap.get(pageIndex)) {
+    for (const staff of this.staffService.getStavesForIndex(pageIndex)) {
       svgParent.appendChild(staff.svg);
     }
 
@@ -160,11 +168,10 @@ export class DivaViewComponent implements OnInit {
   /** Parse the IIIF manifest and associate each canvas index with an array of staves */
   parseCanvases(manifest: { sequences: { canvases: object[] }[] }) {
     console.log(this.diva);
-    this.indexMap = new Map();
     for (const sequence of manifest.sequences) {
       for (const canvas of sequence.canvases) {
         // Add each canvas and record its zero-based index
-        this.indexMap.set(sequence.canvases.indexOf(canvas), []);
+        this.staffService.initIndex(sequence.canvases.indexOf(canvas));
       }
     }
   }

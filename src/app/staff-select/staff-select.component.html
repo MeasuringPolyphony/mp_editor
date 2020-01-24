@@ -1,1 +1,3 @@
-<p>staff-select works!</p>
+<div *ngIf="staffService.selected">
+    <p>The staff with ID {{staffService.selected.id}} is selected!</p>
+</div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StaffService } from '../staff.service';
 
 @Component({
   selector: 'app-staff-select',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StaffSelectComponent implements OnInit {
 
-  constructor() { }
+  constructor(public staffService: StaffService) { }
 
   ngOnInit() {
   }

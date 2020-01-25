@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 import { Staff } from './definitions';
 
@@ -8,7 +9,8 @@ import { Staff } from './definitions';
 export class StaffService {
 
   stavesByIndex: Map<number, Array<Staff>>;
-  selectedStaff: Staff = null;
+  _selectedStaff: Staff = null;
+  selectedStaff = new Subject<Staff>();
 
   constructor() {
     this.stavesByIndex = new Map();
@@ -29,11 +31,12 @@ export class StaffService {
   }
 
   get selected() {
-    return this.selectedStaff;
+    return this._selectedStaff;
   }
 
   set selected(staff: Staff) {
-    this.selectedStaff = staff;
+    this._selectedStaff = staff;
+    this.selectedStaff.next(staff);
   }
 
   get staves() {

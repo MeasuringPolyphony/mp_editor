@@ -1,18 +1,18 @@
 import { v4 as uuidv4 } from 'uuid';
 
 // The voice a staff belongs to
-enum Voice {
-  Triplum,
-  Motetus,
-  Tenor,
-  Contratenor
+export enum Voice {
+  Triplum='triplum',
+  Motetus='motetus',
+  Tenor='tenor',
+  Contratenor='contratenor'
 }
 
 // Values for modus, tempus, and prolatio
-enum Mensuration {
-  Three,
-  Two,
-  NA
+export enum Mensuration {
+  Three='3',
+  Two='2',
+  NA='N/A'
 }
 
 type BoundingBox = {

@@ -1,3 +1,52 @@
-<div *ngIf="staffService.selected">
-    <p>The staff with ID {{staffService.selected.id}} is selected!</p>
-</div>
+<form [formGroup]="staffForm" (ngSubmit)="onSubmit()" *ngIf="staffService.selected">
+    <h2>Pitch and Duration Entry</h2>
+    <fieldset>
+        <legend>Select Voice:&nbsp;</legend>
+        <input type="radio" id="voice-triplum" formControlName="voice" value="triplum"/>
+        <label for="voice-triplum">Triplum</label>
+        &nbsp;
+        <input type="radio" id="voice-motetus" formControlName="voice" value="motetus"/>
+        <label for="voice-motetus">Motetus</label>
+        &nbsp;
+        <input type="radio" id="voice-tenor" formControlName="voice" value="tenor"/>
+        <label for="voice-tenor">Tenor</label>
+        &nbsp;
+        <input type="radio" id="voice-contratenor" formControlName="voice" value="contratenor"/>
+        <label for="voice-contratenor">Contratenor</label>
+    </fieldset>
+    <h3>Select Mensuration:</h3>
+    <fieldset>
+        <legend>Modus</legend>
+        <input type="radio" id="modus-3" formControlName="modus" value="3"/>
+        <label for="modus-3">3</label>
+        &nbsp;
+        <input type="radio" id="modus-2" formControlName="modus" value="2"/>
+        <label for="modus-2">2</label>
+        &nbsp;
+        <input type="radio" id="modus-na" formControlName="modus" value="N/A"/>
+        <label for="modus-na">N/A</label>
+    </fieldset>
+    <fieldset>
+        <legend>Tempus</legend>
+        <input type="radio" id="tempus-3" formControlName="tempus" value="3"/>
+        <label for="tempus-3">3</label>
+        &nbsp;
+        <input type="radio" id="tempus-2" formControlName="tempus" value="2"/>
+        <label for="tempus-2">2</label>
+        &nbsp;
+        <input type="radio" id="tempus-na" formControlName="tempus" value="N/A"/>
+        <label for="tempus-na">N/A</label>
+    </fieldset>
+    <fieldset>
+        <legend>Prolatio</legend>
+        <input type="radio" id="prolatio-3" formControlName="prolatio" value="3"/>
+        <label for="prolatio-3">3</label>
+        &nbsp;
+        <input type="radio" id="prolatio-2" formControlName="prolatio" value="2"/>
+        <label for="prolatio-2">2</label>
+        &nbsp;
+        <input type="radio" id="prolatio-na" formControlName="prolatio" value="N/A"/>
+        <label for="prolatio-na">N/A</label>
+    </fieldset>
+    <button type="submit" [disabled]="!staffForm.valid">Update Staff</button>
+</form>

@@ -700,3 +700,7 @@ body {
 app-diva-view {
     grid-column: 1 / 3;
 }
+
+app-staff-select {
+    grid-column: 3 / 5;
+}

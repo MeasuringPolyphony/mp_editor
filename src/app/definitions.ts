@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { MusicList } from './musiclist';
+
 // The voice a staff belongs to
 export enum Voice {
   Triplum='triplum',
@@ -38,6 +40,8 @@ export class Staff {
     this.modus = Mensuration.NA;
     this.tempus = Mensuration.NA;
     this.prolatio = Mensuration.NA;
+
+    this.musicList = new MusicList();
   }
 
   get svg() {
@@ -62,4 +66,5 @@ export class Staff {
   bbox: BoundingBox;  // Relative to the canvas
   canvas: String;     // IIIF canvas @id for the page containing this staff.
 
+  musicList: MusicList;
 }

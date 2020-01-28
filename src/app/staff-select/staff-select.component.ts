@@ -4,6 +4,8 @@ import { StaffService } from '../staff.service';
 import { HNPService } from '../hnp.service';
 import { Voice, Mensuration } from '../definitions';
 
+declare let displayHumdrum;
+
 @Component({
   selector: 'app-staff-select',
   templateUrl: './staff-select.component.html',
@@ -11,16 +13,24 @@ import { Voice, Mensuration } from '../definitions';
 })
 export class StaffSelectComponent implements OnInit {
 
-  constructor(public staffService: StaffService, private hnpService: HNPService) { }
+  constructor(private staffService: StaffService, private hnpService: HNPService) { }
 
   ngOnInit() {
     this.staffService.selectedStaff.subscribe({
       next: (staff) => {
         console.log(staff.voice.toString());
+        console.log(staff.musicList.getHumdrumScore());
+        document.getElementById('example').innerHTML = staff.musicList.getHumdrumScore();
         this.staffForm.get('voice').setValue(staff.voice.toString());
         this.staffForm.get('modus').setValue(staff.modus.toString());
         this.staffForm.get('tempus').setValue(staff.tempus.toString());
         this.staffForm.get('prolatio').setValue(staff.prolatio.toString());
+        var options = {
+          scale: 90,
+          spacingNonLinear: 0,
+          source: 'example'
+        };
+        displayHumdrum(options);
       }
     })
   }

@@ -20,6 +20,13 @@
   <!-- For Verovio and humdrum -->
   <script src="https://verovio-script.humdrum.org/scripts/verovio-toolkit.js"></script>
   <script src="https://plugin.humdrum.org/scripts/humdrum-notation-plugin.js"></script>
+  <script type="text/javascript">
+    let options = {
+        humType: 0
+    };
+    var vrvToolkit = new verovio.toolkit();
+    vrvToolkit.setOptions(options);
+  </script>
 </head>
 <body>
   <script src="./assets/diva/diva.js"></script>

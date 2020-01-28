@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { StaffService } from '../staff.service';
+import { HNPService } from '../hnp.service';
 import { Voice, Mensuration } from '../definitions';
 
 @Component({
@@ -10,7 +11,7 @@ import { Voice, Mensuration } from '../definitions';
 })
 export class StaffSelectComponent implements OnInit {
 
-  constructor(public staffService: StaffService) { }
+  constructor(public staffService: StaffService, private hnpService: HNPService) { }
 
   ngOnInit() {
     this.staffService.selectedStaff.subscribe({

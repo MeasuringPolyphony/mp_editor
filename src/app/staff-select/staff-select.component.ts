@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { StaffService } from '../staff.service';
 import { HNPService } from '../hnp.service';
 import { Voice, Mensuration } from '../definitions';
-
-declare let displayHumdrum;
 
 @Component({
   selector: 'app-staff-select',
@@ -12,6 +10,7 @@ declare let displayHumdrum;
   styleUrls: ['./staff-select.component.css']
 })
 export class StaffSelectComponent implements OnInit {
+  @ViewChild('example', {static: false}) container: ElementRef;
 
   constructor(private staffService: StaffService, private hnpService: HNPService) { }
 
@@ -20,17 +19,14 @@ export class StaffSelectComponent implements OnInit {
       next: (staff) => {
         console.log(staff.voice.toString());
         console.log(staff.musicList.getHumdrumScore());
-        document.getElementById('example').innerHTML = staff.musicList.getHumdrumScore();
         this.staffForm.get('voice').setValue(staff.voice.toString());
         this.staffForm.get('modus').setValue(staff.modus.toString());
         this.staffForm.get('tempus').setValue(staff.tempus.toString());
         this.staffForm.get('prolatio').setValue(staff.prolatio.toString());
-        var options = {
-          scale: 90,
-          spacingNonLinear: 0,
-          source: 'example'
-        };
-        displayHumdrum(options);
+        let element = this.hnpService.humdrumToSVG(staff.musicList.getHumdrumScore());
+        console.log(element);
+        this.container.nativeElement.innerHTML = '';
+        this.container.nativeElement.appendChild(element);
       }
     })
   }

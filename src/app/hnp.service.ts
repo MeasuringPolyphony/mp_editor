@@ -1,17 +1,35 @@
 import { Injectable } from '@angular/core';
 
-declare let vrvToolkit;  // Verovio is loaded globally through <script>
+declare let verovio;  // Verovio is loaded globally through <script>
 
 @Injectable({
   providedIn: 'root'
 })
 export class HNPService {
+  vrvToolkit = null;
+  options = null;
 
   constructor() {
+    this.options = {
+      humType: 0,
+      scale: 90,
+      spacingNonLinear: 0,
+      breaks: 'none',
+
+    }
+    this.vrvToolkit = new verovio.toolkit();
+    this.vrvToolkit.setOptions(this.options);
   }
 
   humdrumToMEI(humdrumData: string): string {
-    vrvToolkit.loadData(humdrumData);
-    return vrvToolkit.getMEI(0, 1);
+    this.vrvToolkit.loadData(humdrumData);
+    return this.vrvToolkit.getMEI(0, 1);
+  }
+
+  humdrumToSVG(humdrumData: string): SVGSVGElement {
+    this.vrvToolkit.loadData(humdrumData);
+    let data = this.vrvToolkit.renderToSVG(1);
+    const parser = new DOMParser();
+    return parser.parseFromString(data, 'image/svg+xml').documentElement as unknown as SVGSVGElement;
   }
 }

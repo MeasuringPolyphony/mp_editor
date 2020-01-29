@@ -5,13 +5,13 @@ From: https://github.com/craigsapp/mensural-input/blob/master/scripts/musiclist.
 
 // vim: ts=3
 
-var C_PitchClass = 0;
-var D_PitchClass = 1;
-var E_PitchClass = 2;
-var F_PitchClass = 3;
-var G_PitchClass = 4;
-var A_PitchClass = 5;
-var B_PitchClass = 6;
+export var C_PitchClass = 0;
+export var D_PitchClass = 1;
+export var E_PitchClass = 2;
+export var F_PitchClass = 3;
+export var G_PitchClass = 4;
+export var A_PitchClass = 5;
+export var B_PitchClass = 6;
 
 
 

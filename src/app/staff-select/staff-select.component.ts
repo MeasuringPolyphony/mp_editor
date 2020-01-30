@@ -66,13 +66,14 @@ export class StaffSelectComponent implements OnInit {
     let musicList = this.staffService._selectedStaff.musicList;
     if ((musicList.m_index >=0) && (event.key.length === 1)) {
       if ((event.key >= '0') && (event.key <= '9')) {
-        //processDigit(event.key.toString(), event);
+        this.processDigit(Number(event.key), event);
         event.preventDefault();
         return;
       }
       state = musicList.addTextToCurrentItem(event.key);
       if (state) {
         event.preventDefault();
+        this.updateSVG();
         return;
       }
     }
@@ -108,7 +109,152 @@ export class StaffSelectComponent implements OnInit {
         musicList.addPitchFar(E_PitchClass);
         event.preventDefault();
         break;
+      case 'e':
+        musicList.addPitchNear(E_PitchClass);
+        event.preventDefault();
+        break;
+      case 'F':
+        musicList.addPitchFar(F_PitchClass);
+        event.preventDefault();
+        break;
+      case 'f':
+        musicList.addPitchNear(F_PitchClass);
+        event.preventDefault();
+        break;
+      case 'G':
+        musicList.addPitchFar(G_PitchClass);
+        event.preventDefault();
+        break;
+      case 'g':
+        musicList.addPitchNear(G_PitchClass);
+        event.preventDefault();
+        break;
+      case 'A':
+        musicList.addPitchFar(A_PitchClass);
+        event.preventDefault();
+        break;
+      case 'a':
+        musicList.addPitchNear(A_PitchClass);
+        event.preventDefault();
+        break;
+      case 'B':
+        musicList.addPitchFar(B_PitchClass);
+        event.preventDefault();
+        break;
+      case 'b':
+        musicList.addPitchNear(B_PitchClass);
+        event.preventDefault();
+        break;
+      case 'r':
+      case 'R':
+        musicList.addRest();
+        event.preventDefault();
+        break;
+      case '.':
+        this.processDotKey();
+        event.preventDefault();
+        break;
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        this.processDigit(Number(event.key), event);
+        event.preventDefault();
+        break;
+      case 'Tab':
+        if (event.shiftKey) {
+          musicList.selectBackward();
+        } else {
+          musicList.selectForward();
+        }
+        event.preventDefault();
+        break;
+      case 'ArrowRight':
+        musicList.selectForward();
+        event.preventDefault();
+        break;
+      case 'ArrowLeft':
+        musicList.selectBackward();
+        event.preventDefault();
+        break;
+      case 'ArrowUp':
+        musicList.raisePitch(event.shiftKey ? 7 : 1);
+        event.preventDefault();
+        break;
+      case 'ArrowDown':
+        musicList.lowerPitch(event.shiftKey ? 7 : 1);
+        event.preventDefault();
+        break;
+      case 'End':
+        musicList.goToEndOfList();
+        event.preventDefault();
+        break;
     }
     this.updateSVG();
+  }
+
+  processDigit(digit: number, _event: KeyboardEvent) {
+    let musicList = this.staffService._selectedStaff.musicList;
+    if (musicList.m_list.length === 0) {
+      if (digit !== 3) {
+        musicList.m_rhythm = digit;
+      }
+      return;
+    }
+    var index = musicList.m_index;
+    var ending = false;
+    if (index < 0) {
+      index = musicList.m_list.length - 1;
+      ending = true;
+    }
+    let item = musicList.m_list[index];
+    if (item.m_type === 'clef') {
+      if ((digit >= 1) && (digit <= 5)) {
+        if (digit !== 3) {
+          item.m_clefLine = digit;
+        }
+      }
+      musicList.runNotationCallback();
+      return;
+    }
+    else if (ending) {
+      musicList.m_rhythm = digit;
+    }
+    else if ((item.m_type === 'note') || (item.m_type === 'rest')) {
+      if (!ending) {
+        if (digit !== 3) {
+          item.m_rhyth = digit;
+          musicList.m_index += 1;
+          musicList.m_rhythm = digit;
+          musicList.runNotationCallback();
+        }
+        if (musicList.m_index >= musicList.m_list.length) {
+          musicList.m_index = -1;
+        }
+      }
+    }
+  }
+
+  processDotKey() {
+    let musicList = this.staffService._selectedStaff.musicList;
+    if (musicList.m_list.length === 0) {
+      return;
+    }
+    let index = musicList.m_index;
+    if (index < 0) {
+      index = musicList.m_list.length - 1;
+    }
+    let item = musicList.m_list[index];
+    if (item.m_type === 'note') {
+      item.m_dot = !item.m_dot;
+      musicList.runNotationCallback();
+      return;
+    }
   }
 }

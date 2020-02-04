@@ -50,7 +50,6 @@ export class DivaViewComponent implements OnInit {
   mousedownHandler(evt: MouseEvent) {
     if (evt.shiftKey) {
       this.creatingStaff = true;
-      console.log("Mouse down! Shift key down!");
 
       const activeContainer = document.getElementById('editor-container-' + this.diva.getActivePageIndex().toString()).firstElementChild as SVGSVGElement;
       const clientPoint = activeContainer.createSVGPoint();
@@ -94,7 +93,6 @@ export class DivaViewComponent implements OnInit {
 
   mouseupHandler(evt: MouseEvent) {
     if (this.creatingStaff) {
-      console.log("Mouse up!");
       this.creatingStaff = false;
 
       const pageIndex = this.diva.getActivePageIndex();
@@ -112,7 +110,7 @@ export class DivaViewComponent implements OnInit {
         this.firstPoint.y,
         secondPoint.x,
         secondPoint.y,
-        ""
+        this.diva.getCurrentCanvas()
       );
       this.staffService.addStaff(pageIndex, newStaff);
       this.refreshOverlay(pageIndex);
@@ -132,8 +130,6 @@ export class DivaViewComponent implements OnInit {
       }
     );
     const marginLeft = window.getComputedStyle(inner, null).getPropertyValue('margin-left');
-
-    console.log(this.diva.getPageDimensionsAtCurrentZoomLevel(pageIndex));
 
     // Check if we have a div for this page. Otherwise create one.
     let pageContainer = document.getElementById('editor-container-' + pageIndex.toString());
@@ -167,7 +163,6 @@ export class DivaViewComponent implements OnInit {
 
   /** Parse the IIIF manifest and associate each canvas index with an array of staves */
   parseCanvases(manifest: { sequences: { canvases: object[] }[] }) {
-    console.log(this.diva);
     for (const sequence of manifest.sequences) {
       for (const canvas of sequence.canvases) {
         // Add each canvas and record its zero-based index

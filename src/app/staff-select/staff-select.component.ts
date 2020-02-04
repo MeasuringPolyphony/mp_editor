@@ -18,14 +18,12 @@ export class StaffSelectComponent implements OnInit {
   ngOnInit() {
     this.staffService.selectedStaff.subscribe({
       next: (staff) => {
-        console.log(staff.voice.toString());
         console.log(staff.musicList.getHumdrumScore());
         this.staffForm.get('voice').setValue(staff.voice.toString());
         this.staffForm.get('modus').setValue(staff.modus.toString());
         this.staffForm.get('tempus').setValue(staff.tempus.toString());
         this.staffForm.get('prolatio').setValue(staff.prolatio.toString());
         let element = this.hnpService.humdrumToSVG(staff.musicList.getHumdrumScore());
-        console.log(element);
         this.container.nativeElement.innerHTML = '';
         this.container.nativeElement.appendChild(element);
       }
@@ -47,7 +45,6 @@ export class StaffSelectComponent implements OnInit {
 
   onSubmit() {
     if (this.staffService._selectedStaff !== null) {
-      console.log("Set!");
       this.staffService._selectedStaff.voice = this.staffForm.get('voice').value as Voice;
       this.staffService._selectedStaff.modus = this.staffForm.get('modus').value as Mensuration;
       this.staffService._selectedStaff.tempus = this.staffForm.get('tempus').value as Mensuration;
@@ -58,7 +55,6 @@ export class StaffSelectComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent) {
     if (this.staffService._selectedStaff == null) return;
-    console.log(event);
 
     // Based on processKeypress function in mensural-input
     if (event.metaKey) return;

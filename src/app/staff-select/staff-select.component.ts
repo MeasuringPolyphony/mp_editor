@@ -13,7 +13,7 @@ import { Voice, Mensuration } from '../definitions';
 export class StaffSelectComponent implements OnInit {
   @ViewChild('example', {static: false}) container: ElementRef;
 
-  constructor(private staffService: StaffService, private hnpService: HNPService) { }
+  constructor(public staffService: StaffService, private hnpService: HNPService) { }
 
   ngOnInit() {
     this.staffService.selectedStaff.subscribe({

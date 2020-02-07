@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StaffService } from './staff.service';
-import { Voice, Staff } from './definitions';
+import { Voice, Staff, IRI } from './definitions';
 
 import { v4 as uuid } from 'uuid';
 
@@ -14,8 +14,9 @@ export class MeiService {
   metadata: {
     shortTitle: string,
     composerName: string,
-    userName: string
-  }
+    userName: string,
+    sourceURI: IRI
+  };
 
   constructor(private staffService: StaffService) { }
 
@@ -41,6 +42,36 @@ export class MeiService {
       }
     }
     return meiDoc;
+  }
+
+  _generateHeader(meiDoc: Document) {
+    let meiHead = meiDoc.createElementNS(NAMESPACE, "meiHead");
+    let fileDesc = meiDoc.createElementNS(NAMESPACE, "fileDesc");
+    meiHead.appendChild(fileDesc);
+    let titleStmt = meiDoc.createElementNS(NAMESPACE, "titleStmt");
+    fileDesc.appendChild(titleStmt);
+    let title = meiDoc.createElementNS(NAMESPACE, "title");
+    title.textContent = this.metadata.shortTitle;
+    titleStmt.appendChild(title);
+    let composer = meiDoc.createElementNS(NAMESPACE, "composer");
+    composer.textContent = this.metadata.composerName;
+    titleStmt.appendChild(composer);
+    let respStmt = meiDoc.createElementNS(NAMESPACE, "respStmt");
+    titleStmt.appendChild(respStmt);
+    let persName = meiDoc.createElementNS(NAMESPACE, "persName");
+    persName.textContent = this.metadata.userName;
+    persName.setAttribute("role", "encoder");
+    respStmt.appendChild(persName);
+    let pubStmt = meiDoc.createElementNS(NAMESPACE, "pubStmt");
+    fileDesc.appendChild(pubStmt);
+
+    let sourceDesc = meiDoc.createElementNS(NAMESPACE, "sourceDesc");
+    fileDesc.appendChild(sourceDesc);
+    let source = meiDoc.createElementNS(NAMESPACE, "source");
+    source.setAttribute("target", this.metadata.sourceURI);
+    sourceDesc.appendChild(source);
+
+    return meiHead;
   }
 
   _addPart(meiDoc: Document, staves: Staff[]) {
@@ -97,7 +128,7 @@ export class MeiService {
     let mei = meiDoc.documentElement;
     mei.setAttribute('meiversion', '4.0.1');
     // Create Header
-    let head = meiDoc.createElementNS(NAMESPACE, 'meiHead');
+    let head = this._generateHeader(meiDoc);
     // TODO Add more to header
     mei.appendChild(head);
 

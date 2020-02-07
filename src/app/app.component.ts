@@ -24,7 +24,12 @@ export class AppComponent {
   }
 
   onSetMetadata() {
-    this.meiService.headerData = { shortTitle: this.shortTitle, composerName: this.composerName, userName: this.userName };
+    this.meiService.headerData = {
+      shortTitle: this.shortTitle,
+      composerName: this.composerName,
+      userName: this.userName,
+      sourceURI: this.iiifManifest
+    };
     this.inputStep = AppComponent.InputStep.INPUT;
   }
 }

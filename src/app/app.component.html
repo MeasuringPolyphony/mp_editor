@@ -11,7 +11,21 @@
 <div id="editor-container">
     <app-diva-view [iiifManifest]="iiifManifest"></app-diva-view>
     <div id="right-side">
-        <app-staff-select></app-staff-select>
-        <app-toolbar></app-toolbar>
+        <form *ngIf="inputStep===0" #metadataForm="ngForm" (submit)="onSetMetadata()">
+            <h1>Enter Metadata</h1>
+            <label class="metadataInput">Short Title:&nbsp;
+                <input [(ngModel)]="shortTitle" id="shortTitle" name="shortTitle"/>
+            </label><br>
+            <label class="metadataInput">Composer Name:&nbsp;
+                <input [(ngModel)]="composerName" id="composerName" name="composerName"/>
+            </label><br>
+            <label class="metadataInput">Your Name:&nbsp;
+                <input [(ngModel)]="userName" id="userName" name="userName"/>
+            </label><br>
+            <button type="submit">Submit</button>
+        </form>
+
+        <app-staff-select *ngIf="inputStep===1"></app-staff-select>
+        <app-toolbar *ngIf="inputStep===1"></app-toolbar>
     </div>
 </div>

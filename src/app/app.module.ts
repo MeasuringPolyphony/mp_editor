@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { DivaViewComponent } from './diva-view/diva-view.component';
@@ -17,6 +17,7 @@ import { IonicModule } from '@ionic/angular';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
     IonicModule.forRoot()
   ],

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StaffService } from '../staff.service';
+import { MeiService } from '../mei.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -8,13 +8,13 @@ import { StaffService } from '../staff.service';
 })
 export class ToolbarComponent implements OnInit {
 
-  constructor(private staffService: StaffService) { }
+  constructor(private meiService: MeiService) { }
 
   ngOnInit() {
   }
 
   saveClick() {
-    let mei = this.staffService.generateFullMEI();
+    let mei = this.meiService.generateFullMEI();
     let serializer = new XMLSerializer();
     let content = serializer.serializeToString(mei);
     console.log(content);

@@ -211,6 +211,14 @@ app-diva-view {
     margin: 1em;
 }
 
+.metadataInput {
+    width: 22em;
+}
+
+.metadataInput input {
+    float: right;
+}
+
 /*app-toolbar {
     grid-column: 3 / 5;
 }

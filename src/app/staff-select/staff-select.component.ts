@@ -11,7 +11,7 @@ import { Voice, Mensuration } from '../definitions';
   styleUrls: ['./staff-select.component.css']
 })
 export class StaffSelectComponent implements OnInit {
-  @ViewChild('example', {static: false}) container: ElementRef;
+  @ViewChild('example') container: ElementRef;
 
   constructor(public staffService: StaffService, private hnpService: HNPService) { }
 

@@ -4,10 +4,10 @@ import { MusicList } from './musiclist';
 
 // The voice a staff belongs to
 export enum Voice {
-  Triplum='triplum',
-  Motetus='motetus',
-  Tenor='tenor',
-  Contratenor='contratenor'
+  triplum='triplum',
+  motetus='motetus',
+  tenor='tenor',
+  contratenor='contratenor'
 }
 
 // Values for modus, tempus, and prolatio
@@ -32,11 +32,12 @@ export type IRI = string;
  * Should contain all the information about a staff that is available.
  */
 export class Staff {
-  constructor(ulx: number, uly: number, lrx: number, lry: number, canvas: string) {
+  constructor(ulx: number, uly: number, lrx: number, lry: number, canvas: string, index: number) {
     this.id = uuidv4();
     this.bbox = { ulx: ulx, uly: uly, lrx: lrx, lry: lry };
     this.canvas = canvas;
-    this.voice = Voice.Triplum;
+    this.index = index;
+    this.voice = Voice.triplum;
     this.modus = Mensuration.NA;
     this.tempus = Mensuration.NA;
     this.prolatio = Mensuration.NA;
@@ -55,6 +56,16 @@ export class Staff {
     return rect;
   }
 
+  static compare(staffA: Staff, staffB: Staff): number {
+    let indexDiff = staffA.index - staffB.index;
+    if (indexDiff !== 0) {
+      return indexDiff;
+    }
+    else {
+      return staffA.bbox.uly - staffB.bbox.uly;
+    }
+  }
+
   id: string;
 
   // Information about the contents of the staff
@@ -64,7 +75,8 @@ export class Staff {
   prolatio: Mensuration;
 
   bbox: BoundingBox;  // Relative to the canvas
-  canvas: String;     // IIIF canvas @id for the page containing this staff.
+  canvas: string;     // IIIF canvas @id for the page containing this staff.
+  index: number;      // 0-based page index
 
   musicList: MusicList;
 }

@@ -18,11 +18,6 @@ export class StaffSelectComponent implements OnInit {
   ngOnInit() {
     this.staffService.selectedStaff.subscribe({
       next: (staff) => {
-        console.log(staff.musicList.getHumdrumScore());
-        this.staffForm.get('voice').setValue(staff.voice.toString());
-        this.staffForm.get('modus').setValue(staff.modus.toString());
-        this.staffForm.get('tempus').setValue(staff.tempus.toString());
-        this.staffForm.get('prolatio').setValue(staff.prolatio.toString());
         let element = this.hnpService.humdrumToSVG(staff.musicList.getHumdrumScore());
         this.container.nativeElement.innerHTML = '';
         this.container.nativeElement.appendChild(element);
@@ -42,15 +37,6 @@ export class StaffSelectComponent implements OnInit {
     tempus: new FormControl(''),
     prolatio: new FormControl('')
   });
-
-  onSubmit() {
-    if (this.staffService._selectedStaff !== null) {
-      this.staffService._selectedStaff.voice = this.staffForm.get('voice').value as Voice;
-      this.staffService._selectedStaff.modus = this.staffForm.get('modus').value as Mensuration;
-      this.staffService._selectedStaff.tempus = this.staffForm.get('tempus').value as Mensuration;
-      this.staffService._selectedStaff.prolatio = this.staffForm.get('prolatio').value as Mensuration;
-    }
-  }
 
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent) {

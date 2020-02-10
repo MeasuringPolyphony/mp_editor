@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StaffService } from './staff.service';
+import { HNPService } from './hnp.service';
 import { Voice, Staff, IRI } from './definitions';
 
 import { v4 as uuid } from 'uuid';
@@ -18,7 +19,7 @@ export class MeiService {
     sourceURI: IRI
   };
 
-  constructor(private staffService: StaffService) { }
+  constructor(private hnpService: HNPService, private staffService: StaffService) { }
 
   get headerData() { return this.metadata };
   set headerData(headerObject) {
@@ -115,8 +116,8 @@ export class MeiService {
       let sb = meiDoc.createElementNS(NAMESPACE, "sb");
       sb.setAttribute("facs", zone.getAttribute("xml:id"));
       layer.appendChild(sb);
-      let staffContents: Element[] = this._getStaffContents(meiDoc, staff);
-      staffContents.forEach(child => section.appendChild(child));
+      let staffContents: Element[] = this._getStaffContents(staff);
+      staffContents.forEach(child => layer.appendChild(child));
     }
 
     let parts = meiDoc.querySelector('parts');
@@ -160,9 +161,22 @@ export class MeiService {
     return surface;
   }
 
-  _getStaffContents(meiDoc: XMLDocument, staff: Staff): Element[] {
-    // TODO make this actual MEI
-    return [];
+  _getStaffContents(staff: Staff): Element[] {
+    let rawMei = this.hnpService.humdrumToMEI(staff.musicList.getHumdrumScore());
+    let parser = new DOMParser();
+    let elements: Element[] = [];
+    let humdrumMei = parser.parseFromString(rawMei, 'application/xml');
+    let clef = humdrumMei.querySelector('clef');
+    if (clef !== null) {
+      elements.push(clef);
+    }
+    let layer = humdrumMei.querySelector('layer');
+    if (layer !== null) {
+      for (let element of Array.from(layer.children)) {
+        elements.push(element);
+      }
+    }
+    return elements;
   }
 
   _generateScoreDef(meiDoc: XMLDocument): Element {

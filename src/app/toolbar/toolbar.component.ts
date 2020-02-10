@@ -13,11 +13,13 @@ export class ToolbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  saveClick() {
-    let mei = this.meiService.generateFullMEI();
-    let serializer = new XMLSerializer();
-    let content = serializer.serializeToString(mei);
-    console.log(content);
+  saveClick(evt: MouseEvent) {
+    let target = evt.target as HTMLAnchorElement;
+    const mei = this.meiService.generateFullMEI();
+    const serializer = new XMLSerializer();
+    const content = serializer.serializeToString(mei);
+    const blob = new Blob([content], {type: 'application/xml'});
+    target.setAttribute('href', window.URL.createObjectURL(blob));
   }
 
 }

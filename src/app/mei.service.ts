@@ -100,12 +100,12 @@ export class MeiService {
           .filter(graphic => graphic.getAttribute("target") === staff.canvas);
         if (temp.length > 0) {
           graphic = temp[0];
-          pb.setAttribute("facs", graphic.getAttribute("xml:id"));
+          pb.setAttribute("facs", '#' + graphic.getAttribute("xml:id"));
         }
         else {
           let surface = this._createNewSurface(meiDoc, staff.canvas);
           graphic = surface.querySelector("graphic");
-          pb.setAttribute("facs", graphic.getAttribute("xml:id"));
+          pb.setAttribute("facs", '#' + graphic.getAttribute("xml:id"));
           facsimile.appendChild(surface);
         }
         page = staff.canvas
@@ -114,7 +114,7 @@ export class MeiService {
       let zone = this._createNewZone(meiDoc, staff);
       graphic.appendChild(zone);
       let sb = meiDoc.createElementNS(NAMESPACE, "sb");
-      sb.setAttribute("facs", zone.getAttribute("xml:id"));
+      sb.setAttribute("facs", '#' + zone.getAttribute("xml:id"));
       layer.appendChild(sb);
       let staffContents: Element[] = this._getStaffContents(staff);
       staffContents.forEach(child => layer.appendChild(child));

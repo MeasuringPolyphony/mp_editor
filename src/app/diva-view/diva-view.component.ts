@@ -113,7 +113,11 @@ export class DivaViewComponent implements OnInit {
         this.diva.getCurrentCanvas(),
         this.diva.getActivePageIndex()
       );
-      this.staffService.addStaff(pageIndex, newStaff);
+      // Check for positive height and width before adding
+      if ((secondPoint.x - this.firstPoint.x > 0) &&
+        (secondPoint.y - this.firstPoint.y) > 0) {
+        this.staffService.addStaff(pageIndex, newStaff);
+      }
       this.refreshOverlay(pageIndex);
       this.firstPoint = null;
     }

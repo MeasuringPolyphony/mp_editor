@@ -118,7 +118,14 @@ export class MeiService {
       sb.setAttribute("facs", '#' + zone.getAttribute("xml:id"));
       layer.appendChild(sb);
       let staffContents: Element[] = this._getStaffContents(staff);
-      staffContents.forEach(child => layer.appendChild(child));
+      staffContents.forEach(child => {
+        if (child.hasAttribute("xml:id")) {
+          // Humdrum w Verovio sets deterministic xml:ids.
+          // This is bad™.
+          child.setAttribute("xml:id", "m-" + uuid());
+        }
+        layer.appendChild(child)
+      });
     }
 
     let parts = meiDoc.querySelector('parts');

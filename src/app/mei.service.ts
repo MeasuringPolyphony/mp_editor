@@ -188,6 +188,7 @@ export class MeiService {
     let staffDef = meiDoc.createElementNS(NAMESPACE, "staffDef");
     staffDef.setAttribute("n", "1");
     staffDef.setAttribute("lines", "5");
+    staffDef.setAttribute("notationtype", "mensural.black");
     staffGrp.appendChild(staffDef);
     return scoreDef;
   }

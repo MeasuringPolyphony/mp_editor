@@ -80,9 +80,10 @@ export class MeiService {
 
     staves.sort(Staff.compare);
     let part = meiDoc.createElementNS(NAMESPACE, "part");
-    part.setAttribute("label", staves[0].voice.toString());
     let scoreDef = this._generateScoreDef(meiDoc);
     part.appendChild(scoreDef);
+    let staffDef = scoreDef.querySelector('staffDef');
+    staffDef.setAttribute("label", staves[0].voice.toString());
     let section = meiDoc.createElementNS(NAMESPACE, "section");
     part.appendChild(section);
     let staff = meiDoc.createElementNS(NAMESPACE, "staff");

@@ -208,7 +208,8 @@ MusicList.prototype.addPitchNear = function (dpc) {
 
 MusicList.prototype.getHumdrumScore = function (opts) {
 	var output = [];
-	output.push("**kern\t**text");
+	//output.push("**kern\t**text");
+	output.push("**mens\t**text");
 	var i;
 	var lines;
 	var noteCounter = 0;
@@ -253,6 +254,7 @@ MusicList.prototype.getHumdrumScore = function (opts) {
 	output.push("*-\t*-");
 	if (!options.export) {
 		output.push("!!!RDF**kern: @ = marked note");
+		//output.push("!!!RDF**mens: @ = marked note");
 	}
 
 	var output2 = "";
@@ -626,7 +628,8 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 	if (this.m_type == "rest") {
 		output += this.m_rhythm;
 		if (this.m_dot) {
-			output += ".";
+			// output += ".";
+			output += ":";
 		}
 		output += "r\t.";
 
@@ -636,15 +639,26 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 	// note line
 	var i;
 
-	switch (this.m_rhythm) {
+	/*switch (this.m_rhythm) {
 		case 4: output += "4"; break;
 		case 2: output += "2"; break;
 		case 1: output += "1"; break;
 		case 0: output += "0"; break;
 		case 9: output += "00"; break;
+	}*/
+	switch (this.m_rhythm) {
+		case 7: output += "X"; break;
+		case 9: output += "L"; break;
+		case 0: output += "S"; break;
+		case 1: output += "s"; break;
+		case 2: output += "M"; break;
+		case 4: output += "m"; break;
+		case 6: output += "u"; break;
+		case 8: output += "U"; break;
 	}
 	if (this.m_dot) {
-		output += ".";
+		// output += ".";
+		output += ":";
 	}
 	var pname;
 	switch (this.m_pname) {

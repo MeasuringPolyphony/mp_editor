@@ -44,7 +44,6 @@ export class StaffSelectComponent implements OnInit {
 
     // Based on processKeypress function in mensural-input
     if (event.metaKey) return;
-    var state;
     let musicList = this.staffService._selectedStaff.musicList;
     if ((musicList.m_index >=0) && (event.key.length === 1)) {
       if ((event.key >= '0') && (event.key <= '9')) {
@@ -52,7 +51,7 @@ export class StaffSelectComponent implements OnInit {
         event.preventDefault();
         return;
       }
-      state = musicList.addTextToCurrentItem(event.key);
+      let state = musicList.addTextToCurrentItem(event.key);
       if (state) {
         event.preventDefault();
         this.updateSVG();
@@ -67,116 +66,120 @@ export class StaffSelectComponent implements OnInit {
         musicList.deleteCharacterOnCurrentItem();
       }
       event.preventDefault();
-      return;
     }
-
-    switch (event.key) {
-      case 'C':
-        musicList.addPitchFar(C_PitchClass);
-        event.preventDefault();
-        break;
-      case 'c':
-        musicList.addPitchNear(C_PitchClass);
-        event.preventDefault();
-        break;
-      case 'D':
-        musicList.addPitchFar(D_PitchClass);
-        event.preventDefault();
-        break;
-      case 'd':
-        musicList.addPitchNear(D_PitchClass);
-        event.preventDefault();
-        break;
-      case 'E':
-        musicList.addPitchFar(E_PitchClass);
-        event.preventDefault();
-        break;
-      case 'e':
-        musicList.addPitchNear(E_PitchClass);
-        event.preventDefault();
-        break;
-      case 'F':
-        musicList.addPitchFar(F_PitchClass);
-        event.preventDefault();
-        break;
-      case 'f':
-        musicList.addPitchNear(F_PitchClass);
-        event.preventDefault();
-        break;
-      case 'G':
-        musicList.addPitchFar(G_PitchClass);
-        event.preventDefault();
-        break;
-      case 'g':
-        musicList.addPitchNear(G_PitchClass);
-        event.preventDefault();
-        break;
-      case 'A':
-        musicList.addPitchFar(A_PitchClass);
-        event.preventDefault();
-        break;
-      case 'a':
-        musicList.addPitchNear(A_PitchClass);
-        event.preventDefault();
-        break;
-      case 'B':
-        musicList.addPitchFar(B_PitchClass);
-        event.preventDefault();
-        break;
-      case 'b':
-        musicList.addPitchNear(B_PitchClass);
-        event.preventDefault();
-        break;
-      case 'r':
-      case 'R':
-        musicList.addRest();
-        event.preventDefault();
-        break;
-      case '.':
-        this.processDotKey();
-        event.preventDefault();
-        break;
-      case '0':
-      case '1':
-      case '2':
-      case '3':
-      case '4':
-      case '5':
-      case '6':
-      case '7':
-      case '8':
-      case '9':
-        this.processDigit(Number(event.key), event);
-        event.preventDefault();
-        break;
-      case 'Tab':
-        if (event.shiftKey) {
-          musicList.selectBackward();
-        } else {
+    else if ((musicList.m_index < 0) && (event.key === 'Backspace')) {
+      musicList.removeLastItem();
+      event.preventDefault();
+    }
+    else {
+      switch (event.key) {
+        case 'C':
+          musicList.addPitchFar(C_PitchClass);
+          event.preventDefault();
+          break;
+        case 'c':
+          musicList.addPitchNear(C_PitchClass);
+          event.preventDefault();
+          break;
+        case 'D':
+          musicList.addPitchFar(D_PitchClass);
+          event.preventDefault();
+          break;
+        case 'd':
+          musicList.addPitchNear(D_PitchClass);
+          event.preventDefault();
+          break;
+        case 'E':
+          musicList.addPitchFar(E_PitchClass);
+          event.preventDefault();
+          break;
+        case 'e':
+          musicList.addPitchNear(E_PitchClass);
+          event.preventDefault();
+          break;
+        case 'F':
+          musicList.addPitchFar(F_PitchClass);
+          event.preventDefault();
+          break;
+        case 'f':
+          musicList.addPitchNear(F_PitchClass);
+          event.preventDefault();
+          break;
+        case 'G':
+          musicList.addPitchFar(G_PitchClass);
+          event.preventDefault();
+          break;
+        case 'g':
+          musicList.addPitchNear(G_PitchClass);
+          event.preventDefault();
+          break;
+        case 'A':
+          musicList.addPitchFar(A_PitchClass);
+          event.preventDefault();
+          break;
+        case 'a':
+          musicList.addPitchNear(A_PitchClass);
+          event.preventDefault();
+          break;
+        case 'B':
+          musicList.addPitchFar(B_PitchClass);
+          event.preventDefault();
+          break;
+        case 'b':
+          musicList.addPitchNear(B_PitchClass);
+          event.preventDefault();
+          break;
+        case 'r':
+        case 'R':
+          musicList.addRest();
+          event.preventDefault();
+          break;
+        case '.':
+          this.processDotKey();
+          event.preventDefault();
+          break;
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+          this.processDigit(Number(event.key), event);
+          event.preventDefault();
+          break;
+        case 'Tab':
+          if (event.shiftKey) {
+            musicList.selectBackward();
+          } else {
+            musicList.selectForward();
+          }
+          event.preventDefault();
+          break;
+        case 'ArrowRight':
           musicList.selectForward();
+          event.preventDefault();
+          break;
+        case 'ArrowLeft':
+          musicList.selectBackward();
+          event.preventDefault();
+          break;
+        case 'ArrowUp':
+          musicList.raisePitch(event.shiftKey ? 7 : 1);
+          event.preventDefault();
+          break;
+        case 'ArrowDown':
+          musicList.lowerPitch(event.shiftKey ? 7 : 1);
+          event.preventDefault();
+          break;
+        case 'End':
+          musicList.goToEndOfList();
+          event.preventDefault();
+          break;
         }
-        event.preventDefault();
-        break;
-      case 'ArrowRight':
-        musicList.selectForward();
-        event.preventDefault();
-        break;
-      case 'ArrowLeft':
-        musicList.selectBackward();
-        event.preventDefault();
-        break;
-      case 'ArrowUp':
-        musicList.raisePitch(event.shiftKey ? 7 : 1);
-        event.preventDefault();
-        break;
-      case 'ArrowDown':
-        musicList.lowerPitch(event.shiftKey ? 7 : 1);
-        event.preventDefault();
-        break;
-      case 'End':
-        musicList.goToEndOfList();
-        event.preventDefault();
-        break;
     }
     this.updateSVG();
   }

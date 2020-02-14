@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { DivaViewComponent } from './diva-view/diva-view.component';
 import { StaffSelectComponent } from './staff-select/staff-select.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [
@@ -18,8 +17,7 @@ import { IonicModule } from '@ionic/angular';
   imports: [
     BrowserModule,
     FormsModule,
-    ReactiveFormsModule,
-    IonicModule.forRoot()
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

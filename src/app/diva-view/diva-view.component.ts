@@ -2,7 +2,7 @@
  * This component contains diva.js and has the staff bounding boxes
  * rendered over it. This is always visible.
  */
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, HostListener } from '@angular/core';
 
 import { StaffService } from '../staff.service';
 import { IRI, Staff } from '../definitions';
@@ -35,11 +35,23 @@ export class DivaViewComponent implements OnInit {
     Diva.Events.subscribe('ActivePageDidChange', this.refreshOverlay.bind(this), this.diva.settings.ID);
     Diva.Events.subscribe('DocumentDidLoad', this.refreshOverlay.bind(this), this.diva.settings.ID);
 
-    this.diva.disableDragScrollable();
+    // this.diva.disableDragScrollable();
 
     this.staffService.selectedStaff.subscribe(() => {
       this.refreshOverlay(this.diva.getActivePageIndex());
     });
+  }
+
+  @HostListener('window:keydown.shift', [])
+  handleKeydown() {
+    this.diva.disableDragScrollable();
+  }
+
+  @HostListener('window:keyup.shift', [])
+  handleKeyup() {
+    if (!this.creatingStaff) {
+      this.diva.enableDragScrollable();
+    }
   }
 
   clickHandler(evt: MouseEvent) {
@@ -104,6 +116,7 @@ export class DivaViewComponent implements OnInit {
 
   mouseupHandler(evt: MouseEvent) {
     if (this.creatingStaff) {
+      this.diva.enableDragScrollable();
       this.creatingStaff = false;
 
       const pageIndex = this.diva.getActivePageIndex();

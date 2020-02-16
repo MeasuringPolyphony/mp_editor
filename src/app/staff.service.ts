@@ -27,6 +27,19 @@ export class StaffService {
     }
   }
 
+  triggerDelete() {
+    if (this._selectedStaff !== null) {
+      for (const [_, staves] of this.stavesByIndex) {
+        if (!staves.includes(this._selectedStaff)) {
+          continue;
+        }
+        staves.splice(staves.indexOf(this._selectedStaff), 1);
+        this.selected = null;
+        break;
+      }
+    }
+  }
+
   addStaff(index: number, staff: Staff) {
     this.stavesByIndex.get(index).push(staff);
   }

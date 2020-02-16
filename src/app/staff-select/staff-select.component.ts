@@ -18,8 +18,9 @@ export class StaffSelectComponent implements OnInit {
   ngOnInit() {
     this.staffService.selectedStaff.subscribe({
       next: (staff) => {
-        let element = this.hnpService.humdrumToSVG(staff.musicList.getHumdrumScore());
         this.container.nativeElement.innerHTML = '';
+        if (staff === null) return;
+        let element = this.hnpService.humdrumToSVG(staff.musicList.getHumdrumScore());
         this.container.nativeElement.appendChild(element);
       }
     })

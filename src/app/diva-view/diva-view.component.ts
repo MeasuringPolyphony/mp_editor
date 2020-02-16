@@ -36,6 +36,10 @@ export class DivaViewComponent implements OnInit {
     Diva.Events.subscribe('DocumentDidLoad', this.refreshOverlay.bind(this), this.diva.settings.ID);
 
     this.diva.disableDragScrollable();
+
+    this.staffService.selectedStaff.subscribe(() => {
+      this.refreshOverlay(this.diva.getActivePageIndex());
+    });
   }
 
   clickHandler(evt: MouseEvent) {

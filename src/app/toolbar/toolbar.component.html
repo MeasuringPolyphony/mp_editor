@@ -5,4 +5,7 @@
             <!--<ion-icon name="save"></ion-icon>-->Save to MEI File
         </a>
     </button>
+    <button *ngIf="staffService.selected" (click)="deleteStaff()">
+        Delete Staff
+    </button>
 </div>

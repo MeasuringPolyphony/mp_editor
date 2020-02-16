@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MeiService } from '../mei.service';
+import { StaffService } from '../staff.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -8,7 +9,7 @@ import { MeiService } from '../mei.service';
 })
 export class ToolbarComponent implements OnInit {
 
-  constructor(private meiService: MeiService) { }
+  constructor(private meiService: MeiService, public staffService: StaffService) { }
 
   ngOnInit() {
   }
@@ -20,6 +21,10 @@ export class ToolbarComponent implements OnInit {
     const content = serializer.serializeToString(mei);
     const blob = new Blob([content], {type: 'application/xml'});
     target.setAttribute('href', window.URL.createObjectURL(blob));
+  }
+
+  deleteStaff() {
+    this.staffService.triggerDelete();
   }
 
 }

@@ -16,6 +16,7 @@ export class AppComponent {
   shortTitle = "";
   composerName = "";
   userName = "";
+  notationSubtype = "";
 
   inputStep: AppComponent.InputStep;
 
@@ -28,7 +29,8 @@ export class AppComponent {
       shortTitle: this.shortTitle,
       composerName: this.composerName,
       userName: this.userName,
-      sourceURI: this.iiifManifest
+      sourceURI: this.iiifManifest,
+      notationSubtype: this.notationSubtype
     };
     this.inputStep = AppComponent.InputStep.INPUT;
   }

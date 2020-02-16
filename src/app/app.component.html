@@ -22,6 +22,12 @@
             <label class="metadataInput">Your Name:&nbsp;
                 <input [(ngModel)]="userName" id="userName" name="userName"/>
             </label><br>
+            <label class="metadataInput">Notation Subtype:&nbsp;
+                <select [(ngModel)]="notationSubtype" id="notationSubtype" name="notationSubtype">
+                    <option value="Ars antiqua">Ars antiqua</option>
+                    <option value="Ars nova">Ars nova</option>
+                </select>
+            </label><br>
             <button type="submit">Submit</button>
         </form>
 

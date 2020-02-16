@@ -219,6 +219,11 @@ app-diva-view {
     float: right;
 }
 
+.metadataInput select {
+    float: right;
+    width: 13em;
+}
+
 /*app-toolbar {
     grid-column: 3 / 5;
 }

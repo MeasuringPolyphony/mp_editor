@@ -16,7 +16,8 @@ export class MeiService {
     shortTitle: string,
     composerName: string,
     userName: string,
-    sourceURI: IRI
+    sourceURI: IRI,
+    notationSubtype: string
   };
 
   constructor(private hnpService: HNPService, private staffService: StaffService) { }
@@ -196,6 +197,9 @@ export class MeiService {
     staffDef.setAttribute("n", "1");
     staffDef.setAttribute("lines", "5");
     staffDef.setAttribute("notationtype", "mensural.black");
+    if (this.metadata.notationSubtype.length > 0) {
+      staffDef.setAttribute("notationsubtype", this.metadata.notationSubtype);
+    }
     staffGrp.appendChild(staffDef);
     return scoreDef;
   }

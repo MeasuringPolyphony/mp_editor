@@ -52,7 +52,7 @@ export class Staff {
     rect.id = this.id;
     rect.setAttribute('width', (this.bbox.lrx - this.bbox.ulx).toString());
     rect.setAttribute('height', (this.bbox.lry - this.bbox.uly).toString());
-    rect.setAttribute('opacity', '0.25');
+    rect.classList.add("zoneRect");
     return rect;
   }
 

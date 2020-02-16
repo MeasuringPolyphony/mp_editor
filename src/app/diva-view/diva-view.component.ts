@@ -2,7 +2,7 @@
  * This component contains diva.js and has the staff bounding boxes
  * rendered over it. This is always visible.
  */
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
 import { StaffService } from '../staff.service';
 import { IRI, Staff } from '../definitions';
@@ -13,7 +13,8 @@ declare let Diva;
 @Component({
   selector: 'app-diva-view',
   templateUrl: './diva-view.component.html',
-  styleUrls: ['./diva-view.component.css']
+  styleUrls: ['./diva-view.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DivaViewComponent implements OnInit {
   diva: any;
@@ -40,9 +41,15 @@ export class DivaViewComponent implements OnInit {
   clickHandler(evt: MouseEvent) {
     const target = evt.target as Element;
     if (target.tagName === 'rect') {
+      // Unselect previously selected staff.
+      Array.from(document.getElementsByClassName("selectedZone"))
+        .forEach(elem => {
+          elem.classList.remove("selectedZone");
+        });
       let staff = this.staffService.getStaffById(target.id);
       if (staff !== null) {
         this.staffService.selected = staff;
+        target.classList.add("selectedZone");
       }
     }
   }
@@ -65,7 +72,7 @@ export class DivaViewComponent implements OnInit {
       rect.setAttribute('y', this.firstPoint.y.toString());
       rect.setAttribute('width', '0');
       rect.setAttribute('height', '0');
-      rect.setAttribute('opacity', '0.25');
+      rect.classList.add("zoneRect");
       rect.id = 'drawing-rect';
 
       activeContainer.appendChild(rect);
@@ -160,7 +167,11 @@ export class DivaViewComponent implements OnInit {
     }
 
     for (const staff of this.staffService.getStavesForIndex(pageIndex)) {
-      svgParent.appendChild(staff.svg);
+      let item = staff.svg;
+      svgParent.appendChild(item);
+      if (this.staffService._selectedStaff === staff) {
+        item.classList.add("selectedZone");
+      }
     }
 
     pageContainer.appendChild(svgParent);

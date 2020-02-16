@@ -199,7 +199,7 @@ p
 
 #editor-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 app-diva-view {
@@ -207,7 +207,7 @@ app-diva-view {
 }
 
 #right-side {
-    grid-column: 3 / 5;
+    grid-column: 3 / 4;
     margin: 1em;
 }
 

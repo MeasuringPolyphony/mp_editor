@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { DivaViewComponent } from './diva-view/diva-view.component';
 import { StaffSelectComponent } from './staff-select/staff-select.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
   imports: [
     BrowserModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -12,8 +12,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$editor-primary: mat-palette($mat-indigo);
-$editor-accent: mat-palette($mat-pink, A200, A100, A400);
+$editor-primary: mat-palette($mat-red, 900);
+$editor-accent: mat-palette($mat-cyan, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
 $editor-warn: mat-palette($mat-red);
@@ -25,4 +25,3 @@ $editor-theme: mat-light-theme($editor-primary, $editor-accent, $editor-warn);
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($editor-theme);
-

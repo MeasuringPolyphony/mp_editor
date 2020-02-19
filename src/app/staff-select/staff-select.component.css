@@ -2,6 +2,10 @@
     display: flex;
 }
 
+form {
+    padding-top: 0.5em;
+}
+
 /*form {
     padding-left: 1.5em;
     padding-right: 1.5em;

@@ -1,5 +1,9 @@
 @import url('https://unpkg.com/diva.js@6.0.2/build/diva.css');
 
+#diva-wrapper {
+    height: calc(100% - 80px);
+}
+
 rect.zoneRect {
     fill: black;
     opacity: 0.25;

@@ -108,8 +108,11 @@ export class DivaViewComponent implements OnInit {
           container.getScreenCTM().inverse()
         );
 
-        drawingRect.setAttribute('width', (transformedPoint.x - this.firstPoint.x).toString());
-        drawingRect.setAttribute('height', (transformedPoint.y - this.firstPoint.y).toString());
+        drawingRect.setAttribute('x', Math.min(transformedPoint.x, this.firstPoint.x).toString());
+        drawingRect.setAttribute('y', Math.min(transformedPoint.y, this.firstPoint.y).toString());
+
+        drawingRect.setAttribute('width', Math.abs(transformedPoint.x - this.firstPoint.x).toString());
+        drawingRect.setAttribute('height', Math.abs(transformedPoint.y - this.firstPoint.y).toString());
       }
     }
   }
@@ -130,18 +133,19 @@ export class DivaViewComponent implements OnInit {
       const secondPoint = clientPoint.matrixTransform(transformMatrix.inverse());
 
       const newStaff = new Staff(
-        this.firstPoint.x,
-        this.firstPoint.y,
-        secondPoint.x,
-        secondPoint.y,
+        Math.min(this.firstPoint.x, secondPoint.x),
+        Math.min(this.firstPoint.y, secondPoint.y),
+        Math.max(secondPoint.x, this.firstPoint.x),
+        Math.max(secondPoint.y, this.firstPoint.y),
         this.diva.getCurrentCanvas(),
         this.diva.getActivePageIndex()
       );
       // Check for positive height and width before adding
-      if ((secondPoint.x - this.firstPoint.x > 0) &&
+      this.staffService.addStaff(pageIndex, newStaff);
+      /*if ((secondPoint.x - this.firstPoint.x > 0) &&
         (secondPoint.y - this.firstPoint.y) > 0) {
         this.staffService.addStaff(pageIndex, newStaff);
-      }
+      }*/
       this.refreshOverlay(pageIndex);
       this.firstPoint = null;
     }

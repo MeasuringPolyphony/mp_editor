@@ -27,10 +27,7 @@ export class StaffService {
         tempus: Mensuration.NA,
         prolatio: Mensuration.NA
       });
-      console.debug(voice);
-      console.debug(this.voices.get(voice as Voice));
     }
-    console.debug(this.voices.get(Voice.triplum))
   }
 
   initIndex(index: number, uri: string) {

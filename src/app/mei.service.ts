@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StaffService } from './staff.service';
 import { HNPService } from './hnp.service';
-import { Voice, Staff, IRI } from './definitions';
+import { Voice, Staff, Mensuration, IRI } from './definitions';
 
 import { v4 as uuid } from 'uuid';
 
@@ -85,6 +85,16 @@ export class MeiService {
     part.appendChild(scoreDef);
     let staffDef = scoreDef.querySelector('staffDef');
     staffDef.setAttribute("label", staves[0].voice.toString());
+    let partMensuration = this.staffService.voices.get(staves[0].voice);
+    if (partMensuration.modus !== Mensuration.NA) {
+      staffDef.setAttribute("modusminor", partMensuration.modus.toString());
+    }
+    if (partMensuration.tempus !== Mensuration.NA) {
+      staffDef.setAttribute("tempus", partMensuration.tempus.toString());
+    }
+    if (partMensuration.prolatio !== Mensuration.NA) {
+      staffDef.setAttribute("prolatio", partMensuration.prolatio.toString());
+    }
     let section = meiDoc.createElementNS(NAMESPACE, "section");
     part.appendChild(section);
     let staff = meiDoc.createElementNS(NAMESPACE, "staff");

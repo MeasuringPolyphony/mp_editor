@@ -11,7 +11,6 @@ import { HNPService } from '../hnp.service';
 })
 export class StaffSelectComponent implements OnInit {
   @ViewChild('example') container: ElementRef;
-
   constructor(public staffService: StaffService, private hnpService: HNPService) { }
 
   ngOnInit() {

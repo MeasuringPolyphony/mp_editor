@@ -2,22 +2,35 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 
-import { Staff, Voice } from './definitions';
-
+import { Staff, Voice, Mensuration, PartMensuration } from './definitions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StaffService {
 
+  voices: Map<Voice, PartMensuration>;
   stavesByIndex: Map<number, Array<Staff>>;
   canvasIndex: Map<string, number>;
   _selectedStaff: Staff = null;
+  _currentPart: PartMensuration = null;
   selectedStaff = new Subject<Staff>();
 
   constructor() {
     this.stavesByIndex = new Map();
     this.canvasIndex = new Map();
+    this.voices = new Map();
+
+    for (let voice in Voice) {
+      this.voices.set(voice as Voice, {
+        modus: Mensuration.NA,
+        tempus: Mensuration.NA,
+        prolatio: Mensuration.NA
+      });
+      console.debug(voice);
+      console.debug(this.voices.get(voice as Voice));
+    }
+    console.debug(this.voices.get(Voice.triplum))
   }
 
   initIndex(index: number, uri: string) {
@@ -46,6 +59,14 @@ export class StaffService {
 
   getStavesForIndex(index: number): Array<Staff> {
     return this.stavesByIndex.get(index);
+  }
+
+  get currentPart() {
+    return this.voices.get(this.selected.voice);
+  }
+
+  set currentPart(_part: PartMensuration) {
+    this.voices.set(this.selected.voice, _part);
   }
 
   get selected() {

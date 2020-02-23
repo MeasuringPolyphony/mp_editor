@@ -24,6 +24,13 @@ type BoundingBox = {
   lry: number;
 }
 
+export type PartMensuration = {
+  modus: Mensuration,
+  tempus: Mensuration,
+  prolatio: Mensuration
+};
+
+
 /** Typedef to show when something is a IIIF manifest IRI */
 export type IRI = string;
 
@@ -38,9 +45,6 @@ export class Staff {
     this.canvas = canvas;
     this.index = index;
     this.voice = Voice.triplum;
-    this.modus = Mensuration.NA;
-    this.tempus = Mensuration.NA;
-    this.prolatio = Mensuration.NA;
 
     this.musicList = new MusicList();
   }

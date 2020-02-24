@@ -626,7 +626,16 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 		return output;
 	}
 	if (this.m_type == "rest") {
-		output += this.m_rhythm;
+		switch (this.m_rhythm) {
+			case 7: output += "X"; break;
+			case 9: output += "L"; break;
+			case 0: output += "S"; break;
+			case 1: output += "s"; break;
+			case 2: output += "M"; break;
+			case 4: output += "m"; break;
+			case 6: output += "u"; break;
+			case 8: output += "U"; break;
+		}
 		if (this.m_dot) {
 			// output += ".";
 			output += ":";

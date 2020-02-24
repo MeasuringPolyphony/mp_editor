@@ -48,6 +48,7 @@ export class StaffSelectComponent implements OnInit {
       if ((event.key >= '0') && (event.key <= '9')) {
         this.processDigit(Number(event.key), event);
         event.preventDefault();
+        this.updateSVG();
         return;
       }
       let state = musicList.addTextToCurrentItem(event.key);
@@ -213,7 +214,7 @@ export class StaffSelectComponent implements OnInit {
     else if ((item.m_type === 'note') || (item.m_type === 'rest')) {
       if (!ending) {
         if (digit !== 3) {
-          item.m_rhyth = digit;
+          item.m_rhythm = digit;
           musicList.m_index += 1;
           musicList.m_rhythm = digit;
           musicList.runNotationCallback();

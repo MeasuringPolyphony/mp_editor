@@ -640,7 +640,13 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 			// output += ".";
 			output += ":";
 		}
-		output += "r\t.";
+		output += "r";
+
+		if (options.mark) {
+			output += "@";
+		}
+
+		output += "\t.";
 
 		return output;
 	}

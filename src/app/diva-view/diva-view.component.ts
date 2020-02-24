@@ -34,6 +34,7 @@ export class DivaViewComponent implements OnInit {
     Diva.Events.subscribe('ManifestDidLoad', this.parseCanvases.bind(this), this.diva.settings.ID);
     Diva.Events.subscribe('ActivePageDidChange', this.refreshOverlay.bind(this), this.diva.settings.ID);
     Diva.Events.subscribe('DocumentDidLoad', this.refreshOverlay.bind(this), this.diva.settings.ID);
+    Diva.Events.subscribe('ZoomLevelDidChange', this.handleZoom.bind(this), this.diva.settings.ID);
 
     // this.diva.disableDragScrollable();
 
@@ -167,6 +168,7 @@ export class DivaViewComponent implements OnInit {
     // Check if we have a div for this page. Otherwise create one.
     let pageContainer = document.getElementById('editor-container-' + pageIndex.toString());
     if (pageContainer === null) {
+      //pageContainer = document.createElement('div');
       pageContainer = document.createElement('div');
       pageContainer.id = 'editor-container-' + pageIndex.toString();
       pageContainer.classList.add('editor-container'); // For future use
@@ -175,9 +177,10 @@ export class DivaViewComponent implements OnInit {
 
     // Create SVG container
     const svgParent = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const maxZoom = this.diva.getPageDimensionsAtZoomLevel(pageIndex, Number.MAX_SAFE_INTEGER)
     svgParent.setAttribute('width', dimensions.width);
     svgParent.setAttribute('height', dimensions.height);
-    svgParent.setAttribute('viewbox', '0 0 ' + dimensions.width + ' ' + dimensions.height);
+    svgParent.setAttribute('viewBox', '0 0 ' + maxZoom.width + ' ' + maxZoom.height);
 
     pageContainer.style.position = 'absolute';
     pageContainer.style.top = `${offset.top}px`;
@@ -196,6 +199,20 @@ export class DivaViewComponent implements OnInit {
     }
 
     pageContainer.appendChild(svgParent);
+  }
+
+  handleZoom(): void {
+    (new Promise(resolve => {
+      Array.from(document.getElementsByClassName('editor-container'))
+        .forEach((elem: HTMLElement) => { elem.style.display = 'none'; });
+      setTimeout(resolve, this.diva.settings.zoomDuration + 100);
+    })).then(() => {
+      this.refreshOverlay(this.diva.getActivePageIndex());
+      Array.from(document.getElementsByClassName('editor-container'))
+        .forEach((elem: HTMLElement) => {
+          elem.style.display = '';
+        });
+    });
   }
 
   /** Parse the IIIF manifest and associate each canvas index with an array of staves */

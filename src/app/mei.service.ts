@@ -7,6 +7,17 @@ import { v4 as uuid } from 'uuid';
 
 const NAMESPACE = 'http://www.music-encoding.org/ns/mei';
 
+// Humdrum w Verovio sets deterministic xml:ids.
+// This is bad™.
+function recurseRandomUUID(element: Element) {
+  if (element.hasAttribute("xml:id")) {
+    element.setAttribute("xml:id", "m-" + uuid());
+  }
+  for (let i = 0; i < element.children.length; i++) {
+    recurseRandomUUID(element.children[i]);
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -130,12 +141,8 @@ export class MeiService {
       layer.appendChild(sb);
       let staffContents: Element[] = this._getStaffContents(staff);
       staffContents.forEach(child => {
-        if (child.hasAttribute("xml:id")) {
-          // Humdrum w Verovio sets deterministic xml:ids.
-          // This is bad™.
-          child.setAttribute("xml:id", "m-" + uuid());
-        }
-        layer.appendChild(child)
+        recurseRandomUUID(child);
+        layer.appendChild(child);
       });
     }
 

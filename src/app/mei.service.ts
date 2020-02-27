@@ -42,12 +42,8 @@ export class MeiService {
     let meiDoc = this._createSkeletonMEI();
     // Iterate through voices
     let staves = this.staffService.staves;
-    console.log(staves);
     for (let voice in Voice) {
-      console.log(voice);
       let voiceStaves = staves.filter(staff => {
-        console.log(staff.voice);
-        console.log(voice);
         return staff.voice == voice;
       });
       if (voiceStaves.length > 0) {

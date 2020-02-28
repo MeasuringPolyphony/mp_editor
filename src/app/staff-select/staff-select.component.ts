@@ -37,7 +37,6 @@ export class StaffSelectComponent implements OnInit {
     prolatio: new FormControl('')
   });
 
-  @HostListener('document:click', ['$event'])
   handleClick(event: MouseEvent) {
     let target = event.target as Element;
     while (target) {

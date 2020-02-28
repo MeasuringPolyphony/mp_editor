@@ -200,10 +200,8 @@ export class StaffSelectComponent implements OnInit {
     }
     let item = musicList.m_list[index];
     if (item.m_type === 'clef') {
-      if ((digit >= 1) && (digit <= 5)) {
-        if (digit !== 3) {
-          item.m_clefLine = digit;
-        }
+      if (digit !== 3) {
+        musicList.m_rhythm = digit;
       }
       musicList.runNotationCallback();
       return;

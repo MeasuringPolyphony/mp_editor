@@ -45,6 +45,8 @@ function MusicItem() {
 	this.m_line   = -1;
 	this.m_text   = "";
 	this.m_clefLine = 3;
+	this.m_ligStart = false;
+	this.m_ligEnd = false;
 
 	return this;
 }
@@ -654,13 +656,10 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 	// note line
 	var i;
 
-	/*switch (this.m_rhythm) {
-		case 4: output += "4"; break;
-		case 2: output += "2"; break;
-		case 1: output += "1"; break;
-		case 0: output += "0"; break;
-		case 9: output += "00"; break;
-	}*/
+	if (this.m_ligStart) {
+		output += "[";
+	}
+
 	switch (this.m_rhythm) {
 		case 7: output += "X"; break;
 		case 9: output += "L"; break;
@@ -701,6 +700,11 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 			case 2: output += "-"; break;
 		}
 	}
+
+	if (this.m_ligEnd) {
+		output += "]";
+	}
+
 	if (options.mark) {
 		output += "@";
 	}

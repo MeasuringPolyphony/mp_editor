@@ -194,6 +194,13 @@ export class StaffSelectComponent implements OnInit {
           musicList.goToEndOfList();
           event.preventDefault();
           break;
+        case '[':
+          this.processLig(true);
+          event.preventDefault();
+          break;
+        case ']':
+          this.processLig(false);
+          event.preventDefault();
         }
     }
     this.updateSVG();
@@ -251,6 +258,27 @@ export class StaffSelectComponent implements OnInit {
     let item = musicList.m_list[index];
     if (item.m_type === 'note') {
       item.m_dot = !item.m_dot;
+      musicList.runNotationCallback();
+      return;
+    }
+  }
+
+  processLig(isStart: boolean) {
+    let musicList = this.staffService._selectedStaff.musicList;
+    if (musicList.m_list.length === 0) {
+      return;
+    }
+    let index = musicList.m_index;
+    if (index < 0) {
+      index = musicList.m_list.length - 1;
+    }
+    let item = musicList.m_list[index];
+    if (item.m_type === 'note') {
+      if (isStart) {
+        item.m_ligStart = !item.m_ligStart;
+      } else {
+        item.m_ligEnd = !item.m_ligEnd;
+      }
       musicList.runNotationCallback();
       return;
     }

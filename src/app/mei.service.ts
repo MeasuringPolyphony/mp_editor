@@ -138,6 +138,9 @@ export class MeiService {
       let staffContents: Element[] = this._getStaffContents(staff);
       staffContents.forEach(child => {
         recurseRandomUUID(child);
+        if (child.tagName === 'ligature') {
+          child.removeAttribute('form');
+        }
         layer.appendChild(child);
       });
     }

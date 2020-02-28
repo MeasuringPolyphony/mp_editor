@@ -37,6 +37,22 @@ export class StaffSelectComponent implements OnInit {
     prolatio: new FormControl('')
   });
 
+  @HostListener('document:click', ['$event'])
+  handleClick(event: MouseEvent) {
+    let target = event.target as Element;
+    while (target) {
+      if (target.nodeName === 'g') {
+        let matches: Array<string>;
+        if (matches = target.id.match(/-.*L(\d+)/)) {
+          this.staffService._selectedStaff.musicList.selectItemByLine(parseInt(matches[1]))
+          this.updateSVG();
+          break;
+        }
+      }
+      target = target.parentNode as Element;
+    }
+  }
+
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent) {
     if (this.staffService._selectedStaff == null) return;

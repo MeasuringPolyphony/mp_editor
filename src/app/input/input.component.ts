@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+
 import { IRI } from './definitions';
+import { formIIIFManifest } from '../tools';
 import { MeiService } from './mei.service';
 
 @Component({
@@ -8,8 +11,7 @@ import { MeiService } from './mei.service';
   styleUrls: ['./input.component.css']
 })
 export class InputComponent implements OnInit {
-  iiifManifest: IRI = 'https://gallica.bnf.fr/iiif/ark:/12148/btv1b8454675g/manifest.json';
-  title = 'Measuring Polyphony Editor';
+  iiifManifest: IRI;
 
   // Metadata for MEI header
   shortTitle = "";
@@ -19,11 +21,26 @@ export class InputComponent implements OnInit {
 
   inputStep: InputComponent.InputStep;
 
-  constructor(private meiService: MeiService) {
+  source: string;
+  identifier: string;
+
+  constructor(
+    private meiService: MeiService,
+    private route: ActivatedRoute,
+  ) {
     this.inputStep = InputComponent.InputStep.METADATA;
+    this.source = this.route.snapshot.paramMap.get('source');
+    this.identifier = decodeURIComponent(this.route.snapshot.paramMap.get('identifier'));
+    this.iiifManifest = formIIIFManifest(this.source, this.identifier);
+    console.debug(this.iiifManifest);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    /*this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      this.source = paramMap.get('source');
+      this.identifier = decodeURIComponent(paramMap.get('identifier'));
+    });*/
+  }
 
   onSetMetadata() {
     this.meiService.headerData = {

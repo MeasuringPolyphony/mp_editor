@@ -11,6 +11,7 @@ import { InputModule } from './input/input.module';
 import { InputComponent } from './input/input.component';
 
 import { AppComponent } from './app.component';
+import { SelectDocumentComponent } from './select-document/select-document.component';
 
 const routes: Routes = [
   {
@@ -19,14 +20,16 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/input/gallica/12148%2Fbtv1b8454675g',
+    // redirectTo: '/input/gallica/12148%2Fbtv1b8454675g',
+    component: SelectDocumentComponent,
     pathMatch: 'full'
   }
 ]
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SelectDocumentComponent
   ],
   imports: [
     RouterModule.forRoot(

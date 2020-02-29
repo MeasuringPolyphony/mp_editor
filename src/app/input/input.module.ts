@@ -9,9 +9,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { DivaViewComponent } from './diva-view/diva-view.component';
 import { StaffSelectComponent } from './staff-select/staff-select.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { InputComponent } from './input.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppComponent } from './app/app.component';
-
 
 @NgModule({
   declarations: [
@@ -19,7 +18,7 @@ import { AppComponent } from './app/app.component';
     StaffSelectComponent,
     StaffSelectComponent,
     ToolbarComponent,
-    AppComponent
+    InputComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +30,7 @@ import { AppComponent } from './app/app.component';
     MatDividerModule
   ],
   exports: [
-    AppComponent
+    InputComponent
   ]
 })
 export class InputModule { }

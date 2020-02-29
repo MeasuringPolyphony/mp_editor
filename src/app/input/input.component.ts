@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
-import { IRI } from '../definitions';
-import { MeiService } from '../mei.service';
-
+import { Component, OnInit } from '@angular/core';
+import { IRI } from './definitions';
+import { MeiService } from './mei.service';
 
 @Component({
-  selector: 'app-app',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-input',
+  templateUrl: './input.component.html',
+  styleUrls: ['./input.component.css']
 })
-export class AppComponent {
+export class InputComponent implements OnInit {
   iiifManifest: IRI = 'https://gallica.bnf.fr/iiif/ark:/12148/btv1b8454675g/manifest.json';
   title = 'Measuring Polyphony Editor';
 
@@ -18,11 +17,13 @@ export class AppComponent {
   userName = "";
   notationSubtype = "";
 
-  inputStep: AppComponent.InputStep;
+  inputStep: InputComponent.InputStep;
 
   constructor(private meiService: MeiService) {
-    this.inputStep = AppComponent.InputStep.METADATA;
+    this.inputStep = InputComponent.InputStep.METADATA;
   }
+
+  ngOnInit() {}
 
   onSetMetadata() {
     this.meiService.headerData = {
@@ -32,11 +33,11 @@ export class AppComponent {
       sourceURI: this.iiifManifest,
       notationSubtype: this.notationSubtype
     };
-    this.inputStep = AppComponent.InputStep.INPUT;
+    this.inputStep = InputComponent.InputStep.INPUT;
   }
 }
 
-export namespace AppComponent {
+export namespace InputComponent {
   export enum InputStep {
     METADATA,
     INPUT

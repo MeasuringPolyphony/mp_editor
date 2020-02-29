@@ -1,0 +1,34 @@
+#editor-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+app-diva-view {
+    grid-column: 1 / 3;
+}
+
+#right-side {
+    grid-column: 3 / 4;
+    margin: 1em;
+}
+
+.metadataInput {
+    width: 22em;
+}
+
+.metadataInput input {
+    float: right;
+}
+
+.metadataInput select {
+    float: right;
+    width: 13em;
+}
+
+/*app-toolbar {
+    grid-column: 3 / 5;
+}
+
+app-staff-select {
+    grid-column: 3 / 5;
+}*/

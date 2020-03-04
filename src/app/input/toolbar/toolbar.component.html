@@ -4,7 +4,11 @@
             <!--<ion-icon name="save"></ion-icon>-->Save to MEI File
         </a>
     </button>
+    <button mat-stroked-button (click)="finishStep()">
+        Move to Score Editor
+    </button>
     <button mat-stroked-button *ngIf="staffService.selected" (click)="deleteStaff()">
         Delete Staff
     </button>
+
 </div>

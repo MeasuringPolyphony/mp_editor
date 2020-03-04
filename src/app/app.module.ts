@@ -12,11 +12,16 @@ import { InputComponent } from './input/input.component';
 
 import { AppComponent } from './app.component';
 import { SelectDocumentComponent } from './select-document/select-document.component';
+import { ScoreEditorComponent } from './score-editor/score-editor.component';
 
 const routes: Routes = [
   {
     path: 'input/:source/:identifier',
     component: InputComponent
+  },
+  {
+    path: 'score/:source/:identifier',
+    component: ScoreEditorComponent
   },
   {
     path: '',

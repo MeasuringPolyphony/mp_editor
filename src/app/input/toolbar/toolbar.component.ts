@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MeiService } from '../mei.service';
 import { StaffService } from '../staff.service';
+import { StateService } from '../../state-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,6 +14,7 @@ export class ToolbarComponent implements OnInit {
   constructor(
     private meiService: MeiService,
     public staffService: StaffService,
+    private stateService: StateService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -33,6 +35,7 @@ export class ToolbarComponent implements OnInit {
     const mei = this.meiService.generateFullMEI();
     const type = this.route.snapshot.paramMap.get('source');
     const identifier = this.route.snapshot.paramMap.get('identifier');
+    this.stateService.mei = mei;
     this.router.navigate(['/score', type, identifier]);
   }
 

@@ -12,6 +12,7 @@ import { InputComponent } from './input/input.component';
 
 import { AppComponent } from './app.component';
 import { SelectDocumentComponent } from './select-document/select-document.component';
+import { ScoreEditorModule } from './score-editor/score-editor.module';
 import { ScoreEditorComponent } from './score-editor/score-editor.component';
 
 const routes: Routes = [
@@ -46,7 +47,8 @@ const routes: Routes = [
     MatTabsModule,
     MatButtonModule,
     MatDividerModule,
-    InputModule
+    InputModule,
+    ScoreEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

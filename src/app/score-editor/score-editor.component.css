@@ -1,0 +1,12 @@
+#score-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+app-score-diva-view {
+    grid-column: 1 / 2;
+}
+
+app-score-verovio-view {
+    grid-column: 2 / 4;
+}

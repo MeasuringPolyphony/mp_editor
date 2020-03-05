@@ -7,8 +7,7 @@ import { Component, OnInit, Input, ViewEncapsulation, HostListener } from '@angu
 import { StaffService } from '../staff.service';
 import { IRI, Staff } from '../definitions';
 
-//import * as Diva from 'diva.js';
-declare let Diva;
+import Diva from 'diva.js';
 
 @Component({
   selector: 'app-diva-view',
@@ -17,7 +16,7 @@ declare let Diva;
   encapsulation: ViewEncapsulation.None
 })
 export class DivaViewComponent implements OnInit {
-  diva: any;
+  diva: Diva;
   creatingStaff: boolean = false;
   firstPoint: DOMPoint = null;
 
@@ -178,8 +177,8 @@ export class DivaViewComponent implements OnInit {
     // Create SVG container
     const svgParent = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const maxZoom = this.diva.getPageDimensionsAtZoomLevel(pageIndex, Number.MAX_SAFE_INTEGER)
-    svgParent.setAttribute('width', dimensions.width);
-    svgParent.setAttribute('height', dimensions.height);
+    svgParent.setAttribute('width', dimensions.width.toString());
+    svgParent.setAttribute('height', dimensions.height.toString());
     svgParent.setAttribute('viewBox', '0 0 ' + maxZoom.width + ' ' + maxZoom.height);
 
     pageContainer.style.position = 'absolute';

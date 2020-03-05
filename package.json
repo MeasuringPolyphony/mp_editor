@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~9.0.1",
     "@angular/platform-browser-dynamic": "~9.0.1",
     "@angular/router": "~9.0.1",
+    "diva.js": "github:DDMAL/diva.js#lodash-imports",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
@@ -31,6 +32,7 @@
     "@angular/compiler-cli": "~9.0.1",
     "@angular/language-service": "~9.0.1",
     "@ionic/angular-toolkit": "latest",
+    "@types/diva.js": "^6.0.1",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.12.27",

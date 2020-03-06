@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { v4 as uuid } from 'uuid';
 
 import { Staff, Voice, Mensuration, PartMensuration } from './definitions';
 

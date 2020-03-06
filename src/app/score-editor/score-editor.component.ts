@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { IRI } from '../input/definitions';
 import { StateService } from '../state-service.service';
@@ -18,6 +18,7 @@ export class ScoreEditorComponent implements OnInit {
   meiDoc: XMLDocument;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private stateService: StateService
   ) {
@@ -27,6 +28,9 @@ export class ScoreEditorComponent implements OnInit {
     );
     this.iiifManifest = formIIIFManifest(this.source, this.identifier);
     this.meiDoc = this.stateService.mei;
+    if (this.meiDoc === null) {
+      this.router.navigate(['/input', this.source, this.identifier])
+    }
     console.debug(this.meiDoc);
   }
 

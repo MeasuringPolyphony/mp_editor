@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular
 import { FormControl, FormGroup } from '@angular/forms';
 import { StaffService } from '../staff.service';
 import { C_PitchClass, D_PitchClass, E_PitchClass, F_PitchClass, G_PitchClass, A_PitchClass, B_PitchClass } from '../musiclist';
-import { HNPService } from '../hnp.service';
+import { HNPService } from '../../hnp.service';
 
 @Component({
   selector: 'app-staff-select',

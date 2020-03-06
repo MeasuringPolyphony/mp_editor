@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+
+import { HNPService } from '../../hnp.service';
+import { StateService } from '../../state-service.service';
 
 @Component({
   selector: 'app-score-verovio-view',
@@ -7,9 +10,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScoreVerovioViewComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild('verovio') container: ElementRef;
+
+  constructor(
+    private verovioService: HNPService,
+    private stateService: StateService
+  ) { }
 
   ngOnInit() {
+    // this.container.nativeElement.innerHTML = '';
+    // const svg = this.verovioService.meiToSVG(this.stateService.mei);
+    // console.debug('svg');
+    // console.debug(svg);
+    // this.container.nativeElement.appendChild(svg);
   }
 
 }

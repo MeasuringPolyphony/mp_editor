@@ -32,4 +32,13 @@ export class HNPService {
     const parser = new DOMParser();
     return parser.parseFromString(data, 'image/svg+xml').documentElement as unknown as SVGSVGElement;
   }
+
+  meiToSVG(meiDocument: XMLDocument): SVGSVGElement {
+    const serializer = new XMLSerializer();
+    const serializedMei = serializer.serializeToString(meiDocument);
+    const parser = new DOMParser();
+    this.vrvToolkit.loadData(serializedMei);
+    const svgRaw = this.vrvToolkit.renderToSVG(1);
+    return parser.parseFromString(svgRaw, 'image/svg+xml').documentElement as unknown as SVGSVGElement;    
+  }
 }

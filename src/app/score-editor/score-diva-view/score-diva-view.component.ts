@@ -19,7 +19,7 @@ export class ScoreDivaViewComponent implements OnInit {
 
   ngOnInit() {
     console.debug('IIIFManifest: ' + this.iiifManifest);
-    this.diva = new Diva('diva-wrapper', {
+    this.diva = new Diva('diva-score-wrapper', {
       objectData: this.iiifManifest
     });
   }

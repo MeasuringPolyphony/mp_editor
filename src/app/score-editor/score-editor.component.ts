@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IRI } from '../input/definitions';
 import { StateService } from '../state-service.service';
+import { formIIIFManifest } from '../tools';
 
 @Component({
   selector: 'app-score-editor',
@@ -24,6 +25,7 @@ export class ScoreEditorComponent implements OnInit {
     this.identifier = decodeURIComponent(
       this.route.snapshot.paramMap.get('identifier')
     );
+    this.iiifManifest = formIIIFManifest(this.source, this.identifier);
     this.meiDoc = this.stateService.mei;
     console.debug(this.meiDoc);
   }

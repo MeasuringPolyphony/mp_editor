@@ -201,6 +201,14 @@ export class StaffSelectComponent implements OnInit {
         case ']':
           this.processLig(false);
           event.preventDefault();
+          break;
+        case '#':
+        case '-':
+        case 'N':
+        case 'n':
+          this.processAccidental(event.key);
+          event.preventDefault();
+          break;
         }
     }
     this.updateSVG();
@@ -281,6 +289,35 @@ export class StaffSelectComponent implements OnInit {
       }
       musicList.runNotationCallback();
       return;
+    }
+  }
+
+  processAccidental(accid: string) {
+    let musicList = this.staffService._selectedStaff.musicList;
+    if (musicList.m_list.length === 0) {
+      return;
+    }
+    let index = musicList.m_index;
+    if (index < 0) {
+      index = musicList.m_list.length - 1;
+    }
+    let item = musicList.m_list[index];
+    if (item.m_type === 'note') {
+      switch(accid) {
+        case 'N':
+          item.m_accid = 0;
+          break;
+        case '#':
+          item.m_accid = 1;
+          break;
+        case '-':
+          item.m_accid = 2;
+          break;
+        case 'n':
+          item.m_accid = 3;
+          break;
+      }
+      musicList.runNotationCallback();
     }
   }
 }

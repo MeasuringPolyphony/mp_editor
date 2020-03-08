@@ -698,6 +698,7 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 		switch (this.m_accid) {
 			case 1: output += "#"; break;
 			case 2: output += "-"; break;
+			case 3: output += "n"; break;
 		}
 	}
 

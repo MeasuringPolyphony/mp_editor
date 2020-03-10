@@ -28,13 +28,46 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.container.nativeElement.innerHTML = '';
-    const scoreDoc = ScoringUp.ArsAntiqua.lining_up(
-      ScoringUp.merge(this.stateService.mei)
-    );
+    const scoreDoc = this.runScoringUp(this.stateService.mei);
     const svg = this.verovioService.meiToSVG(
       scoreDoc
     );
     this.container.nativeElement.appendChild(svg);
+  }
+
+  runScoringUp(meiDoc: XMLDocument): XMLDocument {
+    let output = null;
+    try {
+      const staffDef = meiDoc.getElementsByTagName("staffDef")[0];
+      const quasiDoc = ScoringUp.merge(meiDoc);
+      switch (staffDef.getAttribute("notationtype")) {
+        case "mensural.white":
+          console.warn("Mensural White is not currently supported!");
+          break;
+        case "mensural.black":
+          switch(staffDef.getAttribute("notationsubtype")) {
+            case "Ars antiqua":
+              output = ScoringUp.ArsAntiqua.lining_up(quasiDoc);
+              break;
+            case "Ars nova":
+              console.warn("Ars antiqua is currently not supported!");
+              break;
+            default:
+              console.warn("Only 'Ars antiqua' and 'Ars nova' are supported!");
+          }
+          break;
+        default:
+          console.warn("Only mensural notation types are supported.");
+          break;
+      }
+    }
+    catch(e) {
+      console.error(e);
+      output = null;
+    }
+    finally {
+      return output;
+    }
   }
 
 }

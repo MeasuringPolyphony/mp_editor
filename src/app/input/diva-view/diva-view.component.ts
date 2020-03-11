@@ -43,6 +43,7 @@ export class DivaViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.staffService._selectedStaff = null;
     try {
       this.diva.deactivate();
       this.diva.destroy();

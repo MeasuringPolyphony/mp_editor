@@ -21,7 +21,7 @@ export class StaffSelectComponent implements OnInit {
         let element = this.hnpService.humdrumToSVG(staff.musicList.getHumdrumScore());
         this.container.nativeElement.appendChild(element);
       }
-    })
+    });
   }
 
   updateSVG() {

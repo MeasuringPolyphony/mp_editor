@@ -32,6 +32,14 @@ export class InputComponent implements OnInit {
     this.source = this.route.snapshot.paramMap.get('source');
     this.identifier = decodeURIComponent(this.route.snapshot.paramMap.get('identifier'));
     this.iiifManifest = formIIIFManifest(this.source, this.identifier);
+
+    if (this.meiService.headerData != undefined) {
+      this.shortTitle = this.meiService.headerData.shortTitle;
+      this.composerName = this.meiService.headerData.composerName;
+      this.userName = this.meiService.headerData.userName;
+      this.notationSubtype = this.meiService.headerData.notationSubtype;
+    }
+
     console.debug(this.iiifManifest);
   }
 

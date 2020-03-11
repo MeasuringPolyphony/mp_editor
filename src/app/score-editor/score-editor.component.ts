@@ -31,7 +31,6 @@ export class ScoreEditorComponent implements OnInit {
     if (this.meiDoc === null) {
       this.router.navigate(['/input', this.source, this.identifier])
     }
-    console.debug(this.meiDoc);
   }
 
   ngOnInit() {

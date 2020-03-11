@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { IRI, Staff } from '../../input/definitions';
 
@@ -9,7 +9,7 @@ import Diva from 'diva.js';
   templateUrl: './score-diva-view.component.html',
   styleUrls: ['./score-diva-view.component.css']
 })
-export class ScoreDivaViewComponent implements OnInit {
+export class ScoreDivaViewComponent implements OnInit, OnDestroy {
 
   diva: Diva;
 
@@ -22,6 +22,16 @@ export class ScoreDivaViewComponent implements OnInit {
     this.diva = new Diva('diva-score-wrapper', {
       objectData: this.iiifManifest
     });
+  }
+
+  ngOnDestroy() {
+    try {
+      this.diva.deactivate();
+      this.diva.destroy();
+    }
+    catch (e) {
+      console.warn(e);
+    }
   }
 
 }

@@ -2,7 +2,7 @@
  * This component contains diva.js and has the staff bounding boxes
  * rendered over it. This is always visible.
  */
-import { Component, OnInit, Input, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewEncapsulation, HostListener } from '@angular/core';
 
 import { StaffService } from '../staff.service';
 import { IRI, Staff } from '../definitions';
@@ -15,7 +15,7 @@ import Diva from 'diva.js';
   styleUrls: ['./diva-view.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class DivaViewComponent implements OnInit {
+export class DivaViewComponent implements OnInit, OnDestroy {
   diva: Diva;
   creatingStaff: boolean = false;
   firstPoint: DOMPoint = null;
@@ -40,6 +40,16 @@ export class DivaViewComponent implements OnInit {
     this.staffService.selectedStaff.subscribe(() => {
       this.refreshOverlay(this.diva.getActivePageIndex());
     });
+  }
+
+  ngOnDestroy() {
+    try {
+      this.diva.deactivate();
+      this.diva.destroy();
+    }
+    catch (e) {
+      console.warn(e);
+    }
   }
 
   @HostListener('window:keydown.shift', [])
@@ -153,7 +163,7 @@ export class DivaViewComponent implements OnInit {
 
   refreshOverlay(pageIndex: number): void {
     // Get some features from the diva viewer
-    const inner = document.getElementById('diva-1-inner'); // Is there a better way to do this?
+    const inner = this.diva.settings.innerElement;
     const dimensions = this.diva.getPageDimensionsAtCurrentZoomLevel(pageIndex);
     const offset = this.diva.settings.viewHandler._viewerCore.getPageRegion(
       pageIndex,
@@ -162,7 +172,7 @@ export class DivaViewComponent implements OnInit {
         incorporateViewport: true
       }
     );
-    const marginLeft = window.getComputedStyle(inner, null).getPropertyValue('margin-left');
+    const marginLeft = getComputedStyle(inner, null).getPropertyValue('margin-left');
 
     // Check if we have a div for this page. Otherwise create one.
     let pageContainer = document.getElementById('editor-container-' + pageIndex.toString());

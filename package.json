@@ -23,7 +23,7 @@
     "@angular/router": "~9.0.1",
     "diva.js": "github:DDMAL/diva.js#lodash-imports",
     "rxjs": "~6.5.4",
-    "scoring-up": "github:JRegimbal/JS_ScUp#make-module",
+    "scoring-up": "github:martha-thomae/JS_ScUp",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },

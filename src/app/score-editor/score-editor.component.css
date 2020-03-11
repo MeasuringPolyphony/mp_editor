@@ -7,6 +7,7 @@ app-score-diva-view {
     grid-column: 1 / 2;
 }
 
-app-score-verovio-view {
+#right {
     grid-column: 2 / 4;
+    margin: 1em;
 }

@@ -4,6 +4,8 @@ import * as ScoringUp from 'scoring-up';
 import { HNPService } from '../../hnp.service';
 import { StateService } from '../../state-service.service';
 
+import { scoreDoc } from '../score-editor.module';
+
 @Component({
   selector: 'app-score-verovio-view',
   templateUrl: './score-verovio-view.component.html',
@@ -19,20 +21,15 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    // this.container.nativeElement.innerHTML = '';
-    // const svg = this.verovioService.meiToSVG(this.stateService.mei);
-    // console.debug('svg');
-    // console.debug(svg);
-    // this.container.nativeElement.appendChild(svg);
+    scoreDoc.subscribe((doc) => {
+      this.container.nativeElement.innerHTML = '';
+      const svg = this.verovioService.meiToSVG(doc);
+      this.container.nativeElement.appendChild(svg);
+    })
   }
 
   ngAfterViewInit() {
-    this.container.nativeElement.innerHTML = '';
-    const scoreDoc = this.runScoringUp(this.stateService.mei);
-    const svg = this.verovioService.meiToSVG(
-      scoreDoc
-    );
-    this.container.nativeElement.appendChild(svg);
+    scoreDoc.next(this.runScoringUp(this.stateService.mei));
   }
 
   runScoringUp(meiDoc: XMLDocument): XMLDocument {

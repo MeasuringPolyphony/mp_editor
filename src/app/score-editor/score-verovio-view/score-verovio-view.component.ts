@@ -8,6 +8,8 @@ import { StateService } from '../../state-service.service';
 
 import { scoreDoc } from '../score-editor.module';
 
+const pnameOrder = [ 'c', 'd', 'e', 'f', 'g', 'a', 'b'];
+
 @Component({
   selector: 'app-score-verovio-view',
   templateUrl: './score-verovio-view.component.html',
@@ -85,6 +87,32 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
             target.insertAdjacentElement("afterend", dot);
           }
           break;
+        case 'ArrowUp':
+          if (target.hasAttribute('pname')) {
+            let currentPname = target.getAttribute('pname');
+            let idx = pnameOrder.indexOf(currentPname);
+            if (idx + 1 < pnameOrder.length) {
+              target.setAttribute('pname', pnameOrder[idx + 1]);
+            }
+            else {
+              target.setAttribute('pname', pnameOrder[0]);
+              target.setAttribute('oct', (parseInt(target.getAttribute('oct')) + 1).toString());
+            }
+          }
+          break;
+        case 'ArrowDown':
+          if (target.hasAttribute('pname')) {
+            let currentPname = target.getAttribute('pname');
+            let idx = pnameOrder.indexOf(currentPname);
+            if (idx - 1 > 0) {
+              target.setAttribute('pname', pnameOrder[idx - 1]);
+            }
+            else {
+              target.setAttribute('pname', pnameOrder[pnameOrder.length - 1]);
+              target.setAttribute('oct', (parseInt(target.getAttribute('oct')) - 1).toString());
+            }
+          }
+          break;
         default:
           return;
       }
@@ -128,5 +156,4 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       return output;
     }
   }
-
 }

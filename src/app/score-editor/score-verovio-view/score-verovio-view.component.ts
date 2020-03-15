@@ -113,6 +113,14 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
             }
           }
           break;
+        case '1': target.setAttribute('dur', 'semibrevis'); break;
+        case '2': target.setAttribute('dur', 'minima'); break;
+        case '4': target.setAttribute('dur', 'semiminima'); break;
+        case '8': target.setAttribute('dur', 'fusa'); break;
+        case '6': target.setAttribute('dur', 'semifusa'); break;
+        case '7': target.setAttribute('dur', 'maxima'); break;
+        case '9': target.setAttribute('dur', 'longa'); break;
+        case '0': target.setAttribute('dur', 'brevis'); break
         default:
           return;
       }

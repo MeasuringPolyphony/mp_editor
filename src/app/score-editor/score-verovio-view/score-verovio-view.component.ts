@@ -6,7 +6,7 @@ import * as ScoringUp from 'scoring-up';
 import { HNPService } from '../../hnp.service';
 import { StateService } from '../../state-service.service';
 
-import { scoreDoc } from '../score-editor.module';
+import { scoreDoc } from '../definitions';
 
 const pnameOrder = [ 'c', 'd', 'e', 'f', 'g', 'a', 'b'];
 

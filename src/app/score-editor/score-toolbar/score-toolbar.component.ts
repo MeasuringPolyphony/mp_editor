@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { scoreDoc } from '../score-editor.module';
+import { scoreDoc } from '../definitions';
 
 @Component({
   selector: 'app-score-toolbar',

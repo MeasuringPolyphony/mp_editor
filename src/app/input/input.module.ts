@@ -5,6 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 import { DivaViewComponent } from './diva-view/diva-view.component';
 import { StaffSelectComponent } from './staff-select/staff-select.component';
@@ -29,7 +32,13 @@ import { StorageComponent } from './storage/storage.component';
     BrowserAnimationsModule,
     MatTabsModule,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule
+  ],
+  entryComponents: [
+    StorageComponent
   ],
   exports: [
     InputComponent

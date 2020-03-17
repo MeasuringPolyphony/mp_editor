@@ -1,1 +1,16 @@
-<p>storage works!</p>
+<h1 mat-dialog-title>Storage</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <mat-label>Select Slot</mat-label>
+        <mat-select [(value)]="selected">
+            <mat-option *ngFor="let slot of slots" [value]="slot">
+                Slot {{slot}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button cdkFocusInitial (click)="onCancelClick()">Cancel</button>
+    <button mat-button (click)="onSaveClick()">Save</button>
+    <button mat-button (click)="onLoadClick()">Load</button>
+</div>

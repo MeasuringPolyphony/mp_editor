@@ -3,6 +3,9 @@ import { MeiService } from '../mei.service';
 import { StaffService } from '../staff.service';
 import { StateService } from '../../state-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+
+import { StorageComponent } from '../storage/storage.component';
 
 @Component({
   selector: 'app-toolbar',
@@ -16,10 +19,19 @@ export class ToolbarComponent implements OnInit {
     public staffService: StaffService,
     private stateService: StateService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(StorageComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      console.debug("Closed!");
+      console.debug(result);
+    })
   }
 
   saveClick(evt: MouseEvent) {

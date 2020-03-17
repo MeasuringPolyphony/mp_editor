@@ -11,6 +11,7 @@ import { StaffSelectComponent } from './staff-select/staff-select.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { InputComponent } from './input.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StorageComponent } from './storage/storage.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     StaffSelectComponent,
     StaffSelectComponent,
     ToolbarComponent,
-    InputComponent
+    InputComponent,
+    StorageComponent
   ],
   imports: [
     CommonModule,

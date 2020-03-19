@@ -66,11 +66,13 @@ export class StaffSelectComponent implements OnInit {
         this.updateSVG();
         return;
       }
-      let state = musicList.addTextToCurrentItem(event.key);
-      if (state) {
-        event.preventDefault();
-        this.updateSVG();
-        return;
+      if (event.key !== ' ') {
+        let state = musicList.addTextToCurrentItem(event.key);
+        if (state) {
+          event.preventDefault();
+          this.updateSVG();
+          return;
+        }
       }
     }
     if ((musicList.m_index >= 0) && (event.key === 'Backspace')) {
@@ -174,6 +176,7 @@ export class StaffSelectComponent implements OnInit {
           }
           event.preventDefault();
           break;
+        case ' ':
         case 'ArrowRight':
           musicList.selectForward();
           event.preventDefault();

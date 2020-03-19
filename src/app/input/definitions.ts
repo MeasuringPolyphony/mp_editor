@@ -30,6 +30,10 @@ export type PartMensuration = {
   prolatio: Mensuration
 };
 
+export type VoicePair = {
+  voice: Voice,
+  mensurations: PartMensuration
+};
 
 /** Typedef to show when something is a IIIF manifest IRI */
 export type IRI = string;
@@ -39,14 +43,39 @@ export type IRI = string;
  * Should contain all the information about a staff that is available.
  */
 export class Staff {
-  constructor(ulx: number, uly: number, lrx: number, lry: number, canvas: string, index: number) {
-    this.id = uuidv4();
+  constructor(
+    ulx: number,
+    uly: number,
+    lrx: number,
+    lry: number,
+    canvas: string,
+    index: number,
+    id?: string,
+    voice?: Voice,
+    musicList?: any
+  ) {
+    if (id) {
+      this.id = id;
+    }
+    else {
+      this.id = uuidv4();
+    }
     this.bbox = { ulx: ulx, uly: uly, lrx: lrx, lry: lry };
     this.canvas = canvas;
     this.index = index;
-    this.voice = Voice.triplum;
+    if (voice) {
+      this.voice = voice;
+    }
+    else {
+      this.voice = Voice.triplum;
+    }
 
-    this.musicList = new MusicList();
+    if (musicList) {
+      this.musicList = musicList;
+    }
+    else {
+      this.musicList = new MusicList();
+    }
   }
 
   get svg() {

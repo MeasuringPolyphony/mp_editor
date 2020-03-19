@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 const SLOTS = 5;
+export type DialogResult = {
+  selected: number,
+  action: string
+};
 
 @Component({
   selector: 'app-storage',

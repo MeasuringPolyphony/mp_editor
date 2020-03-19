@@ -5,7 +5,9 @@ import { StateService } from '../../state-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { StorageComponent } from '../storage/storage.component';
+import { StorageComponent, DialogResult } from '../storage/storage.component';
+import { Staff } from '../definitions';
+import { MusicList, MusicItem } from '../musiclist';
 
 @Component({
   selector: 'app-toolbar',
@@ -28,10 +30,48 @@ export class ToolbarComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(StorageComponent);
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: DialogResult) => {
       console.debug("Closed!");
-      console.debug(result);
-    })
+      switch (result.action) {
+        case 'save':
+          const state = {
+            voices: [...(this.staffService.voices.entries())].map(value => {
+              return {
+                voice: value[0],
+                mensurations: value[1]
+              };
+            }),
+            staves: this.staffService.staves,
+            metadata: this.meiService.metadata
+          };
+          localStorage.setItem(
+            "input-slot-" + result.selected.toString(),
+            JSON.stringify(state)
+          );
+          break;
+        case 'load':
+          const stateString = localStorage.getItem("input-slot-" + result.selected.toString());
+          try {
+            const state = JSON.parse(stateString);
+            this.staffService.setVoices(state.voices);
+            this.meiService.metadata = state.metadata;
+            for (let staff of state.staves as Staff[]) {
+              Object.setPrototypeOf(staff, Staff.prototype);
+              Object.setPrototypeOf(staff.musicList, MusicList.prototype);
+              staff.musicList.m_list.forEach(item => {
+                Object.setPrototypeOf(item, MusicItem.prototype);
+              });
+              this.staffService.initIndex(staff.index, staff.canvas);
+              this.staffService.addStaff(staff.index, staff);
+            }
+            this.staffService.selected = this.staffService.staves[0];
+          }
+          catch (e) {
+            console.error(e);
+          }
+          break;
+      }
+    });
   }
 
   saveClick(evt: MouseEvent) {

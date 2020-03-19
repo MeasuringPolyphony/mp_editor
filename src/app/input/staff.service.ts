@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Staff, Voice, Mensuration, PartMensuration } from './definitions';
+import { Staff, Voice, Mensuration, PartMensuration, VoicePair } from './definitions';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,12 @@ export class StaffService {
     if (!this.stavesByIndex.has(index)) {
       this.stavesByIndex.set(index, []);
       this.canvasIndex.set(uri, index);
+    }
+  }
+
+  setVoices(voices: VoicePair[]) {
+    for (let voice of voices) {
+      this.voices.set(voice.voice, voice.mensurations);
     }
   }
 

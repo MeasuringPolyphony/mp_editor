@@ -10,6 +10,15 @@ import { scoreDoc } from '../definitions';
 
 const pnameOrder = [ 'c', 'd', 'e', 'f', 'g', 'a', 'b'];
 
+function recurseXmlId(element: Element) {
+  if (element.hasAttribute('xml:id')) {
+    element.setAttribute('xml:id', 'm-' + uuid());
+  }
+  for (let i = 0; i < element.children.length; i++) {
+    recurseXmlId(element.children[i]);
+  }
+}
+
 @Component({
   selector: 'app-score-verovio-view',
   templateUrl: './score-verovio-view.component.html',
@@ -42,8 +51,15 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
           elem.classList.remove("selected");
           elem.setAttribute("fill", "");
         });
-      document.getElementById(this.selectedId).classList.add("selected");
-      document.getElementById(this.selectedId).setAttribute("fill", "#d00");
+      try {
+        document.getElementById(this.selectedId).classList.add("selected");
+        document.getElementById(this.selectedId).setAttribute("fill", "#d00");
+      }
+      catch (_e) {
+        console.debug(_e);
+        this.selectedId = null;
+      }
+
     }
   }
 
@@ -126,6 +142,27 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
         case '-': target.setAttribute('accid', 'f'); break;
         case 'n': target.setAttribute('accid', 'n'); break;
         case 'N': target.removeAttribute('accid'); break;
+
+        case 'I':
+          const clone = target.cloneNode(true) as Element;
+          recurseXmlId(clone);
+          if (target.nextElementSibling && target.nextElementSibling.tagName === 'dot') {
+            const cloneDot = target.nextElementSibling.cloneNode(true) as Element;
+            recurseXmlId(cloneDot);
+            target.nextElementSibling.insertAdjacentElement('afterend', clone);
+            clone.insertAdjacentElement('afterend', cloneDot);
+          }
+          else {
+            target.insertAdjacentElement('beforebegin', clone);
+          }
+          break;
+        case 'Backspace':
+          if (target.nextElementSibling && target.nextElementSibling.tagName === 'dot') {
+            target.nextElementSibling.remove();
+          }
+          target.remove();
+
+          break;
         default:
           return;
       }

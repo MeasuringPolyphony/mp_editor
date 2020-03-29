@@ -11,6 +11,9 @@ import { HNPService } from '../../hnp.service';
 })
 export class StaffSelectComponent implements OnInit {
   @ViewChild('example') container: ElementRef;
+  keySigMode = false;
+  pitchSig: string = null;
+  accidSig: string = null;
   constructor(public staffService: StaffService, private hnpService: HNPService) { }
 
   ngOnInit() {
@@ -56,6 +59,13 @@ export class StaffSelectComponent implements OnInit {
   handleKeyPress(event: KeyboardEvent) {
     if (this.staffService._selectedStaff == null) return;
 
+    if (this.keySigMode) {
+      this.handleKeySigPress(event);
+      event.preventDefault();
+      this.updateSVG();
+      return;
+    }
+
     // Based on processKeypress function in mensural-input
     if (event.metaKey) return;
     let musicList = this.staffService._selectedStaff.musicList;
@@ -90,6 +100,11 @@ export class StaffSelectComponent implements OnInit {
     }
     else {
       switch (event.key) {
+        case 'k':
+          this.keySigMode = true;
+          console.debug("Set keySigMode");
+          event.preventDefault();
+          break;
         case 'C':
           musicList.addPitchFar(C_PitchClass);
           event.preventDefault();
@@ -292,6 +307,49 @@ export class StaffSelectComponent implements OnInit {
       }
       musicList.runNotationCallback();
       return;
+    }
+  }
+
+  handleKeySigPress(event: KeyboardEvent) {
+    switch (event.key) {
+      case 'a':
+      case 'A':
+      case 'b':
+      case 'B':
+      case 'c':
+      case 'C':
+      case 'd':
+      case 'D':
+      case 'e':
+      case 'E':
+      case 'f':
+      case 'F':
+      case 'g':
+      case 'G':
+        if (this.pitchSig === null) {
+          this.pitchSig = event.key;
+        }
+        else {
+          this.pitchSig = null;
+          this.accidSig = null;
+          this.keySigMode = false;
+          console.debug("unset keySigMode");
+        }
+        break;
+      case '#':
+      case '-':
+      case 'n':
+        if (this.pitchSig !== null && this.accidSig === null) {
+          this.accidSig = event.key;
+          let musicList = this.staffService._selectedStaff.musicList;
+          musicList.processKeySig(this.pitchSig, this.accidSig);
+          console.debug("Process with " + this.pitchSig + " and " + this.accidSig);
+        }
+        this.pitchSig = null;
+        this.accidSig = null;
+        this.keySigMode = false;
+        console.debug("unset keySigMode");
+        break;
     }
   }
 

@@ -47,6 +47,7 @@ function MusicItem() {
 	this.m_clefLine = 3;
 	this.m_ligStart = false;
 	this.m_ligEnd = false;
+	this.m_keySig = new Map();
 
 	return this;
 }
@@ -517,6 +518,38 @@ MusicList.prototype.clear = function () {
 }
 
 
+//////////////////////////////
+//
+// MusicList::clear --
+//
+
+MusicList.prototype.processKeySig = function (pitch, accid) {
+	if (this.m_list.length > 0) {
+		let first = this.m_list[0];
+		if (first.m_type !== "clef") {
+			console.debug("First was not a clef!!!");
+			return false;
+		}
+		if (first.m_keySig === undefined) {
+			first.m_keySig = new Map();
+		}
+		if (first.m_keySig.has(pitch)) {
+			if (first.m_keySig.get(pitch) === accid) {
+				first.m_keySig.delete(pitch);
+			} else {
+				first.m_keySig.set(pitch, accid);
+			}
+		}
+		else {
+			first.m_keySig.set(pitch, accid);
+		}
+		this.runNotationCallback();
+		return true;
+	}
+	console.debug("Length is 0");
+	return false;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -625,6 +658,17 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 		output += this.m_clefLine;
 		output += "\t";
 		output += "*";
+		if (this.m_keySig.size > 0) {
+			output += "\n";
+			output += "*k[";
+			for (let [pitch, accid] of this.m_keySig) {
+				output += pitch;
+				output += accid;
+			}
+			output += "]";
+			output += "\t*";
+		}
+
 		return output;
 	}
 	if (this.m_type == "rest") {

@@ -200,6 +200,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     }
     catch(e) {
       console.error(e);
+      alert("Error in scoring up tool! " + e);
       output = null;
     }
     finally {

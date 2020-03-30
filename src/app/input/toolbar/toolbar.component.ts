@@ -60,6 +60,7 @@ export class ToolbarComponent implements OnInit {
               Object.setPrototypeOf(staff.musicList, MusicList.prototype);
               staff.musicList.m_list.forEach(item => {
                 Object.setPrototypeOf(item, MusicItem.prototype);
+                item.init();
               });
               this.staffService.initIndex(staff.index, staff.canvas);
               this.staffService.addStaff(staff.index, staff);

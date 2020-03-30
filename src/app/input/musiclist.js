@@ -768,4 +768,49 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 	return output;
 }
 
+//////////////////////////////
+//
+// MusicItem::init --
+//
+
+MusicItem.prototype.init = function () {
+	// This just makes sure all members are defined
+	if (this.m_type === undefined) {
+		this.m_type = "note";
+	}
+	if (this.m_pname === undefined) {
+		this.m_pname = C_PitchClass;
+	}
+	if (this.m_accid === undefined) {
+		this.m_accid = 0;
+	}
+	if (this.m_oct === undefined) {
+		this.m_oct = 4;
+	}
+	if (this.m_rhythm === undefined) {
+		this.m_rhythm = 1;
+	}
+	if (this.m_dot === undefined) {
+		this.m_dot = false;
+	}
+	if (this.m_line === undefined) {
+		this.m_line = -1;
+	}
+	if (this.m_text === undefined) {
+		this.m_text = "";
+	}
+	if (this.m_clefLine === undefined) {
+		this.m_clefLine = 3;
+	}
+	if (this.m_ligStart === undefined) {
+		this.m_ligStart = false;
+	}
+	if (this.m_ligEnd === undefined) {
+		this.m_ligEnd = false;
+	}
+	if (this.m_keySig === undefined) {
+		this.m_keySig = new Map();
+	}
+}
+
 export { MusicItem, MusicList };

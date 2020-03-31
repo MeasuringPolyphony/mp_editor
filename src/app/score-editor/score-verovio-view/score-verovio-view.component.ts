@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import * as ScoringUp from 'scoring-up';
 import { HNPService } from '../../hnp.service';
 import { StateService } from '../../state-service.service';
+import { SelectedStaffService } from '../selected-staff.service';
 
 import { scoreDoc } from '../definitions';
 
@@ -32,7 +33,8 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private verovioService: HNPService,
-    private stateService: StateService
+    private stateService: StateService,
+    private staffService: SelectedStaffService
   ) { }
 
   ngOnInit() {
@@ -58,8 +60,47 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       catch (_e) {
         console.debug(_e);
         this.selectedId = null;
+        return;
       }
+      try {
+        // Get nearest pb  and sb
+        console.debug(this.stateService.mei);
+        const resolver = this.stateService.mei.createNSResolver(this.stateService.mei.ownerDocument == null ? this.stateService.mei.documentElement : this.stateService.mei.ownerDocument.documentElement);
+        const meiRes = () => { return 'http://www.music-encoding.org/ns/mei'; };
+        const ref = this.stateService.mei.evaluate("//*[@xml:id='" + this.selectedId + "']", this.stateService.mei, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        let result = this.stateService.mei.evaluate("./preceding::mei:pb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const pb = result.snapshotItem(result.snapshotLength - 1) as Element;
+        console.debug(pb);
+        result = this.stateService.mei.evaluate("./preceding::mei:sb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const sb = result.snapshotItem(result.snapshotLength - 1) as Element;
+        console.debug(sb);
+        // Get corresponding zones (strip away fragment symbol)
+        const pbFacsId = pb.getAttribute("facs")[0] === "#" ?
+          pb.getAttribute("facs").substring(1) :
+          pb.getAttribute("facs");
+        const sbFacsId = sb.getAttribute("facs")[0] === "#" ?
+          sb.getAttribute("facs").substring(1) :
+          sb.getAttribute("facs");
 
+        // The following SHOULD use XPath but I haven't been able to get it to work
+        const pbGraphic = Array.from(
+          this.stateService.mei.getElementsByTagName("graphic")
+        ).filter(el => { return el.getAttribute("xml:id") === pbFacsId; }).pop();
+        const sbZone = Array.from(
+          pbGraphic.children
+        ).filter(el => { return el.getAttribute("xml:id") === sbFacsId; }).pop()
+        const iri = pbGraphic.getAttribute("target");
+        const bbox = {
+          ulx: sbZone.getAttribute("ulx"),
+          uly: sbZone.getAttribute("uly"),
+          lrx: sbZone.getAttribute("lrx"),
+          lry: sbZone.getAttribute("lry")
+        };
+        this.staffService.staffLocation = [iri, bbox];
+      }
+      catch (_e) {
+        console.debug(_e);
+      }
     }
   }
 

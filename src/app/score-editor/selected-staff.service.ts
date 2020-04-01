@@ -24,7 +24,6 @@ export class SelectedStaffService {
   }
 
   set staffLocation(loc: [IRI, BBox]) {
-    console.debug(loc);
     this._staffLoc.next(loc);
   }
 

@@ -64,16 +64,13 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       }
       try {
         // Get nearest pb  and sb
-        console.debug(this.stateService.mei);
         const resolver = this.stateService.mei.createNSResolver(this.stateService.mei.ownerDocument == null ? this.stateService.mei.documentElement : this.stateService.mei.ownerDocument.documentElement);
         const meiRes = () => { return 'http://www.music-encoding.org/ns/mei'; };
         const ref = this.stateService.mei.evaluate("//*[@xml:id='" + this.selectedId + "']", this.stateService.mei, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         let result = this.stateService.mei.evaluate("./preceding::mei:pb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
         const pb = result.snapshotItem(result.snapshotLength - 1) as Element;
-        console.debug(pb);
         result = this.stateService.mei.evaluate("./preceding::mei:sb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
         const sb = result.snapshotItem(result.snapshotLength - 1) as Element;
-        console.debug(sb);
         // Get corresponding zones (strip away fragment symbol)
         const pbFacsId = pb.getAttribute("facs")[0] === "#" ?
           pb.getAttribute("facs").substring(1) :

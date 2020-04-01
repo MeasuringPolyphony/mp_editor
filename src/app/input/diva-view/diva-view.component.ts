@@ -230,7 +230,7 @@ export class DivaViewComponent implements OnInit, OnDestroy {
     for (const sequence of manifest.sequences) {
       for (const canvas of sequence.canvases) {
         // Add each canvas and record its zero-based index
-        this.staffService.initIndex(sequence.canvases.indexOf(canvas), canvas.toString());
+        this.staffService.initIndex(sequence.canvases.indexOf(canvas), canvas['@id'].toString());
       }
     }
   }

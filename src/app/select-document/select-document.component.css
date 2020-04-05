@@ -1,0 +1,8 @@
+#document-select {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#document-select div {
+    grid-column: 2;
+}

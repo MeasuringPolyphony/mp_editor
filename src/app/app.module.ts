@@ -1,11 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 import { InputModule } from './input/input.module';
 import { InputComponent } from './input/input.component';
@@ -45,9 +47,12 @@ const routes: Routes = [
     ),
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     MatTabsModule,
     MatButtonModule,
     MatDividerModule,
+    MatFormFieldModule,
+    MatSelectModule,
     InputModule,
     ScoreEditorModule
   ],

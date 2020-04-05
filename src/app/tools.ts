@@ -10,3 +10,6 @@ export function formIIIFManifest(source: string, identifier: string): IRI {
       return '';
   }
 }
+
+//https://gallica.bnf.fr/ark:/12148/btv1b8454675g
+export const gallicaRegexp = new RegExp("https?:\/\/gallica\.bnf\.fr\/ark:\/([a-z0-9]+\/[a-z0-9]+)");

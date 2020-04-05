@@ -7,7 +7,14 @@ app-score-diva-view {
     grid-column: 1 / 2;
 }
 
+app-score-verovio-view {
+    overflow-x: scroll;
+    display: block;
+    width: 100%;
+}
+
 #right {
     grid-column: 2 / 4;
-    margin: 1em;
+    padding: 1em;
+    width: 100%;
 }

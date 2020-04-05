@@ -46,6 +46,21 @@ export class SelectDocumentComponent implements OnInit {
           return;
         }
         break;
+      case 'ecodices':
+        if (Tools.ecodicesRegexp.test(resourceURL)) {
+          console.debug("Regular ecodices");
+          let matches = resourceURL.match(Tools.ecodicesRegexp);
+          identifier = matches[1] + '-' + matches[2];
+        }
+        else if (Tools.ecodicesIIIFRegexp.test(resourceURL)) {
+          console.debug("IIIF ecodices");
+          identifier = resourceURL.match(Tools.ecodicesIIIFRegexp)[1];
+        }
+        else {
+          this.invalid = true;
+          return;
+        }
+        break;
       default:
         console.debug(source);
         this.invalid = true;

@@ -5,6 +5,8 @@ import { StateService } from '../../state-service.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import * as vkbeautify from 'vkbeautify';
+
 import { StorageComponent, DialogResult } from '../storage/storage.component';
 import { Staff } from '../definitions';
 import { MusicList, MusicItem } from '../musiclist';
@@ -79,7 +81,7 @@ export class ToolbarComponent implements OnInit {
     let target = evt.target as HTMLAnchorElement;
     const mei = this.meiService.generateFullMEI();
     const serializer = new XMLSerializer();
-    const content = serializer.serializeToString(mei);
+    const content = vkbeautify.xml(serializer.serializeToString(mei));
     const blob = new Blob([content], {type: 'application/xml'});
     target.setAttribute('href', window.URL.createObjectURL(blob));
   }

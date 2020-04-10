@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import * as vkbeautify from 'vkbeautify';
+
 import { StateService } from '../../state-service.service';
 import { scoreDoc } from '../definitions';
 
@@ -24,7 +26,7 @@ export class ScoreToolbarComponent implements OnInit {
     if (this.currentDoc !== null) {
       const target = event.target as HTMLAnchorElement;
       const serializer = new XMLSerializer();
-      const content = serializer.serializeToString(this.currentDoc);
+      const content = vkbeautify.xml(serializer.serializeToString(this.currentDoc));
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
     }
@@ -34,7 +36,7 @@ export class ScoreToolbarComponent implements OnInit {
     if (this.stateService.mei != null) {
       const target = event.target as HTMLAnchorElement;
       const serializer = new XMLSerializer();
-      const content = serializer.serializeToString(this.stateService.mei);
+      const content = vkbeautify.xml(serializer.serializeToString(this.stateService.mei));
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
     }

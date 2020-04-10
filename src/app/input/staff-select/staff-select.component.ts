@@ -95,7 +95,13 @@ export class StaffSelectComponent implements OnInit {
       event.preventDefault();
     }
     else if ((musicList.m_index < 0) && (event.key === 'Backspace')) {
-      musicList.removeLastItem();
+      let last = musicList.m_list[musicList.m_list.length - 1];
+      if (last.m_type === "barline" && last.m_rhythm === 2) {
+        last.m_rhythm = 1;
+        musicList.runNotationCallback();
+      } else {
+        musicList.removeLastItem();
+      }
       event.preventDefault();
     }
     else {
@@ -225,6 +231,10 @@ export class StaffSelectComponent implements OnInit {
         case 'N':
         case 'n':
           this.processAccidental(event.key);
+          event.preventDefault();
+          break;
+        case '|':
+          musicList.addBarLine();
           event.preventDefault();
           break;
         }

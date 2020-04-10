@@ -62,6 +62,30 @@ function MusicItem() {
 
 //////////////////////////////
 //
+// MusicList::addBarLine --
+//
+
+MusicList.prototype.addBarLine = function () {
+	if (this.m_list.length === 0) {
+		return;
+	}
+	let lastItem = this.m_list[this.m_list.length - 1];
+	if (lastItem.m_type === "barline") {
+		// Set to double barline
+		lastItem.m_rhythm = 2;
+	}
+	else {
+		// Add barline
+		let item = new MusicItem();
+		item.m_type = "barline";
+		item.m_rhythm = 1;
+		this.m_list.push(item);
+	}
+	this.runNotationCallback();
+}
+
+//////////////////////////////
+//
 // MusicList::addClef --
 //
 
@@ -694,6 +718,17 @@ MusicItem.prototype.getHumdrumLine = function (options) {
 
 		output += "\t.";
 
+		return output;
+	}
+	if (this.m_type == "barline") {
+		output += "=";
+		if (this.m_rhythm == 2) {
+			output += "||";
+		}
+		if (options.mark) {
+			output += "@";
+		}
+		output += "\t.";
 		return output;
 	}
 

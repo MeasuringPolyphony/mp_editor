@@ -30,6 +30,8 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   @ViewChild('verovio') container: ElementRef;
 
   selectedId: string = null;
+  quasiScore: XMLDocument = null;
+  corrToSicMap: Map<string, string> = new Map();
 
   constructor(
     private verovioService: HNPService,
@@ -63,10 +65,15 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
         return;
       }
       try {
+        // Convert ID to sic ID if applicable
+        let partsId = this.selectedId;
+        if (this.corrToSicMap.has(partsId)) {
+          partsId = this.corrToSicMap.get(partsId);
+        }
         // Get nearest pb  and sb
         const resolver = this.stateService.mei.createNSResolver(this.stateService.mei.ownerDocument == null ? this.stateService.mei.documentElement : this.stateService.mei.ownerDocument.documentElement);
         const meiRes = () => { return 'http://www.music-encoding.org/ns/mei'; };
-        const ref = this.stateService.mei.evaluate("//*[@xml:id='" + this.selectedId + "']", this.stateService.mei, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        const ref = this.stateService.mei.evaluate("//*[@xml:id='" + partsId + "']", this.stateService.mei, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         let result = this.stateService.mei.evaluate("./preceding::mei:pb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
         const pb = result.snapshotItem(result.snapshotLength - 1) as Element;
         result = this.stateService.mei.evaluate("./preceding::mei:sb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
@@ -122,10 +129,24 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent) {
     if (this.selectedId !== null) {
-      const resolver = this.stateService.mei.createNSResolver(this.stateService.mei.ownerDocument == null ? this.stateService.mei.documentElement : this.stateService.mei.ownerDocument.documentElement);
-      const result = this.stateService.mei.evaluate("//*[@xml:id='" + this.selectedId + "']", this.stateService.mei, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+      let meiDoc: XMLDocument;
+      if (this.stateService.editorialMode) {
+        if (this.quasiScore === null) {
+          this.quasiScore = this.getQuasiScore(this.stateService.mei);
+        }
+        meiDoc = this.quasiScore;
+      }
+      else {
+        meiDoc = this.stateService.mei;
+      }
+      const resolver = meiDoc.createNSResolver(meiDoc.ownerDocument == null ? meiDoc.documentElement : meiDoc.ownerDocument.documentElement);
+      const result = meiDoc.evaluate("//*[@xml:id='" + this.selectedId + "']", meiDoc, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
       if (!result.singleNodeValue) return;
-      const target = result.singleNodeValue as Element;
+      let target = result.singleNodeValue as Element;
+      // Ensure corrected element in MEI
+      if (this.stateService.editorialMode) {
+        target = this.ensureCorrElement(target, meiDoc);
+      }
       if (target.tagName === "note") {
         switch (event.key) {
           case '.':
@@ -137,7 +158,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
               }
             }
             else {
-              let dot = this.stateService.mei.createElementNS("http://music-encoding.org/ns/mei", "dot");
+              let dot = meiDoc.createElementNS("http://music-encoding.org/ns/mei", "dot");
               dot.setAttribute("xml:id", "m-" + uuid());
               target.insertAdjacentElement("afterend", dot);
             }
@@ -240,7 +261,13 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     let output = null;
     try {
       const staffDef = meiDoc.getElementsByTagName("staffDef")[0];
-      const quasiDoc = ScoringUp.merge(meiDoc.cloneNode(true));
+      let quasiDoc: XMLDocument;
+      if (this.stateService.editorialMode) {
+        quasiDoc = this.quasiScore.cloneNode(true) as XMLDocument;
+      }
+      else {
+        quasiDoc = ScoringUp.merge(meiDoc.cloneNode(true));
+      }
       switch (staffDef.getAttribute("notationtype")) {
         case "mensural.white":
           console.warn("Mensural White is not currently supported!");
@@ -270,5 +297,40 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     finally {
       return output;
     }
+  }
+
+  getQuasiScore(partsMEI: XMLDocument): XMLDocument {
+    let quasi = null;
+    try {
+      quasi = ScoringUp.merge(partsMEI.cloneNode(true));
+    } catch (e) {
+      console.error(e);
+    }
+    return quasi;
+  }
+
+  ensureCorrElement(target: Element, meiDoc: XMLDocument): Element {
+    if (target.closest('corr')) {
+      return target;
+    }
+    const choice = meiDoc.createElementNS('http://music-encoding.org/ns/mei', 'choice');
+    const corr = meiDoc.createElementNS('http://music-encoding.org/ns/mei', 'corr');
+    const sic = meiDoc.createElementNS('http://music-encoding.org/ns/mei', 'sic');
+    const sibling = target.nextElementSibling;
+    target.insertAdjacentElement('beforebegin', choice);
+    choice.appendChild(corr);
+    choice.appendChild(sic);
+    sic.appendChild(target);
+    const corrTarget = target.cloneNode(true) as Element;
+    recurseXmlId(corrTarget);
+    corr.appendChild(corrTarget);
+    this.corrToSicMap.set(corrTarget.getAttribute("xml:id"), target.getAttribute("xml:id"));
+    if (sibling !== null && sibling.tagName === 'dot') {
+      sic.appendChild(sibling);
+      const sibCorr = sibling.cloneNode(true) as Element;
+      recurseXmlId(sibCorr);
+      corr.appendChild(sibCorr);
+    }
+    return corrTarget;
   }
 }

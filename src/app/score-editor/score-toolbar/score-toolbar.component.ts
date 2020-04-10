@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { StateService } from '../../state-service.service';
 import { scoreDoc } from '../definitions';
 
 @Component({
@@ -11,7 +12,7 @@ export class ScoreToolbarComponent implements OnInit {
 
   currentDoc: XMLDocument = null;
 
-  constructor() { }
+  constructor(private stateService: StateService) { }
 
   ngOnInit() {
     scoreDoc.subscribe((doc) => {
@@ -24,6 +25,16 @@ export class ScoreToolbarComponent implements OnInit {
       const target = event.target as HTMLAnchorElement;
       const serializer = new XMLSerializer();
       const content = serializer.serializeToString(this.currentDoc);
+      const blob = new Blob([content], {type: 'application/xml'});
+      target.setAttribute('href', URL.createObjectURL(blob));
+    }
+  }
+
+  savePartsClick(event: MouseEvent) {
+    if (this.stateService.mei != null) {
+      const target = event.target as HTMLAnchorElement;
+      const serializer = new XMLSerializer();
+      const content = serializer.serializeToString(this.stateService.mei);
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
     }

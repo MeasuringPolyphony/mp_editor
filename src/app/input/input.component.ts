@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { IRI } from './definitions';
 import { formIIIFManifest } from '../tools';
+import { StateService } from '../state-service.service';
 import { MeiService } from './mei.service';
 
 @Component({
@@ -26,6 +27,7 @@ export class InputComponent implements OnInit {
 
   constructor(
     private meiService: MeiService,
+    private stateService: StateService,
     private route: ActivatedRoute,
   ) {
     this.inputStep = InputComponent.InputStep.METADATA;
@@ -44,10 +46,7 @@ export class InputComponent implements OnInit {
   }
 
   ngOnInit() {
-    /*this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      this.source = paramMap.get('source');
-      this.identifier = decodeURIComponent(paramMap.get('identifier'));
-    });*/
+    this.stateService.editorialMode = false;
   }
 
   onSetMetadata() {

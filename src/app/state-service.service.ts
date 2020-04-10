@@ -6,10 +6,11 @@ import { Injectable } from '@angular/core';
 export class StateService {
 
   private meiDoc: XMLDocument;
-  public editorialMode = false;
+  public editorialMode: boolean;
 
   constructor() {
     this.meiDoc = null;
+    this.editorialMode = false;
   }
 
   get mei(): XMLDocument {

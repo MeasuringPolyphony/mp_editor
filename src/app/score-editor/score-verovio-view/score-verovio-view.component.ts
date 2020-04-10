@@ -158,7 +158,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
               }
             }
             else {
-              let dot = meiDoc.createElementNS("http://music-encoding.org/ns/mei", "dot");
+              let dot = meiDoc.createElementNS("http://www.music-encoding.org/ns/mei", "dot");
               dot.setAttribute("xml:id", "m-" + uuid());
               target.insertAdjacentElement("afterend", dot);
             }
@@ -313,9 +313,9 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     if (target.closest('corr')) {
       return target;
     }
-    const choice = meiDoc.createElementNS('http://music-encoding.org/ns/mei', 'choice');
-    const corr = meiDoc.createElementNS('http://music-encoding.org/ns/mei', 'corr');
-    const sic = meiDoc.createElementNS('http://music-encoding.org/ns/mei', 'sic');
+    const choice = meiDoc.createElementNS('http://www.music-encoding.org/ns/mei', 'choice');
+    const corr = meiDoc.createElementNS('http://www.music-encoding.org/ns/mei', 'corr');
+    const sic = meiDoc.createElementNS('http://www.music-encoding.org/ns/mei', 'sic');
     const sibling = target.nextElementSibling;
     target.insertAdjacentElement('beforebegin', choice);
     choice.appendChild(corr);

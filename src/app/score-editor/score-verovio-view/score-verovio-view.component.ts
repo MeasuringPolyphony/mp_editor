@@ -109,7 +109,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     let target = event.target as Element;
     while (target) {
       if (target.nodeName === 'g') {
-        if (target.classList.contains('note')) {
+        if (target.classList.contains('note') || target.classList.contains('rest')) {
           this.selectedId = target.id;
           this.setSelected();
           break;
@@ -126,83 +126,109 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       const result = this.stateService.mei.evaluate("//*[@xml:id='" + this.selectedId + "']", this.stateService.mei, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
       if (!result.singleNodeValue) return;
       const target = result.singleNodeValue as Element;
-      switch (event.key) {
-        case '.':
-          let sibling = target.nextElementSibling;
-          if (sibling !== null && sibling.tagName === 'dot') {
-            target.nextSibling.remove();
-            if (target.hasAttribute("dots")) {
-              target.setAttribute("dots", "0");
-            }
-          }
-          else {
-            let dot = this.stateService.mei.createElementNS("http://music-encoding.org/ns/mei", "dot");
-            dot.setAttribute("xml:id", "m-" + uuid());
-            target.insertAdjacentElement("afterend", dot);
-          }
-          break;
-        case 'ArrowUp':
-          if (target.hasAttribute('pname')) {
-            let currentPname = target.getAttribute('pname');
-            let idx = pnameOrder.indexOf(currentPname);
-            if (idx + 1 < pnameOrder.length) {
-              target.setAttribute('pname', pnameOrder[idx + 1]);
+      if (target.tagName === "note") {
+        switch (event.key) {
+          case '.':
+            let sibling = target.nextElementSibling;
+            if (sibling !== null && sibling.tagName === 'dot') {
+              target.nextSibling.remove();
+              if (target.hasAttribute("dots")) {
+                target.setAttribute("dots", "0");
+              }
             }
             else {
-              target.setAttribute('pname', pnameOrder[0]);
-              target.setAttribute('oct', (parseInt(target.getAttribute('oct')) + 1).toString());
+              let dot = this.stateService.mei.createElementNS("http://music-encoding.org/ns/mei", "dot");
+              dot.setAttribute("xml:id", "m-" + uuid());
+              target.insertAdjacentElement("afterend", dot);
             }
-          }
-          break;
-        case 'ArrowDown':
-          if (target.hasAttribute('pname')) {
-            let currentPname = target.getAttribute('pname');
-            let idx = pnameOrder.indexOf(currentPname);
-            if (idx - 1 > 0) {
-              target.setAttribute('pname', pnameOrder[idx - 1]);
+            break;
+          case 'ArrowUp':
+            if (target.hasAttribute('pname')) {
+              let currentPname = target.getAttribute('pname');
+              let idx = pnameOrder.indexOf(currentPname);
+              if (idx + 1 < pnameOrder.length) {
+                target.setAttribute('pname', pnameOrder[idx + 1]);
+              }
+              else {
+                target.setAttribute('pname', pnameOrder[0]);
+                target.setAttribute('oct', (parseInt(target.getAttribute('oct')) + 1).toString());
+              }
+            }
+            break;
+          case 'ArrowDown':
+            if (target.hasAttribute('pname')) {
+              let currentPname = target.getAttribute('pname');
+              let idx = pnameOrder.indexOf(currentPname);
+              if (idx - 1 > 0) {
+                target.setAttribute('pname', pnameOrder[idx - 1]);
+              }
+              else {
+                target.setAttribute('pname', pnameOrder[pnameOrder.length - 1]);
+                target.setAttribute('oct', (parseInt(target.getAttribute('oct')) - 1).toString());
+              }
+            }
+            break;
+          case '1': target.setAttribute('dur', 'semibrevis'); break;
+          case '2': target.setAttribute('dur', 'minima'); break;
+          case '4': target.setAttribute('dur', 'semiminima'); break;
+          case '8': target.setAttribute('dur', 'fusa'); break;
+          case '6': target.setAttribute('dur', 'semifusa'); break;
+          case '7': target.setAttribute('dur', 'maxima'); break;
+          case '9': target.setAttribute('dur', 'longa'); break;
+          case '0': target.setAttribute('dur', 'brevis'); break;
+
+          case '#': target.setAttribute('accid', 's'); break;
+          case '-': target.setAttribute('accid', 'f'); break;
+          case 'n': target.setAttribute('accid', 'n'); break;
+          case 'N': target.removeAttribute('accid'); break;
+
+          case 'I':
+            const clone = target.cloneNode(true) as Element;
+            recurseXmlId(clone);
+            if (target.nextElementSibling && target.nextElementSibling.tagName === 'dot') {
+              const cloneDot = target.nextElementSibling.cloneNode(true) as Element;
+              recurseXmlId(cloneDot);
+              target.nextElementSibling.insertAdjacentElement('afterend', clone);
+              clone.insertAdjacentElement('afterend', cloneDot);
             }
             else {
-              target.setAttribute('pname', pnameOrder[pnameOrder.length - 1]);
-              target.setAttribute('oct', (parseInt(target.getAttribute('oct')) - 1).toString());
+              target.insertAdjacentElement('beforebegin', clone);
             }
-          }
-          break;
-        case '1': target.setAttribute('dur', 'semibrevis'); break;
-        case '2': target.setAttribute('dur', 'minima'); break;
-        case '4': target.setAttribute('dur', 'semiminima'); break;
-        case '8': target.setAttribute('dur', 'fusa'); break;
-        case '6': target.setAttribute('dur', 'semifusa'); break;
-        case '7': target.setAttribute('dur', 'maxima'); break;
-        case '9': target.setAttribute('dur', 'longa'); break;
-        case '0': target.setAttribute('dur', 'brevis'); break
+            break;
+          case 'Backspace':
+            if (target.nextElementSibling && target.nextElementSibling.tagName === 'dot') {
+              target.nextElementSibling.remove();
+            }
+            target.remove();
 
-        case '#': target.setAttribute('accid', 's'); break;
-        case '-': target.setAttribute('accid', 'f'); break;
-        case 'n': target.setAttribute('accid', 'n'); break;
-        case 'N': target.removeAttribute('accid'); break;
+            break;
+          default:
+            return;
+        }
+      } else if (target.tagName === "rest") {
+        switch (event.key) {
+          case '1': target.setAttribute('dur', 'semibrevis'); break;
+          case '2': target.setAttribute('dur', 'minima'); break;
+          case '4': target.setAttribute('dur', 'semiminima'); break;
+          case '8': target.setAttribute('dur', 'fusa'); break;
+          case '6': target.setAttribute('dur', 'semifusa'); break;
+          case '7': target.setAttribute('dur', 'maxima'); break;
+          case '9': target.setAttribute('dur', 'longa'); break;
+          case '0': target.setAttribute('dur', 'brevis'); break;
 
-        case 'I':
-          const clone = target.cloneNode(true) as Element;
-          recurseXmlId(clone);
-          if (target.nextElementSibling && target.nextElementSibling.tagName === 'dot') {
-            const cloneDot = target.nextElementSibling.cloneNode(true) as Element;
-            recurseXmlId(cloneDot);
-            target.nextElementSibling.insertAdjacentElement('afterend', clone);
-            clone.insertAdjacentElement('afterend', cloneDot);
-          }
-          else {
+          case 'I':
+            const clone = target.cloneNode(true) as Element;
+            recurseXmlId(clone);
             target.insertAdjacentElement('beforebegin', clone);
-          }
-          break;
-        case 'Backspace':
-          if (target.nextElementSibling && target.nextElementSibling.tagName === 'dot') {
-            target.nextElementSibling.remove();
-          }
-          target.remove();
+            break;
 
-          break;
-        default:
-          return;
+          case 'Backspace':
+            target.remove();
+            break;
+
+          default:
+            return;
+        }
       }
 
       event.preventDefault();

@@ -1,8 +1,62 @@
 <div id="score-container">
     <app-score-diva-view [iiifManifest]="iiifManifest"></app-score-diva-view>
     <div id="right">
-        <app-score-toolbar></app-score-toolbar>
-        <mat-divider></mat-divider>
-        <app-score-verovio-view></app-score-verovio-view>
+        <mat-tab-group>
+            <mat-tab label="Score Editor">
+                <app-score-toolbar></app-score-toolbar>
+                <mat-divider></mat-divider>
+                <app-score-verovio-view></app-score-verovio-view>
+            </mat-tab>
+            <mat-tab label="Help">
+                <h2>Making Simple Edits</h2>
+                <p>
+                    When you click on a pitch, the staff to which
+                    that pitch belongs will be highlighted with a
+                    dashed box in the manuscript image in the left
+                    of the screen. This is to help you check
+                    the accuracy of the edits you make.
+                </p>
+                <p>
+                    You can make simple edits directly as follows.
+                    By clicking on a pitch to highlight it you can edit:
+                </p>
+                <ul>
+                    <li><em>Pitch</em>
+                        Use up/down arrow keys to change pitch.
+                    </li>
+                    <li><em>Rhythm</em>
+                        Type a number key to alter its rhythm
+                        (1 semibreve, 2 minim, 4 semiminim,
+                        8 fusa, 6 semifusa, 0 breve, 9 long, 7 maxima).
+                        Scoring-up will rerun after a rhythmic value changes.
+                    </li>
+                    <li><em>Dots</em>
+                        Typing a period will add or remove the dot from the
+                        highlighted pitch. Scoring-up will automatically
+                        rerun.
+                    </li>
+                    <li><em>Accidentals</em>
+                        To add or remove a flat, type <code>-</code>. To
+                        add/remove a sharp, type <code>#</code>. To add/remove
+                        a natural, type <code>n</code>.
+                    </li>
+                </ul>
+                <p>
+                    You can also use the back button to return to the data input
+                    screen and make more significant edits, but any changes made
+                    in the score editor thus far will be lost!
+                </p>
+                <p>
+                    The purpose of the score editor is to do enough editing to
+                    enable the correct alignment of the score and edit while
+                    viewing the manuscript. For more fine-grained editing,
+                    it is recommended to download the MEI file and open it
+                    in a tool that allows direct editing of the MEI file such
+                    as <a href="https://verovio.humdrum.org" target="_blank">
+                    the Verovio Humdrum Viewer</a> or <a href="https://editor.verovio.org"
+                    target="_blank">the Verovio Editor</a>.
+                </p>
+            </mat-tab>
+        </mat-tab-group>
     </div>
 </div>

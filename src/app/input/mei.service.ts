@@ -112,6 +112,14 @@ export class MeiService {
     let page: string = undefined;
     let graphic: Element = undefined;
     for (let staff of staves) {
+      let staffContents: Element[] = this._getStaffContents(staff);
+      // Ignore noteless staves
+      if (staffContents.filter(element => {
+        return element.tagName === 'note';
+      }).length === 0) {
+        continue;
+      }
+
       if (staff.canvas !== page) {
         // Add pb
         let pb = meiDoc.createElementNS(NAMESPACE, "pb");
@@ -135,7 +143,6 @@ export class MeiService {
       let sb = meiDoc.createElementNS(NAMESPACE, "sb");
       sb.setAttribute("facs", '#' + zone.getAttribute("xml:id"));
       layer.appendChild(sb);
-      let staffContents: Element[] = this._getStaffContents(staff);
       staffContents.forEach(child => {
         recurseRandomUUID(child);
         if (child.tagName === 'ligature') {

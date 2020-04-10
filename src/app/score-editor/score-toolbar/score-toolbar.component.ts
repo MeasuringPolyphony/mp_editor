@@ -14,7 +14,7 @@ export class ScoreToolbarComponent implements OnInit {
 
   currentDoc: XMLDocument = null;
 
-  constructor(private stateService: StateService) { }
+  constructor(public stateService: StateService) { }
 
   ngOnInit() {
     scoreDoc.subscribe((doc) => {
@@ -39,6 +39,12 @@ export class ScoreToolbarComponent implements OnInit {
       const content = vkbeautify.xml(serializer.serializeToString(this.stateService.mei));
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
+    }
+  }
+
+  setEditorialMode() {
+    if (confirm("Edits in editorial mode reflect cases where there is a problem with the manuscript. You cannot exit editorial mode. Do you want to continue?")) {
+      this.stateService.editorialMode = true;
     }
   }
 

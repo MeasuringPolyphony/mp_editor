@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class StateService {
 
   private meiDoc: XMLDocument;
+  public editorialMode = false;
 
   constructor() {
     this.meiDoc = null;

@@ -9,4 +9,7 @@
             Download Parts-based MEI
         </a>
     </button>
+    <button mat-stroked-button *ngIf="!stateService.editorialMode" (click)="setEditorialMode()">
+        Move to Editorial Mode
+    </button>
 </div>

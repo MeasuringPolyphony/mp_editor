@@ -1,10 +1,14 @@
-<h1 mat-dialog-title>Storage</h1>
+<h1 mat-dialog-title>Save/Load My Work</h1>
 <div mat-dialog-content>
+    <p>
+        This browser can locally store and reload data from different workspaces.
+        This data will persist until overwritten or the browser's stored data is cleared.
+    </p>
     <mat-form-field>
-        <mat-label>Select Slot</mat-label>
+        <mat-label>Select Workspace</mat-label>
         <mat-select [(value)]="selected">
             <mat-option *ngFor="let slot of slots" [value]="slot">
-                Slot {{slot}}
+                Workspace {{slot}}
             </mat-option>
         </mat-select>
     </mat-form-field>

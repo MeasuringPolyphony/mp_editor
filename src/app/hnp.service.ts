@@ -14,6 +14,7 @@ export class HNPService {
       humType: 0,
       scale: 90,
       spacingNonLinear: 0,
+      spacingLinear: 0.05,
       breaks: 'none',
 
     }
@@ -39,6 +40,6 @@ export class HNPService {
     const parser = new DOMParser();
     this.vrvToolkit.loadData(serializedMei);
     const svgRaw = this.vrvToolkit.renderToSVG(1);
-    return parser.parseFromString(svgRaw, 'image/svg+xml').documentElement as unknown as SVGSVGElement;    
+    return parser.parseFromString(svgRaw, 'image/svg+xml').documentElement as unknown as SVGSVGElement;
   }
 }

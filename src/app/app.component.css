@@ -133,6 +133,15 @@ p
 	margin-top: 28px;
 }
 
+#transcriptionDiv {
+    width: 100%;
+}
+
+#new-transcription-button {
+    float: right;
+    background-color: white;
+}
+
 @media (min-width: 992px)
 {
 	#mainNav

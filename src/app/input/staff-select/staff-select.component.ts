@@ -55,6 +55,10 @@ export class StaffSelectComponent implements OnInit {
     }
   }
 
+  repTenorButton() {
+    this.staffService._repeatingTenor.followsId = this.staffService._selectedStaff.id;
+  }
+
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent) {
     if (this.staffService._selectedStaff == null) return;

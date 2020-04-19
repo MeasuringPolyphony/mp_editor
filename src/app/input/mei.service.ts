@@ -84,6 +84,7 @@ export class MeiService {
   }
 
   _addPart(meiDoc: Document, staves: Staff[]) {
+    let dir = null;
     let facsimile = meiDoc.querySelector("facsimile");
 
     staves.sort(Staff.compare);
@@ -107,6 +108,18 @@ export class MeiService {
     let staff = meiDoc.createElementNS(NAMESPACE, "staff");
     staff.setAttribute("n", "1");
     section.appendChild(staff);
+
+    if (staffDef.getAttribute('label') === 'tenor' &&
+      this.staffService._repeatingTenor.repetitions > 0) {
+      /* IMPORTANT NOTE */
+      /* The "n" attribute here is used to represent the number of repetitions */
+      /* It does NOT mean this is the nth directive of the piece */
+      /* This should be replaced with a correct MEI attribute when possible */
+      dir = meiDoc.createElementNS(NAMESPACE, "dir");
+      dir.setAttribute("n", this.staffService._repeatingTenor.repetitions.toString());
+      staff.appendChild(dir);
+    }
+
     let layer = meiDoc.createElementNS(NAMESPACE, "layer");
     staff.appendChild(layer);
     let page: string = undefined;
@@ -145,11 +158,29 @@ export class MeiService {
       layer.appendChild(sb);
       staffContents.forEach(child => {
         recurseRandomUUID(child);
+        // Set first note of repeating tenor if applicable
+        if (dir && !dir.hasAttribute('plist') && child.tagName === 'note') {
+          dir.setAttribute('plist', '#' + child.getAttribute('xml:id'));
+        }
         if (child.tagName === 'ligature') {
           child.removeAttribute('form');
         }
         layer.appendChild(child);
       });
+
+      // Set last note of repeating tenor if applicable.
+      if (staff.id === this.staffService._repeatingTenor.followsId) {
+        let lastId = layer.lastElementChild.getAttribute('xml:id');
+        dir.setAttribute('plist', dir.getAttribute('plist') + ' #' + lastId);
+        dir.setAttribute('follows', '#' + lastId);
+      }
+    }
+
+    // Set last note of repeating tenor if it hasn't been set and should be
+    if (dir && !dir.hasAttribute('follows')) {
+      let lastId = layer.lastElementChild.getAttribute('xml:id');
+      dir.setAttribute('plist', dir.getAttribute('plist') + ' #' + lastId);
+      dir.setAttribute('follows', '#' + lastId);
     }
 
     let parts = meiDoc.querySelector('parts');

@@ -14,11 +14,20 @@ export class StaffService {
   _selectedStaff: Staff = null;
   _currentPart: PartMensuration = null;
   selectedStaff = new Subject<Staff>();
+  _repeatingTenor: {
+    followsId: string,
+    repetitions: number
+  }
 
   constructor() {
     this.stavesByIndex = new Map();
     this.canvasIndex = new Map();
     this.voices = new Map();
+
+    this._repeatingTenor = {
+      followsId: null,
+      repetitions: 0
+    };
 
     for (let voice in Voice) {
       this.voices.set(voice as Voice, {
@@ -69,6 +78,10 @@ export class StaffService {
 
   set currentPart(_part: PartMensuration) {
     this.voices.set(this.selected.voice, _part);
+  }
+
+  get repeatingTenor() {
+    return this._repeatingTenor;
   }
 
   get selected() {

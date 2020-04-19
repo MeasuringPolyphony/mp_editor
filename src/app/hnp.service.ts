@@ -13,10 +13,9 @@ export class HNPService {
     this.options = {
       humType: 0,
       scale: 90,
-      spacingNonLinear: 0,
-      spacingLinear: 0.05,
+      spacingNonLinear: 0.35,
+      spacingLinear: 0.275,
       breaks: 'none',
-
     }
     this.vrvToolkit = new verovio.toolkit();
     this.vrvToolkit.setOptions(this.options);

@@ -117,7 +117,7 @@ export class MeiService {
       /* This should be replaced with a correct MEI attribute when possible */
       dir = meiDoc.createElementNS(NAMESPACE, "dir");
       dir.setAttribute("n", this.staffService._repeatingTenor.repetitions.toString());
-      staff.appendChild(dir);
+      dir.setAttribute("layer", "1"); // The layer is always n="1" here.
     }
 
     let layer = meiDoc.createElementNS(NAMESPACE, "layer");
@@ -177,10 +177,13 @@ export class MeiService {
     }
 
     // Set last note of repeating tenor if it hasn't been set and should be
-    if (dir && !dir.hasAttribute('follows')) {
-      let lastId = layer.lastElementChild.getAttribute('xml:id');
-      dir.setAttribute('plist', dir.getAttribute('plist') + ' #' + lastId);
-      dir.setAttribute('follows', '#' + lastId);
+    if (dir) {
+      if (!dir.hasAttribute('follows')) {
+        let lastId = layer.lastElementChild.getAttribute('xml:id');
+        dir.setAttribute('plist', dir.getAttribute('plist') + ' #' + lastId);
+        dir.setAttribute('follows', '#' + lastId);
+      }
+      staff.appendChild(dir);
     }
 
     let parts = meiDoc.querySelector('parts');

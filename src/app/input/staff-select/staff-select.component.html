@@ -53,13 +53,14 @@
 </form>
 <div #example (click)="handleClick($event)"></div>
 <div *ngIf="staffService.selected && staffService._selectedStaff.voice === 'tenor'">
-    <button mat-stroked-button (click)="repTenorButton()"
-    *ngIf="staffService._repeatingTenor.followsId !== staffService._selectedStaff.id;else disabledbutton">Set End of Repeating Tenor</button>
+    <!--<button mat-stroked-button (click)="repTenorButton()"
+    *ngIf="staffService._repeatingTenor.staffId !== staffService._selectedStaff.id;else disabledbutton">Set End of Repeating Tenor</button>
     <ng-template #disabledbutton>
         <button mat-stroked-button disabled>Set End of Repeating Tenor</button>
-    </ng-template>
+    </ng-template>-->
+    <button mat-stroked-button (click)="repTenorButton()">Set End of Repeating Tenor</button>
     &nbsp;
-    <label>Number of Repetitions:&nbsp;
-        <input [(ngModel)]="staffService._repeatingTenor.repetitions" type="number" min="0">
+    <label>Number of Tenor Statements Indicated:&nbsp;
+        <input [(ngModel)]="staffService._repeatingTenor.repetitions" type="number" min="1">
     </label>
 </div>

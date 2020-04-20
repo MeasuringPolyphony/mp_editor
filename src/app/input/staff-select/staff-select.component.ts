@@ -31,6 +31,15 @@ export class StaffSelectComponent implements OnInit {
     let element = this.hnpService.humdrumToSVG(this.staffService._selectedStaff.musicList.getHumdrumScore());
     this.container.nativeElement.innerHTML = '';
     this.container.nativeElement.appendChild(element);
+
+    if (this.staffService._selectedStaff.id === this.staffService._repeatingTenor.staffId) {
+      try {
+        let endNote = element.getElementById(this.staffService._repeatingTenor.elementId);
+        endNote.setAttribute('fill', '#00f');
+      } catch (e) {
+        console.debug(e);
+      }
+    }
   }
 
   staffForm = new FormGroup({
@@ -56,7 +65,16 @@ export class StaffSelectComponent implements OnInit {
   }
 
   repTenorButton() {
-    this.staffService._repeatingTenor.followsId = this.staffService._selectedStaff.id;
+    this.staffService._repeatingTenor.staffId = this.staffService._selectedStaff.id;
+
+    try {
+        let layer = this.container.nativeElement.querySelector('.layer');
+        this.staffService._repeatingTenor.elementId = layer.lastElementChild.id;
+    } catch (e) {
+      console.debug(e);
+      this.staffService._repeatingTenor.elementId = null;
+    }
+    this.updateSVG();
   }
 
   @HostListener('document:keydown', ['$event'])

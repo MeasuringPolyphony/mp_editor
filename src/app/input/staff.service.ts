@@ -15,7 +15,8 @@ export class StaffService {
   _currentPart: PartMensuration = null;
   selectedStaff = new Subject<Staff>();
   _repeatingTenor: {
-    followsId: string,
+    staffId: string,
+    elementId: string,
     repetitions: number
   }
 
@@ -25,8 +26,9 @@ export class StaffService {
     this.voices = new Map();
 
     this._repeatingTenor = {
-      followsId: null,
-      repetitions: 0
+      staffId: null,
+      elementId: null,
+      repetitions: 1
     };
 
     for (let voice in Voice) {

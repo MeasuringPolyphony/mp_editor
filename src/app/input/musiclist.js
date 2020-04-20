@@ -257,6 +257,7 @@ MusicList.prototype.getHumdrumScore = function (opts) {
 	output.push("*-\t*-");
 	if (!options.export) {
 		output.push("!!!RDF**kern: @ = marked note");
+		//output.push("!!!RDF**kern: i = marked note, color=blue");
 		//output.push("!!!RDF**mens: @ = marked note");
 	}
 

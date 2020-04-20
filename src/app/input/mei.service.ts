@@ -110,13 +110,13 @@ export class MeiService {
     section.appendChild(staff);
 
     if (staffDef.getAttribute('label') === 'tenor' &&
-      this.staffService._repeatingTenor.repetitions > 0) {
+      this.staffService._repeatingTenor.repetitions > 1) {
       /* IMPORTANT NOTE */
       /* The "n" attribute here is used to represent the number of repetitions */
       /* It does NOT mean this is the nth directive of the piece */
       /* This should be replaced with a correct MEI attribute when possible */
       dir = meiDoc.createElementNS(NAMESPACE, "dir");
-      dir.setAttribute("n", this.staffService._repeatingTenor.repetitions.toString());
+      dir.setAttribute("n", (this.staffService._repeatingTenor.repetitions - 1).toString());
       dir.setAttribute("layer", "1"); // The layer is always n="1" here.
     }
 
@@ -157,6 +157,7 @@ export class MeiService {
       sb.setAttribute("facs", '#' + zone.getAttribute("xml:id"));
       layer.appendChild(sb);
       staffContents.forEach(child => {
+        const endNoteFlag = (this.staffService._repeatingTenor.staffId === staff.id && this.staffService._repeatingTenor.elementId === child.getAttribute('xml:id'));
         recurseRandomUUID(child);
         // Set first note of repeating tenor if applicable
         if (dir && !dir.hasAttribute('plist') && child.tagName === 'note') {
@@ -165,15 +166,12 @@ export class MeiService {
         if (child.tagName === 'ligature') {
           child.removeAttribute('form');
         }
+        if (endNoteFlag) {
+          dir.setAttribute('plist', dir.getAttribute('plist') + ' #' + child.getAttribute('xml:id'));
+          dir.setAttribute('follows', '#' + child.getAttribute('xml:id'));
+        }
         layer.appendChild(child);
       });
-
-      // Set last note of repeating tenor if applicable.
-      if (staff.id === this.staffService._repeatingTenor.followsId) {
-        let lastId = layer.lastElementChild.getAttribute('xml:id');
-        dir.setAttribute('plist', dir.getAttribute('plist') + ' #' + lastId);
-        dir.setAttribute('follows', '#' + lastId);
-      }
     }
 
     // Set last note of repeating tenor if it hasn't been set and should be

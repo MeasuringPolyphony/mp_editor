@@ -32,12 +32,13 @@ export class StaffSelectComponent implements OnInit {
     this.container.nativeElement.innerHTML = '';
     this.container.nativeElement.appendChild(element);
 
-    if (this.staffService._selectedStaff.id === this.staffService._repeatingTenor.staffId) {
-      try {
-        let endNote = element.getElementById(this.staffService._repeatingTenor.elementId);
+    if (this.staffService._selectedStaff.id === this.staffService._repeatingTenor.staffId &&
+        this.staffService._repeatingTenor.elementId !== null) {
+      let endNote = element.getElementById(this.staffService._repeatingTenor.elementId);
+      if (endNote !== null) {
         endNote.setAttribute('fill', '#00f');
-      } catch (e) {
-        console.debug(e);
+      } else {
+        this.staffService._repeatingTenor.elementId = null;
       }
     }
   }

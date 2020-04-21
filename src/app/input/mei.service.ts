@@ -118,7 +118,7 @@ export class MeiService {
       dir = meiDoc.createElementNS(NAMESPACE, "dir");
       dir.setAttribute("n", (this.staffService._repeatingTenor.repetitions - 1).toString());
       dir.setAttribute("layer", "1"); // The layer is always n="1" here.
-      dir.textContent = 'Repeat ' + (this.staffService.repeatingTenor.repetitions - 1).toString() + ' times';
+      // dir.textContent = 'Repeat ' + (this.staffService.repeatingTenor.repetitions - 1).toString() + ' times';
     }
 
     let layer = meiDoc.createElementNS(NAMESPACE, "layer");

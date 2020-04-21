@@ -118,9 +118,11 @@ export class MeiService {
       dir = meiDoc.createElementNS(NAMESPACE, "dir");
       dir.setAttribute("n", (this.staffService._repeatingTenor.repetitions - 1).toString());
       dir.setAttribute("layer", "1"); // The layer is always n="1" here.
+      dir.textContent = 'Repeat ' + (this.staffService.repeatingTenor.repetitions - 1).toString() + ' times';
     }
 
     let layer = meiDoc.createElementNS(NAMESPACE, "layer");
+    layer.setAttribute('n', '1');
     staff.appendChild(layer);
     let page: string = undefined;
     let graphic: Element = undefined;
@@ -182,6 +184,10 @@ export class MeiService {
         dir.setAttribute('follows', '#' + lastId);
       }
       staff.appendChild(dir);
+      dir.insertAdjacentHTML(
+        'beforebegin',
+        '<!-- The @n attribute on <dir> is used to represent the number of repetitions in a machine readable format. -->'
+      );
     }
 
     let parts = meiDoc.querySelector('parts');

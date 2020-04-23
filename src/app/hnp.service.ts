@@ -14,7 +14,7 @@ export class HNPService {
       humType: 0,
       scale: 90,
       spacingNonLinear: 0.35,
-      spacingLinear: 0.275,
+      lyricSize: 3,
       breaks: 'none',
     }
     this.vrvToolkit = new verovio.toolkit();

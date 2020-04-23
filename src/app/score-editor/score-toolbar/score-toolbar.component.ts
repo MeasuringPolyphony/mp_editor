@@ -54,4 +54,12 @@ export class ScoreToolbarComponent implements OnInit {
     }
   }
 
+  copyToClipboard() {
+    if (this.currentDoc !== null) {
+      const serializer = new XMLSerializer();
+      const content = vkbeautify.xml(serializer.serializeToString(this.currentDoc));
+      navigator.clipboard.writeText(content).then(() => { alert("MEI Score Copied!"); }).catch(err => { console.debug(err); alert("Copy failed :("); });
+    }
+  }
+
 }

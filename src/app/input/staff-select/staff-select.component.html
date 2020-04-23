@@ -57,9 +57,9 @@
         If the piece has repetitions of the tenor that are not written out in full,
         please specify here. See "Music Input Help" for details.
     </p>
-    <button mat-stroked-button (click)="repTenorButton()">Set End of Repeating Tenor</button>
+    <button class="primary-button" mat-stroked-button (click)="repTenorButton()">Set End of Repeating Tenor</button>
     &nbsp;
-    <label>Number of Tenor Statements Indicated:&nbsp;
+    <label>Total Number of Tenor Statements:&nbsp;
         <input [(ngModel)]="staffService._repeatingTenor.repetitions" type="number" min="1">
     </label>
 </div>

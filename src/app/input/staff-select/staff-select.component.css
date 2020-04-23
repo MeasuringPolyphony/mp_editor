@@ -17,7 +17,8 @@ form {
 }
 
 #tenor-section {
-    background-color: #DBD1C1;
+    /*background-color: #DBD1C1;*/
+    background-color: #f9f0dc;
     border-style: solid;
     border-width: 1px;
     padding-left: 10px;

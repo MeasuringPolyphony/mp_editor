@@ -5,4 +5,21 @@
 
 #document-select div {
     grid-column: 2;
+    display: grid;
+}
+
+#document-select div * {
+    justify-self: center;
+}
+
+form {
+    display: grid;
+}
+
+form * {
+    justify-self: center;
+}
+
+a {
+    margin-top: 2em;
 }

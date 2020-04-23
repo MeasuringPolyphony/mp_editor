@@ -17,7 +17,9 @@
                 </label>
                 <small *ngIf="invalid">URL is unexpected for this source!</small>
             </div>
-            <button type="submit" [disabled]="!selectionForm.valid" mat-stroked-button>Submit</button>
+            <div>
+                <button type="submit" [disabled]="!selectionForm.valid" mat-stroked-button>Submit</button>
+            </div>
         </form>
         <br/><br/>
         <a [routerLink]="['/input', 'gallica', encodedIdSample]">

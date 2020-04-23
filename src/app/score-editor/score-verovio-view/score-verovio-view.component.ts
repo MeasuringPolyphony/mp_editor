@@ -35,7 +35,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private verovioService: HNPService,
-    private stateService: StateService,
+    public stateService: StateService,
     private staffService: SelectedStaffService
   ) { }
 
@@ -46,6 +46,12 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       this.container.nativeElement.appendChild(svg);
       this.setSelected();
     })
+  }
+
+  setEditorialMode() {
+    if (confirm("Edits in editorial mode reflect cases where there is a problem with the manuscript. You cannot exit editorial mode. Do you want to continue?")) {
+      this.stateService.editorialMode = true;
+    }
   }
 
   setSelected() {

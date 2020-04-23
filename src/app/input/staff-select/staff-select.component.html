@@ -1,23 +1,23 @@
 <form [formGroup]="staffForm" *ngIf="staffService.selected">
-    <h1>Pitch and Duration Entry</h1>
+    <h1>Enter Music</h1>
     <fieldset>
-        <legend>Select Voice:&nbsp;</legend>
+        <legend class="music-subentry">Voice:&nbsp;</legend>
         <input [(ngModel)]="staffService._selectedStaff.voice" type="radio" id="voice-triplum" formControlName="voice" value="triplum"/>
-        <label for="voice-triplum">Triplum</label>
+        <label for="voice-triplum">triplum</label>
         &nbsp;
         <input [(ngModel)]="staffService._selectedStaff.voice" type="radio" id="voice-motetus" formControlName="voice" value="motetus"/>
-        <label for="voice-motetus">Motetus</label>
+        <label for="voice-motetus">motetus</label>
         &nbsp;
         <input [(ngModel)]="staffService._selectedStaff.voice" type="radio" id="voice-tenor" formControlName="voice" value="tenor"/>
-        <label for="voice-tenor">Tenor</label>
+        <label for="voice-tenor">tenor</label>
         &nbsp;
         <input [(ngModel)]="staffService._selectedStaff.voice" type="radio" id="voice-contratenor" formControlName="voice" value="contratenor"/>
-        <label for="voice-contratenor">Contratenor</label>
+        <label for="voice-contratenor">contratenor</label>
     </fieldset>
-    <h2>Select Mensuration:</h2>
+    <h3 class="music-subentry">Select Mensuration:</h3>
     <div class="flex-container">
         <fieldset>
-            <legend>Modus</legend>
+            <legend class="mensuration">modus</legend>
             <input [(ngModel)]="staffService.currentPart.modus" type="radio" id="modus-3" formControlName="modus" value="3"/>
             <label for="modus-3">3</label>
             &nbsp;
@@ -28,7 +28,7 @@
             <label for="modus-na">N/A</label>
         </fieldset>
         <fieldset>
-            <legend>Tempus</legend>
+            <legend class="mensuration">tempus</legend>
             <input [(ngModel)]="staffService.currentPart.tempus" type="radio" id="tempus-3" formControlName="tempus" value="3"/>
             <label for="tempus-3">3</label>
             &nbsp;
@@ -39,7 +39,7 @@
             <label for="tempus-na">N/A</label>
         </fieldset>
         <fieldset>
-            <legend>Prolatio</legend>
+            <legend class="mensuration">prolatio</legend>
             <input [(ngModel)]="staffService.currentPart.prolatio" type="radio" id="prolatio-3" formControlName="prolatio" value="3"/>
             <label for="prolatio-3">3</label>
             &nbsp;
@@ -52,15 +52,17 @@
     </div>
 </form>
 <div #example (click)="handleClick($event)"></div>
-<div *ngIf="staffService.selected && staffService._selectedStaff.voice === 'tenor'">
-    <!--<button mat-stroked-button (click)="repTenorButton()"
-    *ngIf="staffService._repeatingTenor.staffId !== staffService._selectedStaff.id;else disabledbutton">Set End of Repeating Tenor</button>
-    <ng-template #disabledbutton>
-        <button mat-stroked-button disabled>Set End of Repeating Tenor</button>
-    </ng-template>-->
+<div id="tenor-section" *ngIf="staffService.selected && staffService._selectedStaff.voice === 'tenor'">
+    <p>
+        If the piece has repetitions of the tenor that are not written out in full,
+        please specify here. See "Music Input Help" for details.
+    </p>
     <button mat-stroked-button (click)="repTenorButton()">Set End of Repeating Tenor</button>
     &nbsp;
     <label>Number of Tenor Statements Indicated:&nbsp;
         <input [(ngModel)]="staffService._repeatingTenor.repetitions" type="number" min="1">
     </label>
 </div>
+<button *ngIf="staffService.selected" mat-stroked-button (click)="finishStep()">
+    Continue to Score Editor
+</button>

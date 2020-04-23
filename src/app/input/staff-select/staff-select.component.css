@@ -6,6 +6,25 @@ form {
     padding-top: 0.5em;
 }
 
+.music-subentry {
+    font-size: 1.75rem;
+    font-weight: 500;
+    margin-top: 0.75rem;
+}
+
+.mensuration {
+    font-size: 1.25rem;
+}
+
+#tenor-section {
+    background-color: #DBD1C1;
+    border-style: solid;
+    border-width: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 1rem;
+}
+
 /*form {
     padding-left: 1.5em;
     padding-right: 1.5em;

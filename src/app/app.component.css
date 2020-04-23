@@ -49,8 +49,8 @@ p
 
 #mainNav
 {
-	font-family: 'Roboto', sans-serif;
-	margin-bottom: 0;
+	font-family: 'Merriweather', serif;
+	margin-bottom: 20px;
 	text-transform: uppercase;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 	background-color:	#9D2322;

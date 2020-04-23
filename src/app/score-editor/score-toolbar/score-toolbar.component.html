@@ -1,18 +1,15 @@
 <div class="toolbar-container">
     <button mat-stroked-button (click)="goToInputEditor()">
-        Return to Input Editor
+        Return to Music Input
     </button>
     <button mat-stroked-button>
         <a download type="application/xml" (click)="saveClick($event)">
-            Download Scoring-Up MEI
+            Download MEI Score
         </a>
     </button>
     <button mat-stroked-button>
         <a download type="application/xml" (click)="savePartsClick($event)">
-            Download Parts-based MEI
+            Download MEI Parts
         </a>
-    </button>
-    <button mat-stroked-button *ngIf="!stateService.editorialMode" (click)="setEditorialMode()">
-        Move to Editorial Mode
     </button>
 </div>

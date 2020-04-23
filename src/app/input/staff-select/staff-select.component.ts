@@ -1,8 +1,11 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StaffService } from '../staff.service';
 import { C_PitchClass, D_PitchClass, E_PitchClass, F_PitchClass, G_PitchClass, A_PitchClass, B_PitchClass } from '../musiclist';
 import { HNPService } from '../../hnp.service';
+import { MeiService } from '../mei.service';
+import { StateService } from '../../state-service.service';
 
 @Component({
   selector: 'app-staff-select',
@@ -14,7 +17,14 @@ export class StaffSelectComponent implements OnInit {
   keySigMode = false;
   pitchSig: string = null;
   accidSig: string = null;
-  constructor(public staffService: StaffService, private hnpService: HNPService) { }
+  constructor(
+    public staffService: StaffService,
+    private hnpService: HNPService,
+    private meiService: MeiService,
+    private stateService: StateService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.staffService.selectedStaff.subscribe({
@@ -63,6 +73,14 @@ export class StaffSelectComponent implements OnInit {
       }
       target = target.parentNode as Element;
     }
+  }
+
+  finishStep() {
+    const mei = this.meiService.generateFullMEI();
+    const type = this.route.snapshot.paramMap.get('source');
+    const identifier = this.route.snapshot.paramMap.get('identifier');
+    this.stateService.mei = mei;
+    this.router.navigate(['/score', type, identifier]);
   }
 
   repTenorButton() {

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MeiService } from '../mei.service';
 import { StaffService } from '../staff.service';
-import { StateService } from '../../state-service.service';
-import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import * as vkbeautify from 'vkbeautify';
@@ -21,9 +19,6 @@ export class ToolbarComponent implements OnInit {
   constructor(
     private meiService: MeiService,
     public staffService: StaffService,
-    private stateService: StateService,
-    private route: ActivatedRoute,
-    private router: Router,
     public dialog: MatDialog
   ) { }
 
@@ -84,14 +79,6 @@ export class ToolbarComponent implements OnInit {
     const content = vkbeautify.xml(serializer.serializeToString(mei));
     const blob = new Blob([content], {type: 'application/xml'});
     target.setAttribute('href', window.URL.createObjectURL(blob));
-  }
-
-  finishStep() {
-    const mei = this.meiService.generateFullMEI();
-    const type = this.route.snapshot.paramMap.get('source');
-    const identifier = this.route.snapshot.paramMap.get('identifier');
-    this.stateService.mei = mei;
-    this.router.navigate(['/score', type, identifier]);
   }
 
   deleteStaff() {

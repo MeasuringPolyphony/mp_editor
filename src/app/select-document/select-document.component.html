@@ -1,9 +1,9 @@
 <div id="document-select">
     <div>
-        <h1>Select Manuscript to Load</h1>
+        <h1>Load Manuscript</h1>
         <form [formGroup]="selectionForm" (submit)="submit()">
             <div>
-                <label class="label">Manuscript Source:&nbsp;
+                <label class="label">Manuscript Repository:&nbsp;
                     <select formControlName="source">
                         <option value="gallica" selected>Gallica</option>
                         <option value="ecodices">eCodices</option>
@@ -12,7 +12,7 @@
                 </label>
             </div>
             <div>
-                <label class="label">Document URL:&nbsp;
+                <label class="label">URL:&nbsp;
                     <input type="url" formControlName="resourceURL">
                 </label>
                 <small *ngIf="invalid">URL is unexpected for this source!</small>

@@ -46,12 +46,6 @@ export class ScoreToolbarComponent implements OnInit {
     }
   }
 
-  setEditorialMode() {
-    if (confirm("Edits in editorial mode reflect cases where there is a problem with the manuscript. You cannot exit editorial mode. Do you want to continue?")) {
-      this.stateService.editorialMode = true;
-    }
-  }
-
   goToInputEditor() {
     if (confirm("Warning: Edits made on this page will be lost. Return to input editor?")) {
       let source = this.route.snapshot.paramMap.get('source');

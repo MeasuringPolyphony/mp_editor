@@ -2,7 +2,7 @@
     <div>
         <h1>Load Manuscript</h1>
         <form [formGroup]="selectionForm" (submit)="submit()">
-            <div>
+            <div style="display:block;">
                 <label class="label">Manuscript Repository:&nbsp;
                     <select formControlName="source">
                         <option value="gallica" selected>Gallica</option>
@@ -10,8 +10,7 @@
                         <option value="diamm" disabled>DIAMM</option>
                     </select>
                 </label>
-            </div>
-            <div>
+                &nbsp;
                 <label class="label">URL:&nbsp;
                     <input type="url" formControlName="resourceURL">
                 </label>

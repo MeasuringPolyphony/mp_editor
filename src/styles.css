@@ -2,3 +2,6 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Merriweather, "Helvetica Neue", serif; }
+.primary-button {
+    background-color: #DBD4C1
+}

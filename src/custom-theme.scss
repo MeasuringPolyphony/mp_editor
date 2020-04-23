@@ -11,6 +11,40 @@ $custom-typography: mat-typography-config($font-family: '"Merriweather", serif;'
 @include mat-core($custom-typography);
 //@include mat-core();
 
+// Custom palette for Measuring Polyphony
+$mp-font: (
+  50: #ffd8af,
+  100: #ffb494,
+  200: #eb8e71,
+  300: #c7694a,
+  400: #ad4d2f,
+  500: #923013,
+  600: #86260f,
+  700: #761806,
+  800: #670200,
+  900: #560000,
+  A100: #f5c396,
+  A200: #d5a071,
+  A400: #9a642d,
+  A700: #673500,
+  contrast: (
+    50: $black-87-opacity,
+    100: $black-87-opacity,
+    200: $black-87-opacity,
+    300: $black-87-opacity,
+    400: $black-87-opacity,
+    500: white,
+    600: white,
+    700: white,
+    800: #dbd4c1,
+    900: $white-87-opacity,
+    A100: $black-87-opacity,
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
@@ -23,7 +57,11 @@ $editor-warn: mat-palette($mat-red);
 // Create the theme object (a Sass map containing all of the palettes).
 $editor-theme: mat-light-theme($editor-primary, $editor-accent, $editor-warn);
 
+$mp-font-primary: mat-palette($mp-font, 800);
+$mp-font-theme: mat-light-theme($mp-font-primary, $mp-font-primary, $mp-font-primary);
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($editor-theme);
+@include mat-button-theme($mp-font-theme);

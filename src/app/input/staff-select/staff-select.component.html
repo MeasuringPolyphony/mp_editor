@@ -63,6 +63,6 @@
         <input [(ngModel)]="staffService._repeatingTenor.repetitions" type="number" min="1">
     </label>
 </div>
-<button *ngIf="staffService.selected" mat-stroked-button (click)="finishStep()">
+<button color=primary class="primary-button" *ngIf="staffService.selected" mat-stroked-button (click)="finishStep()">
     Continue to Score Editor
 </button>

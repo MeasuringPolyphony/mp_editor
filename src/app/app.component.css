@@ -139,7 +139,7 @@ p
 
 #new-transcription-button {
     float: right;
-    background-color: white;
+    /*background-color: white;*/
 }
 
 @media (min-width: 992px)

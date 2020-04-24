@@ -1,4 +1,17 @@
-<div #verovio (click)="handleClick($event)"></div>
-<button color=primary class="primary-button" mat-stroked-button *ngIf="!stateService.editorialMode" (click)="setEditorialMode()">
-    Continue in Editorial Mode
-</button>
+<div id="verovio" #verovio (click)="handleClick($event)"></div>
+<div>
+    <label>
+        Generate Barlines on Export
+        <input type="checkbox" [(ngModel)]="stateService.scoreOptions.barlines">
+    </label>
+    &nbsp;
+    <label>
+        Switch to Modern Clefs on Export
+        <input type="checkbox" [(ngModel)]="stateService.scoreOptions.modernClefs">
+    </label>
+</div>
+<div>
+    <button color=primary class="primary-button" mat-stroked-button *ngIf="!stateService.editorialMode" (click)="setEditorialMode()">
+        Continue in Editorial Mode
+    </button>
+</div>

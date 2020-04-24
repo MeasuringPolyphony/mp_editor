@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { refineScore } from 'scoring-up';
 import * as vkbeautify from 'vkbeautify';
 
 import { StateService } from '../../state-service.service';
@@ -29,8 +30,13 @@ export class ScoreToolbarComponent implements OnInit {
   saveClick(event: MouseEvent) {
     if (this.currentDoc !== null) {
       const target = event.target as HTMLAnchorElement;
+      const refinedDoc = refineScore(
+        this.currentDoc.cloneNode(true),
+        this.stateService.scoreOptions.modernClefs,
+        this.stateService.scoreOptions.barlines
+      );
       const serializer = new XMLSerializer();
-      const content = vkbeautify.xml(serializer.serializeToString(this.currentDoc));
+      const content = vkbeautify.xml(serializer.serializeToString(refinedDoc));
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
     }
@@ -57,7 +63,12 @@ export class ScoreToolbarComponent implements OnInit {
   copyToClipboard() {
     if (this.currentDoc !== null) {
       const serializer = new XMLSerializer();
-      const content = vkbeautify.xml(serializer.serializeToString(this.currentDoc));
+      const refinedDoc = refineScore(
+        this.currentDoc.cloneNode(true),
+        this.stateService.scoreOptions.modernClefs,
+        this.stateService.scoreOptions.barlines
+      );
+      const content = vkbeautify.xml(serializer.serializeToString(refinedDoc));
       navigator.clipboard.writeText(content).then(() => { alert("MEI Score Copied!"); }).catch(err => { console.debug(err); alert("Copy failed :("); });
     }
   }

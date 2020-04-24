@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -19,6 +20,7 @@ import { ScoreToolbarComponent } from './score-toolbar/score-toolbar.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatDividerModule,
     MatTabsModule,

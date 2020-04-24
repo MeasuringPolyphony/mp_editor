@@ -8,7 +8,6 @@ app-score-diva-view {
 }
 
 app-score-verovio-view {
-    overflow-x: scroll;
     display: block;
     width: 100%;
 }

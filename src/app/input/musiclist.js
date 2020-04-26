@@ -213,6 +213,7 @@ MusicList.prototype.getHumdrumScore = function (opts) {
 	var output = [];
 	//output.push("**kern\t**text");
 	output.push("**mens\t**text");
+  output.push("*black\t*");
 	var i;
 	var lines;
 	var noteCounter = 0;

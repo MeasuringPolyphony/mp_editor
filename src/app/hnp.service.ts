@@ -23,7 +23,10 @@ export class HNPService {
 
   humdrumToMEI(humdrumData: string): string {
     this.vrvToolkit.loadData(humdrumData);
-    return this.vrvToolkit.getMEI(0, 1);
+    return this.vrvToolkit.getMEI({
+      pageNo: 0,
+      scoreBased: true
+    });
   }
 
   humdrumToSVG(humdrumData: string): SVGSVGElement {

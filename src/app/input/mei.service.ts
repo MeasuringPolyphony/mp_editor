@@ -161,6 +161,10 @@ export class MeiService {
       staffContents.forEach(child => {
         const endNoteFlag = (this.staffService._repeatingTenor.staffId === staff.id && this.staffService._repeatingTenor.elementId === child.getAttribute('xml:id'));
         recurseRandomUUID(child);
+        // Remove @color, @marked
+        if (child.hasAttribute('color')) child.removeAttribute('color');
+        if (child.hasAttribute('type')) child.removeAttribute('type');
+
         // Set first note of repeating tenor if applicable
         if (dir && !dir.hasAttribute('plist') && child.tagName === 'note') {
           dir.setAttribute('plist', '#' + child.getAttribute('xml:id'));

@@ -50,8 +50,8 @@ export class Staff {
     lry: number,
     canvas: string,
     index: number,
-    id?: string,
     voice?: Voice,
+    id?: string,
     musicList?: any
   ) {
     if (id) {

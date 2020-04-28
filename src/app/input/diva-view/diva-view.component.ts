@@ -149,7 +149,8 @@ export class DivaViewComponent implements OnInit, OnDestroy {
         Math.max(secondPoint.x, this.firstPoint.x),
         Math.max(secondPoint.y, this.firstPoint.y),
         this.diva.getCurrentCanvas(),
-        this.diva.getActivePageIndex()
+        this.diva.getActivePageIndex(),
+        this.staffService._selectedStaff ? this.staffService._selectedStaff.voice : undefined
       );
       // Check for positive height and width before adding
       this.staffService.addStaff(pageIndex, newStaff);

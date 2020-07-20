@@ -17,7 +17,7 @@ export enum Mensuration {
   NA='N/A'
 }
 
-type BoundingBox = {
+export type BoundingBox = {
   ulx: number;
   uly: number;
   lrx: number;

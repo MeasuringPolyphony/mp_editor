@@ -242,7 +242,7 @@ export class NoteItem implements MusicItem {
 export class MusicList {
   m_list: Array<MusicItem> = [];
   m_index = -1;
-  m_rhythm = -1;
+  m_rhythm = 1;
   m_notationCallback = null;
 
   addClef (dpc: PitchClass) {

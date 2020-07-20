@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { MusicList } from './musiclist';
+import { MusicList } from '../utils/MusicItem';
 
 // The voice a staff belongs to
 export enum Voice {
@@ -52,7 +52,7 @@ export class Staff {
     index: number,
     voice?: Voice,
     id?: string,
-    musicList?: any
+    musicList?: MusicList
   ) {
     if (id) {
       this.id = id;

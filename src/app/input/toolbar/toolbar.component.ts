@@ -7,7 +7,7 @@ import * as vkbeautify from 'vkbeautify';
 
 import { StorageComponent, DialogResult } from '../storage/storage.component';
 import { Staff } from '../definitions';
-import { MusicList, MusicItem } from '../musiclist';
+import { MusicList, NoteItem, ClefItem, RestItem } from '../../utils/MusicItem';
 
 @Component({
   selector: 'app-toolbar',
@@ -56,8 +56,12 @@ export class ToolbarComponent implements OnInit {
               Object.setPrototypeOf(staff, Staff.prototype);
               Object.setPrototypeOf(staff.musicList, MusicList.prototype);
               staff.musicList.m_list.forEach(item => {
-                Object.setPrototypeOf(item, MusicItem.prototype);
-                item.init();
+                switch(item.m_type) {
+                  case "note": Object.setPrototypeOf(item, NoteItem.prototype); break;
+                  case "rest": Object.setPrototypeOf(item, RestItem.prototype); break;
+                  case "clef": Object.setPrototypeOf(item, ClefItem.prototype); break;
+                }
+                item.constructor();
               });
               this.staffService.initIndex(staff.index, staff.canvas);
               this.staffService.addStaff(staff.index, staff);

@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StaffService } from '../staff.service';
-import { C_PitchClass, D_PitchClass, E_PitchClass, F_PitchClass, G_PitchClass, A_PitchClass, B_PitchClass } from '../musiclist';
+import { PitchClass, NoteItem, RestItem, Accid, LigStatus } from '../../utils/MusicItem';
 import { HNPService } from '../../hnp.service';
 import { MeiService } from '../mei.service';
 import { StateService } from '../../state-service.service';
@@ -147,59 +147,59 @@ export class StaffSelectComponent implements OnInit {
           event.preventDefault();
           break;
         case 'C':
-          musicList.addPitchFar(C_PitchClass);
+          musicList.addPitchFar(PitchClass.C);
           event.preventDefault();
           break;
         case 'c':
-          musicList.addPitchNear(C_PitchClass);
+          musicList.addPitchNear(PitchClass.C);
           event.preventDefault();
           break;
         case 'D':
-          musicList.addPitchFar(D_PitchClass);
+          musicList.addPitchFar(PitchClass.D);
           event.preventDefault();
           break;
         case 'd':
-          musicList.addPitchNear(D_PitchClass);
+          musicList.addPitchNear(PitchClass.D);
           event.preventDefault();
           break;
         case 'E':
-          musicList.addPitchFar(E_PitchClass);
+          musicList.addPitchFar(PitchClass.E);
           event.preventDefault();
           break;
         case 'e':
-          musicList.addPitchNear(E_PitchClass);
+          musicList.addPitchNear(PitchClass.E);
           event.preventDefault();
           break;
         case 'F':
-          musicList.addPitchFar(F_PitchClass);
+          musicList.addPitchFar(PitchClass.F);
           event.preventDefault();
           break;
         case 'f':
-          musicList.addPitchNear(F_PitchClass);
+          musicList.addPitchNear(PitchClass.F);
           event.preventDefault();
           break;
         case 'G':
-          musicList.addPitchFar(G_PitchClass);
+          musicList.addPitchFar(PitchClass.G);
           event.preventDefault();
           break;
         case 'g':
-          musicList.addPitchNear(G_PitchClass);
+          musicList.addPitchNear(PitchClass.G);
           event.preventDefault();
           break;
         case 'A':
-          musicList.addPitchFar(A_PitchClass);
+          musicList.addPitchFar(PitchClass.A);
           event.preventDefault();
           break;
         case 'a':
-          musicList.addPitchNear(A_PitchClass);
+          musicList.addPitchNear(PitchClass.A);
           event.preventDefault();
           break;
         case 'B':
-          musicList.addPitchFar(B_PitchClass);
+          musicList.addPitchFar(PitchClass.B);
           event.preventDefault();
           break;
         case 'b':
-          musicList.addPitchNear(B_PitchClass);
+          musicList.addPitchNear(PitchClass.B);
           event.preventDefault();
           break;
         case 'r':
@@ -301,7 +301,12 @@ export class StaffSelectComponent implements OnInit {
     else if ((item.m_type === 'note') || (item.m_type === 'rest')) {
       if (!ending) {
         if (digit !== 3) {
-          item.m_rhythm = digit;
+          if (item.m_type === "note") {
+            (item as NoteItem).m_rhythm = digit;
+          }
+          else {
+            (item as RestItem).m_rhythm = digit;
+          }
           musicList.m_index += 1;
           musicList.m_rhythm = digit;
           musicList.runNotationCallback();
@@ -324,7 +329,8 @@ export class StaffSelectComponent implements OnInit {
     }
     let item = musicList.m_list[index];
     if (item.m_type === 'note') {
-      item.m_dot = !item.m_dot;
+      let note = item as NoteItem;
+      note.m_dot = !note.m_dot;
       musicList.runNotationCallback();
       return;
     }
@@ -341,10 +347,11 @@ export class StaffSelectComponent implements OnInit {
     }
     let item = musicList.m_list[index];
     if (item.m_type === 'note') {
+      let note = item as NoteItem;
       if (isStart) {
-        item.m_ligStart = !item.m_ligStart;
+        note.m_lig = note.m_lig === LigStatus.START ? LigStatus.NONE : LigStatus.START;
       } else {
-        item.m_ligEnd = !item.m_ligEnd;
+        note.m_lig = note.m_lig === LigStatus.END ? LigStatus.NONE : LigStatus.END;
       }
       musicList.runNotationCallback();
       return;
@@ -405,18 +412,19 @@ export class StaffSelectComponent implements OnInit {
     }
     let item = musicList.m_list[index];
     if (item.m_type === 'note') {
+      let note = item as NoteItem;
       switch(accid) {
         case 'N':
-          item.m_accid = 0;
+          note.m_accid = Accid.NONE;
           break;
         case '#':
-          item.m_accid = 1;
+          note.m_accid = Accid.SHARP;
           break;
         case '-':
-          item.m_accid = 2;
+          note.m_accid = Accid.FLAT;
           break;
         case 'n':
-          item.m_accid = 3;
+          note.m_accid = Accid.NATURAL;
           break;
       }
       musicList.runNotationCallback();

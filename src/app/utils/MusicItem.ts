@@ -476,7 +476,7 @@ export class MusicList {
     this.runNotationCallback();
   }
 
-  getHumdrumScore (opts: object) {
+  getHumdrumScore (opts?: object) {
     let output = [];
     output.push("**mens\t**text");
   	output.push("*black\t*");
@@ -533,6 +533,16 @@ export class MusicList {
   		output2 += output[i] + "\n";
   	}
   	return output2;
+  }
+
+  selectItemByLine (lineNumber: number) {
+    for (let i = 0; i < this.m_list.length; i++) {
+      if (this.m_list[i].m_line === lineNumber) {
+        this.m_index = i;
+        this.runNotationCallback();
+        return;
+      }
+    }
   }
 
   processKeySig (pitch: string, accid: string): boolean {

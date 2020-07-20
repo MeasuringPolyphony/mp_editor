@@ -28,6 +28,7 @@ export enum LigStatus {
 
 export interface MusicItem {
   m_type: string;
+  m_id: string;
   m_line: number;
   getHumdrumLine(options: object): string;
 }
@@ -35,6 +36,7 @@ export interface MusicItem {
 export class ClefItem implements MusicItem {
   readonly m_type = "clef";
   m_line = -1;
+  m_id: string;
   m_pname: PitchClass;
   m_clefLine: number;
   m_keySig: Map<string,string>;
@@ -85,6 +87,7 @@ export class ClefItem implements MusicItem {
 export class RestItem implements MusicItem {
   readonly m_type = "rest";
   m_line = -1;
+  m_id: string;
   m_rhythm: number;
   m_dot: boolean;
 
@@ -131,6 +134,7 @@ export class NoteItem implements MusicItem {
   m_dot: boolean;
   m_text: string;
   m_lig: LigStatus;
+  m_id: string;
 
   constructor() {
     this.m_pname = PitchClass.C;

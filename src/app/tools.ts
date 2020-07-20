@@ -1,4 +1,4 @@
-import { IRI } from './input/definitions';
+import { IRI } from './utils/definitions';
 
 export function formIIIFManifest(source: string, identifier: string): IRI {
   switch (source) {

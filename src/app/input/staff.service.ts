@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Staff, Voice, Mensuration, PartMensuration, VoicePair } from './definitions';
+import { Staff, Voice, Mensuration, PartMensuration, VoicePair } from '../utils/definitions';
 
 @Injectable({
   providedIn: 'root'

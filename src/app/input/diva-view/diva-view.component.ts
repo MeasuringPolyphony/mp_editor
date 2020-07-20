@@ -5,7 +5,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation, HostListener } from '@angular/core';
 
 import { StaffService } from '../staff.service';
-import { IRI, Staff } from '../definitions';
+import { IRI, Staff } from '../../utils/definitions';
 
 import Diva from 'diva.js';
 

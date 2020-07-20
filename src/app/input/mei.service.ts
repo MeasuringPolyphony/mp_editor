@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StaffService } from './staff.service';
 import { HNPService } from '../hnp.service';
-import { Voice, Staff, Mensuration, IRI } from './definitions';
+import { Voice, Staff, Mensuration, IRI } from '../utils/definitions';
 
 import { v4 as uuid } from 'uuid';
 

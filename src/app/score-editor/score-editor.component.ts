@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { IRI } from '../input/definitions';
+import { IRI } from '../utils/definitions';
 import { StateService } from '../state-service.service';
 import { formIIIFManifest } from '../tools';
 

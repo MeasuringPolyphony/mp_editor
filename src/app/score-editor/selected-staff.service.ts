@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { IRI } from '../input/definitions';
+import { IRI } from '../utils/definitions';
 
 type BBox = {
   ulx: string,

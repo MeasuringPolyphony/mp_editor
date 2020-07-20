@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { MusicList } from '../utils/MusicItem';
+import { MusicList } from './MusicItem';
 
 // The voice a staff belongs to
 export enum Voice {

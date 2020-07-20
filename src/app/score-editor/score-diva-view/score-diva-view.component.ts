@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
-import { IRI, Staff } from '../../input/definitions';
+import { IRI, Staff } from '../../utils/definitions';
 
 import { SelectedStaffService } from '../selected-staff.service';
 

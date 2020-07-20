@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as vkbeautify from 'vkbeautify';
 
 import { StorageComponent, DialogResult } from '../storage/storage.component';
-import { Staff } from '../definitions';
+import { Staff } from '../../utils/definitions';
 import { MusicList, NoteItem, ClefItem, RestItem } from '../../utils/MusicItem';
 
 @Component({

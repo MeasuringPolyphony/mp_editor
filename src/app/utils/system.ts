@@ -1,6 +1,7 @@
 import { IRI, BoundingBox } from './definitions';
 import { MusicList } from './MusicItem';
 import { v4 as uuid } from 'uuid';
+import { HNPService } from '../hnp.service';
 
 export class Pb {
   canvasIRI: IRI;
@@ -48,6 +49,8 @@ export class System {
   sb: Sb;
   contents: MusicList;
 
+  constructor (private hnpService: HNPService) {}
+
   static compare(a: System, b: System): number {
     let diff = a.pb.index - b.pb.index;
     if (diff !== 0) return diff;
@@ -55,6 +58,42 @@ export class System {
   }
 
   getContents(): Element[] {
-    return [];
+    let rawMei = this.hnpService.humdrumToMEI(this.contents.getHumdrumScore());
+    let parser = new DOMParser();
+    let elements: Element[] = [];
+    let humdrumMei = parser.parseFromString(rawMei, 'application/xml');
+    let clef = humdrumMei.querySelector('clef');
+    if (clef !== null) {
+      this._recurseId(clef);
+      elements.push(clef);
+    }
+    let layer = humdrumMei.querySelector('layer');
+    if (layer !== null) {
+      for (let child of Array.from(layer.children)) {
+        this._recurseId(child);
+      }
+    }
+    return elements;
+  }
+
+  _recurseId(element: Element) {
+    let id = element.getAttribute('xml:id');
+    if (id) {
+      let regexpInfo = id.match(/L(\d+)$/);
+      if (regexpInfo) {
+        let line = parseInt(regexpInfo[1]);
+        let match = this.contents.m_list.filter(el => {
+          return el.m_line === line;
+        });
+        if (match.length > 0) {
+          element.setAttribute('xml:id', match[0].m_id);
+          for (let child of Array.from(element.children)) {
+            this._recurseId(child);
+          }
+          return;
+        }
+      }
+    }
+    element.setAttribute('xml:id', 'm-' + uuid());
   }
 }

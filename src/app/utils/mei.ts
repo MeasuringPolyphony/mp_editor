@@ -1,4 +1,4 @@
-import { Part, Tenor } from './part';
+import { Part } from './part';
 import { IRI } from './definitions';
 
 

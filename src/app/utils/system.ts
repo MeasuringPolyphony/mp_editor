@@ -51,7 +51,13 @@ export class System {
   parent: Part;
   contents: MusicList;
 
-  constructor () {}
+  constructor (contents?: MusicList) {
+    if (contents) {
+      this.contents = contents;
+    } else {
+      this.contents = new MusicList();
+    }
+  }
 
   static compare(a: System, b: System): number {
     let diff = a.pb.index - b.pb.index;

@@ -5,7 +5,7 @@ import { refineScore } from 'scoring-up';
 import * as vkbeautify from 'vkbeautify';
 
 import { StateService } from '../../state-service.service';
-import { scoreDoc } from '../definitions';
+import { wrapper, scoreDoc } from '../definitions';
 
 @Component({
   selector: 'app-score-toolbar',
@@ -46,7 +46,7 @@ export class ScoreToolbarComponent implements OnInit {
     if (this.stateService.mei != null) {
       const target = event.target as HTMLAnchorElement;
       const serializer = new XMLSerializer();
-      const content = vkbeautify.xml(serializer.serializeToString(this.stateService.mei));
+      const content = vkbeautify.xml(serializer.serializeToString(wrapper.meiDoc));
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
     }

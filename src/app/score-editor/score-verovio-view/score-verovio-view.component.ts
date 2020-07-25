@@ -3,11 +3,11 @@ import { Component, OnInit, AfterViewInit, HostListener, ViewChild, ElementRef }
 import { v4 as uuid } from 'uuid';
 
 import * as ScoringUp from 'scoring-up';
-import { HNPService } from '../../hnp.service';
+import { vrvToolkit } from '../../utils/verovio';
 import { StateService } from '../../state-service.service';
 import { SelectedStaffService } from '../selected-staff.service';
 
-import { scoreDoc } from '../definitions';
+import { wrapper, scoreDoc } from '../definitions';
 
 const pnameOrder = [ 'c', 'd', 'e', 'f', 'g', 'a', 'b'];
 
@@ -34,15 +34,16 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   corrToSicMap: Map<string, string> = new Map();
 
   constructor(
-    private verovioService: HNPService,
     public stateService: StateService,
     private staffService: SelectedStaffService
-  ) { }
+  ) {
+    wrapper.meiDoc = this.stateService.mei.generateXML();
+  }
 
   ngOnInit() {
     scoreDoc.subscribe((doc) => {
       this.container.nativeElement.innerHTML = '';
-      const svg = this.verovioService.meiToSVG(doc);
+      const svg = vrvToolkit.meiToSVG(doc);
       this.container.nativeElement.appendChild(svg);
       this.setSelected();
     })
@@ -77,12 +78,12 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
           partsId = this.corrToSicMap.get(partsId);
         }
         // Get nearest pb  and sb
-        const resolver = this.stateService.mei.createNSResolver(this.stateService.mei.ownerDocument == null ? this.stateService.mei.documentElement : this.stateService.mei.ownerDocument.documentElement);
+        const resolver = wrapper.meiDoc.createNSResolver(wrapper.meiDoc.ownerDocument == null ? wrapper.meiDoc.documentElement : wrapper.meiDoc.ownerDocument.documentElement);
         const meiRes = () => { return 'http://www.music-encoding.org/ns/mei'; };
-        const ref = this.stateService.mei.evaluate("//*[@xml:id='" + partsId + "']", this.stateService.mei, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-        let result = this.stateService.mei.evaluate("./preceding::mei:pb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const ref = wrapper.meiDoc.evaluate("//*[@xml:id='" + partsId + "']", wrapper.meiDoc, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        let result = wrapper.meiDoc.evaluate("./preceding::mei:pb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
         const pb = result.snapshotItem(result.snapshotLength - 1) as Element;
-        result = this.stateService.mei.evaluate("./preceding::mei:sb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        result = wrapper.meiDoc.evaluate("./preceding::mei:sb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
         const sb = result.snapshotItem(result.snapshotLength - 1) as Element;
         // Get corresponding zones (strip away fragment symbol)
         const pbFacsId = pb.getAttribute("facs")[0] === "#" ?
@@ -94,7 +95,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
 
         // The following SHOULD use XPath but I haven't been able to get it to work
         const pbGraphic = Array.from(
-          this.stateService.mei.getElementsByTagName("graphic")
+          wrapper.meiDoc.getElementsByTagName("graphic")
         ).filter(el => { return el.getAttribute("xml:id") === pbFacsId; }).pop();
         const sbZone = Array.from(
           pbGraphic.children
@@ -115,7 +116,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    scoreDoc.next(this.runScoringUp(this.stateService.mei));
+    scoreDoc.next(this.runScoringUp(wrapper.meiDoc));
   }
 
   handleClick(event: MouseEvent) {
@@ -135,23 +136,23 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent) {
     if (this.selectedId !== null) {
-      let meiDoc: XMLDocument;
+      let doc: XMLDocument;
       if (this.stateService.editorialMode) {
         if (this.quasiScore === null) {
-          this.quasiScore = this.getQuasiScore(this.stateService.mei);
+          this.quasiScore = this.getQuasiScore(wrapper.meiDoc);
         }
-        meiDoc = this.quasiScore;
+        doc = this.quasiScore;
       }
       else {
-        meiDoc = this.stateService.mei;
+        doc = wrapper.meiDoc;
       }
-      const resolver = meiDoc.createNSResolver(meiDoc.ownerDocument == null ? meiDoc.documentElement : meiDoc.ownerDocument.documentElement);
-      const result = meiDoc.evaluate("//*[@xml:id='" + this.selectedId + "']", meiDoc, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+      const resolver = wrapper.meiDoc.createNSResolver(wrapper.meiDoc.ownerDocument == null ? wrapper.meiDoc.documentElement : wrapper.meiDoc.ownerDocument.documentElement);
+      const result = wrapper.meiDoc.evaluate("//*[@xml:id='" + this.selectedId + "']", wrapper.meiDoc, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
       if (!result.singleNodeValue) return;
       let target = result.singleNodeValue as Element;
       // Ensure corrected element in MEI
       if (this.stateService.editorialMode) {
-        target = this.ensureCorrElement(target, meiDoc);
+        target = this.ensureCorrElement(target, wrapper.meiDoc);
       }
       if (target.tagName === "note") {
         switch (event.key) {
@@ -164,7 +165,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
               }
             }
             else {
-              let dot = meiDoc.createElementNS("http://www.music-encoding.org/ns/mei", "dot");
+              let dot = wrapper.meiDoc.createElementNS("http://www.music-encoding.org/ns/mei", "dot");
               dot.setAttribute("xml:id", "m-" + uuid());
               target.insertAdjacentElement("afterend", dot);
             }
@@ -259,7 +260,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       }
 
       event.preventDefault();
-      scoreDoc.next(this.runScoringUp(this.stateService.mei));
+      scoreDoc.next(this.runScoringUp(wrapper.meiDoc));
     }
   }
 

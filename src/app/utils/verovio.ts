@@ -1,4 +1,5 @@
 declare let verovio;
+declare let verovioReady: boolean;
 
 class VrvObj {
   vrvToolkit = null;
@@ -12,8 +13,13 @@ class VrvObj {
       lyricSize: 3,
       breaks: 'none',
     }
-    this.vrvToolkit = new verovio.toolkit();
-    this.vrvToolkit.setOptions(this.options);
+  }
+
+  setup() {
+    if (!this.vrvToolkit) {
+      this.vrvToolkit = new verovio.toolkit();
+      this.vrvToolkit.setOptions(this.options);
+    }
   }
 
   humdrumToMEI(data: string): string {

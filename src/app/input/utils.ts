@@ -4,9 +4,11 @@ import { System } from '../utils/system';
 class SelectedSystem {
   _subject: Subject<System>;
   _selected: System;
+  subscribe;
   constructor() {
     this._subject = new Subject<System>();
     this._selected = null;
+    this.subscribe = this._subject.subscribe;
   }
 
   get selected(): System {
@@ -17,8 +19,6 @@ class SelectedSystem {
     this._selected = system;
     this._subject.next(this._selected);
   }
-
-  subscribe = this._subject.subscribe;
 }
 
 export const selectedSystem = new SelectedSystem();

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { IRI } from '../utils/definitions';
 import { formIIIFManifest } from '../tools';
 import { StateService } from '../state-service.service';
-import { MeiService } from './mei.service';
 
 @Component({
   selector: 'app-input',
@@ -26,7 +25,6 @@ export class InputComponent implements OnInit {
   identifier: string;
 
   constructor(
-    private meiService: MeiService,
     private stateService: StateService,
     private route: ActivatedRoute,
   ) {
@@ -35,11 +33,11 @@ export class InputComponent implements OnInit {
     this.identifier = decodeURIComponent(this.route.snapshot.paramMap.get('identifier'));
     this.iiifManifest = formIIIFManifest(this.source, this.identifier);
 
-    if (this.meiService.headerData != undefined) {
-      this.shortTitle = this.meiService.headerData.shortTitle;
-      this.composerName = this.meiService.headerData.composerName;
-      this.userName = this.meiService.headerData.userName;
-      this.notationSubtype = this.meiService.headerData.notationSubtype;
+    if (this.stateService.mei.metadata != undefined) {
+      this.shortTitle = this.stateService.mei.metadata.shortTitle;
+      this.composerName = this.stateService.mei.metadata.composerName;
+      this.userName = this.stateService.mei.metadata.encoderName;
+      this.notationSubtype = this.stateService.mei.notationSubtype;
     }
 
     console.debug(this.iiifManifest);
@@ -50,13 +48,13 @@ export class InputComponent implements OnInit {
   }
 
   onSetMetadata() {
-    this.meiService.headerData = {
+    this.stateService.mei.metadata = {
       shortTitle: this.shortTitle,
       composerName: this.composerName,
-      userName: this.userName,
-      sourceURI: this.iiifManifest,
-      notationSubtype: this.notationSubtype
+      encoderName: this.userName,
+      sourceIRI: this.iiifManifest,
     };
+    this.stateService.mei.notationSubtype = this.notationSubtype;
     this.inputStep = InputComponent.InputStep.INPUT;
   }
 }

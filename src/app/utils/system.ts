@@ -1,7 +1,8 @@
 import { IRI, BoundingBox } from './definitions';
 import { MusicList } from './MusicItem';
+import { Part } from './part';
 import { v4 as uuid } from 'uuid';
-import { HNPService } from '../hnp.service';
+import { vrvToolkit } from './verovio';
 
 export class Pb {
   canvasIRI: IRI;
@@ -47,9 +48,10 @@ export class Sb {
 export class System {
   pb: Pb;
   sb: Sb;
+  parent: Part;
   contents: MusicList;
 
-  constructor (private hnpService: HNPService) {}
+  constructor () {}
 
   static compare(a: System, b: System): number {
     let diff = a.pb.index - b.pb.index;
@@ -57,8 +59,12 @@ export class System {
     return a.sb.zone.uly - b.sb.zone.uly;
   }
 
+  get id(): string {
+    return this.sb.id;
+  }
+
   getContents(): Element[] {
-    let rawMei = this.hnpService.humdrumToMEI(this.contents.getHumdrumScore());
+    let rawMei = vrvToolkit.humdrumToMEI(this.contents.getHumdrumScore());
     let parser = new DOMParser();
     let elements: Element[] = [];
     let humdrumMei = parser.parseFromString(rawMei, 'application/xml');

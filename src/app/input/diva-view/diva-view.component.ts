@@ -4,8 +4,11 @@
  */
 import { Component, OnInit, OnDestroy, Input, ViewEncapsulation, HostListener } from '@angular/core';
 
-import { StaffService } from '../staff.service';
-import { IRI, Staff } from '../../utils/definitions';
+import { IRI, Voice } from '../../utils/definitions';
+import { System, Pb, Sb } from '../../utils/system';
+import { Part } from '../../utils/part';
+import { StateService } from '../../state-service.service';
+import { selectedSystem } from '../utils';
 
 import Diva from 'diva.js';
 
@@ -22,28 +25,26 @@ export class DivaViewComponent implements OnInit, OnDestroy {
 
   @Input() iiifManifest: IRI;
 
-  constructor(private staffService: StaffService) {
-  }
+  constructor (private stateService: StateService) {}
 
   ngOnInit() {
     this.diva = new Diva('diva-wrapper', {
       objectData: this.iiifManifest
     });
 
-    Diva.Events.subscribe('ManifestDidLoad', this.parseCanvases.bind(this), this.diva.settings.ID);
     Diva.Events.subscribe('ActivePageDidChange', this.refreshOverlay.bind(this), this.diva.settings.ID);
     Diva.Events.subscribe('DocumentDidLoad', this.refreshOverlay.bind(this), this.diva.settings.ID);
     Diva.Events.subscribe('ZoomLevelDidChange', this.handleZoom.bind(this), this.diva.settings.ID);
 
     // this.diva.disableDragScrollable();
 
-    this.staffService.selectedStaff.subscribe(() => {
+    selectedSystem.subscribe(() => {
       this.refreshOverlay(this.diva.getActivePageIndex());
     });
   }
 
   ngOnDestroy() {
-    this.staffService._selectedStaff = null;
+    selectedSystem.selected = null;
     try {
       this.diva.deactivate();
       this.diva.destroy();
@@ -73,9 +74,10 @@ export class DivaViewComponent implements OnInit, OnDestroy {
         .forEach(elem => {
           elem.classList.remove("selectedZone");
         });
-      let staff = this.staffService.getStaffById(target.id);
+
+      let staff = this.stateService.mei.getSystem(target.id);
       if (staff !== null) {
-        this.staffService.selected = staff;
+        selectedSystem.selected = staff;
         target.classList.add("selectedZone");
       }
     }
@@ -143,21 +145,41 @@ export class DivaViewComponent implements OnInit, OnDestroy {
       const transformMatrix = activeContainer.getScreenCTM();
       const secondPoint = clientPoint.matrixTransform(transformMatrix.inverse());
 
-      const newStaff = new Staff(
-        Math.min(this.firstPoint.x, secondPoint.x),
-        Math.min(this.firstPoint.y, secondPoint.y),
-        Math.max(secondPoint.x, this.firstPoint.x),
-        Math.max(secondPoint.y, this.firstPoint.y),
-        this.diva.getCurrentCanvas(),
-        this.diva.getActivePageIndex(),
-        this.staffService._selectedStaff ? this.staffService._selectedStaff.voice : undefined
+      // Get Pb element if one exists
+      let pb = this.stateService.mei.getPb(pageIndex);
+      if (pb === null) {
+        // Make new Pb
+        pb = new Pb(this.diva.getCurrentCanvas());
+        pb.index = pageIndex;
+      }
+
+      // Create sb
+      let sb = new Sb(
+        {
+          ulx: Math.min(this.firstPoint.x, secondPoint.x),
+          uly: Math.min(this.firstPoint.y, secondPoint.y),
+          lrx: Math.max(secondPoint.x, this.firstPoint.x),
+          lry: Math.max(secondPoint.y, this.firstPoint.y),
+        }
       );
-      // Check for positive height and width before adding
-      this.staffService.addStaff(pageIndex, newStaff);
-      /*if ((secondPoint.x - this.firstPoint.x > 0) &&
-        (secondPoint.y - this.firstPoint.y) > 0) {
-        this.staffService.addStaff(pageIndex, newStaff);
-      }*/
+
+      // Determine Part
+      let part: Part;
+      if (selectedSystem.selected !== null) {
+        part = selectedSystem.selected.parent;
+      } else {
+        part = this.stateService.mei.getOrCreatePart(Voice.triplum);
+      }
+
+      const newSystem = new System();
+      newSystem.pb = pb;
+      newSystem.sb = sb;
+      part.addSystem(newSystem);
+
+      // Mark as selected
+      selectedSystem.selected = newSystem;
+
+      // Clean up
       this.refreshOverlay(pageIndex);
       this.firstPoint = null;
     }
@@ -201,10 +223,14 @@ export class DivaViewComponent implements OnInit, OnDestroy {
       pageContainer.firstChild.remove();
     }
 
-    for (const staff of this.staffService.getStavesForIndex(pageIndex)) {
-      let item = staff.svg;
+    let systemsOnPage = this.stateService.mei.getSystems().filter(system => {
+      return system.pb.index === pageIndex;
+    });
+
+    for (const staff of systemsOnPage) {
+      let item = staff.sb.svg;
       svgParent.appendChild(item);
-      if (this.staffService._selectedStaff === staff) {
+      if (selectedSystem.selected === staff) {
         item.classList.add("selectedZone");
       }
     }
@@ -224,15 +250,5 @@ export class DivaViewComponent implements OnInit, OnDestroy {
           elem.style.display = '';
         });
     });
-  }
-
-  /** Parse the IIIF manifest and associate each canvas index with an array of staves */
-  parseCanvases(manifest: { sequences: { canvases: object[] }[] }) {
-    for (const sequence of manifest.sequences) {
-      for (const canvas of sequence.canvases) {
-        // Add each canvas and record its zero-based index
-        this.staffService.initIndex(sequence.canvases.indexOf(canvas), canvas['@id'].toString());
-      }
-    }
   }
 }

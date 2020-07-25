@@ -1,11 +1,12 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StaffService } from '../staff.service';
 import { PitchClass, NoteItem, RestItem, Accid, LigStatus } from '../../utils/MusicItem';
-import { HNPService } from '../../hnp.service';
-import { MeiService } from '../mei.service';
 import { StateService } from '../../state-service.service';
+import { selectedSystem } from '../utils';
+import { vrvToolkit } from '../../utils/verovio';
+import { Tenor } from '../../utils/part';
+import { Voice } from '../../utils/definitions';
 
 @Component({
   selector: 'app-staff-select',
@@ -18,37 +19,34 @@ export class StaffSelectComponent implements OnInit {
   pitchSig: string = null;
   accidSig: string = null;
   constructor(
-    public staffService: StaffService,
-    private hnpService: HNPService,
-    private meiService: MeiService,
     private stateService: StateService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
 
   ngOnInit() {
-    this.staffService.selectedStaff.subscribe({
+    selectedSystem.subscribe({
       next: (staff) => {
         this.container.nativeElement.innerHTML = '';
         if (staff === null) return;
-        let element = this.hnpService.humdrumToSVG(staff.musicList.getHumdrumScore());
+        let element = vrvToolkit.humdrumToSVG(staff.contents.getHumdrumScore());
         this.container.nativeElement.appendChild(element);
       }
     });
   }
 
   updateSVG() {
-    let element = this.hnpService.humdrumToSVG(this.staffService._selectedStaff.musicList.getHumdrumScore());
+    let element = vrvToolkit.humdrumToSVG(selectedSystem.selected.contents.getHumdrumScore());
     this.container.nativeElement.innerHTML = '';
     this.container.nativeElement.appendChild(element);
 
-    if (this.staffService._selectedStaff.id === this.staffService._repeatingTenor.staffId &&
-        this.staffService._repeatingTenor.elementId !== null) {
-      let endNote = element.getElementById(this.staffService._repeatingTenor.elementId);
-      if (endNote !== null) {
-        endNote.setAttribute('fill', '#00f');
-      } else {
-        this.staffService._repeatingTenor.elementId = null;
+    if (selectedSystem.selected.parent.voice === Voice.tenor) {
+      const tenor = selectedSystem.selected.parent as Tenor;
+      if (tenor.endingId !== undefined) {
+        let endNote = element.getElementById(tenor.endingId);
+        if (endNote !== null) {
+          endNote.setAttribute('fill', '#00f');
+        }
       }
     }
   }
@@ -66,7 +64,7 @@ export class StaffSelectComponent implements OnInit {
       if (target.nodeName === 'g') {
         let matches: Array<string>;
         if (matches = target.id.match(/-.*L(\d+)/)) {
-          this.staffService._selectedStaff.musicList.selectItemByLine(parseInt(matches[1]))
+          selectedSystem.selected.contents.selectItemByLine(parseInt(matches[1]))
           this.updateSVG();
           break;
         }
@@ -76,29 +74,28 @@ export class StaffSelectComponent implements OnInit {
   }
 
   finishStep() {
-    const mei = this.meiService.generateFullMEI();
+    // const mei = this.meiService.generateFullMEI();
     const type = this.route.snapshot.paramMap.get('source');
     const identifier = this.route.snapshot.paramMap.get('identifier');
-    this.stateService.mei = mei;
+    // this.stateService.mei = mei;
     this.router.navigate(['/score', type, identifier]);
   }
 
   repTenorButton() {
-    this.staffService._repeatingTenor.staffId = this.staffService._selectedStaff.id;
-
+    const tenor = this.stateService.mei.getPart(Voice.tenor) as Tenor;
     try {
         let layer = this.container.nativeElement.querySelector('.layer');
-        this.staffService._repeatingTenor.elementId = layer.lastElementChild.id;
+        tenor.endingId = layer.lastElementChild.id;
     } catch (e) {
       console.debug(e);
-      this.staffService._repeatingTenor.elementId = null;
+      tenor.endingId = undefined;
     }
     this.updateSVG();
   }
 
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent) {
-    if (this.staffService._selectedStaff == null) return;
+    if (selectedSystem.selected == null) return;
 
     if (this.keySigMode) {
       this.handleKeySigPress(event);
@@ -109,7 +106,7 @@ export class StaffSelectComponent implements OnInit {
 
     // Based on processKeypress function in mensural-input
     if (event.metaKey) return;
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = selectedSystem.selected.contents;
     if ((musicList.m_index >=0) && (event.key.length === 1)) {
       if ((event.key >= '0') && (event.key <= '9')) {
         this.processDigit(Number(event.key), event);
@@ -274,7 +271,7 @@ export class StaffSelectComponent implements OnInit {
   }
 
   processDigit(digit: number, _event: KeyboardEvent) {
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = selectedSystem.selected.contents;
     if (musicList.m_list.length === 0) {
       if (digit !== 3) {
         musicList.m_rhythm = digit;
@@ -319,7 +316,7 @@ export class StaffSelectComponent implements OnInit {
   }
 
   processDotKey() {
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = selectedSystem.selected.contents;
     if (musicList.m_list.length === 0) {
       return;
     }
@@ -337,7 +334,7 @@ export class StaffSelectComponent implements OnInit {
   }
 
   processLig(isStart: boolean) {
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = selectedSystem.selected.contents;
     if (musicList.m_list.length === 0) {
       return;
     }
@@ -389,7 +386,7 @@ export class StaffSelectComponent implements OnInit {
       case 'n':
         if (this.pitchSig !== null && this.accidSig === null) {
           this.accidSig = event.key;
-          let musicList = this.staffService._selectedStaff.musicList;
+          let musicList = selectedSystem.selected.contents;
           musicList.processKeySig(this.pitchSig, this.accidSig);
           console.debug("Process with " + this.pitchSig + " and " + this.accidSig);
         }
@@ -402,7 +399,7 @@ export class StaffSelectComponent implements OnInit {
   }
 
   processAccidental(accid: string) {
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = selectedSystem.selected.contents;
     if (musicList.m_list.length === 0) {
       return;
     }

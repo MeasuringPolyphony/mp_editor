@@ -1,4 +1,6 @@
-import { Part } from './part';
+import { Part, Tenor } from './part';
+import { System, Pb } from './system';
+import { Voice } from './definitions';
 import { IRI } from './definitions';
 
 
@@ -15,6 +17,7 @@ export class MEIDocument {
   constructor (manuscriptIRI: IRI) {  // This is for creating a new document
     this.metadata = new Metadata();
     this.metadata.sourceIRI = manuscriptIRI;
+    this.notationType = 'mensural.black'; // Will change with ars antiqua
     this.parts = [];
     this._createSkeletonMEI();
   }
@@ -79,6 +82,48 @@ export class MEIDocument {
     sourceDesc.appendChild(source);
 
     return meiHead;
+  }
+
+  getSystems(): System[] {
+    let allSystems: System[] = [];
+    for (let part of this.parts) {
+      allSystems.unshift(...part.systems);
+    }
+    return allSystems;
+  }
+
+  getSystem(id: string): System {
+    let allSystems = this.getSystems();
+    let systemList = allSystems.filter(system => { return system.id === id; });
+    return systemList.length > 0 ? systemList[0] : null;
+  }
+
+  getPart(voice: Voice): Part {
+    let partlist = this.parts.filter(part => { return part.voice === voice; });
+    return partlist.length > 0 ? partlist[0] : null;
+  }
+
+  getOrCreatePart(voice: Voice): Part {
+    if (this.parts.some(part => { return part.voice === voice; })) {
+      return this.getPart(voice);
+    }
+    let part = (voice === Voice.tenor) ? new Tenor(this) : new Part(this);
+    part.voice = voice;
+    this.parts.push(part);
+    return part;
+  }
+
+  getPb(index: number): Pb {
+    let pbs = new Set<Pb>();
+    for (let part of this.parts) {
+      part.systems.forEach(system => {
+        pbs.add(system.pb);
+      });
+    }
+    for (let pb of pbs.values()) {
+      if (pb.index === index) return pb;
+    }
+    return null;
   }
 }
 

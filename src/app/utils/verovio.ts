@@ -1,11 +1,6 @@
-import { Injectable } from '@angular/core';
+declare let verovio;
 
-declare let verovio;  // Verovio is loaded globally through <script>
-
-@Injectable({
-  providedIn: 'root'
-})
-export class HNPService {
+class VrvObj {
   vrvToolkit = null;
   options = null;
 
@@ -21,8 +16,8 @@ export class HNPService {
     this.vrvToolkit.setOptions(this.options);
   }
 
-  humdrumToMEI(humdrumData: string): string {
-    this.vrvToolkit.loadData(humdrumData);
+  humdrumToMEI(data: string): string {
+    this.vrvToolkit.loadData(data);
     return this.vrvToolkit.getMEI({
       pageNo: 0,
       scoreBased: true
@@ -30,18 +25,20 @@ export class HNPService {
   }
 
   humdrumToSVG(humdrumData: string): SVGSVGElement {
-    this.vrvToolkit.loadData(humdrumData);
+    this.vrvToolkit.loadDat(humdrumData);
     let data = this.vrvToolkit.renderToSVG(1);
     const parser = new DOMParser();
     return parser.parseFromString(data, 'image/svg+xml').documentElement as unknown as SVGSVGElement;
   }
 
-  meiToSVG(meiDocument: XMLDocument): SVGSVGElement {
+  meiToSVG(meiDoc: XMLDocument): SVGSVGElement {
     const serializer = new XMLSerializer();
-    const serializedMei = serializer.serializeToString(meiDocument);
+    const serializedMei = serializer.serializeToString(meiDoc);
     const parser = new DOMParser();
     this.vrvToolkit.loadData(serializedMei);
     const svgRaw = this.vrvToolkit.renderToSVG(1);
     return parser.parseFromString(svgRaw, 'image/svg+xml').documentElement as unknown as SVGSVGElement;
   }
 }
+
+export const vrvToolkit = new VrvObj();

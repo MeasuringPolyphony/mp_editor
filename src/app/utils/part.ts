@@ -23,6 +23,24 @@ export class Part {
     }
 
     this.systems = [];
+    this.modus = Mensuration.NA;
+    this.tempus = Mensuration.NA;
+    this.prolatio = Mensuration.NA;
+  }
+
+  addSystem(system: System) {
+    system.parent = this;
+    this.systems.push(system);
+  }
+
+  removeSystem(id: string): System {
+    let matches = this.systems.filter(system => { return system.id === id; });
+    if (matches.length > 0) {
+      let index = this.systems.indexOf(matches[0]);
+      let removed = this.systems.splice(index, 1);
+      return removed[0];
+    }
+    return null;
   }
 
   generatePartXML(): Element {

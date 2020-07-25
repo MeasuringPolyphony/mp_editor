@@ -1,58 +1,58 @@
-<form [formGroup]="staffForm" *ngIf="staffService.selected">
+<form [formGroup]="staffForm" *ngIf="selected">
     <h1>Enter Music</h1>
     <fieldset>
         <legend class="music-subentry">Voice:&nbsp;</legend>
-        <input [(ngModel)]="staffService._selectedStaff.voice" type="radio" id="voice-triplum" formControlName="voice" value="triplum"/>
+        <input [(ngModel)]="selected.voice" type="radio" id="voice-triplum" formControlName="voice" value="triplum"/>
         <label for="voice-triplum">triplum</label>
         &nbsp;
-        <input [(ngModel)]="staffService._selectedStaff.voice" type="radio" id="voice-motetus" formControlName="voice" value="motetus"/>
+        <input [(ngModel)]="selected.voice" type="radio" id="voice-motetus" formControlName="voice" value="motetus"/>
         <label for="voice-motetus">motetus</label>
         &nbsp;
-        <input [(ngModel)]="staffService._selectedStaff.voice" type="radio" id="voice-tenor" formControlName="voice" value="tenor"/>
+        <input [(ngModel)]="selected.voice" type="radio" id="voice-tenor" formControlName="voice" value="tenor"/>
         <label for="voice-tenor">tenor</label>
         &nbsp;
-        <input [(ngModel)]="staffService._selectedStaff.voice" type="radio" id="voice-contratenor" formControlName="voice" value="contratenor"/>
+        <input [(ngModel)]="selected.voice" type="radio" id="voice-contratenor" formControlName="voice" value="contratenor"/>
         <label for="voice-contratenor">contratenor</label>
     </fieldset>
     <h3 class="music-subentry">Select Mensuration:</h3>
     <div class="flex-container">
         <fieldset>
             <legend class="mensuration">modus</legend>
-            <input [(ngModel)]="staffService.currentPart.modus" type="radio" id="modus-3" formControlName="modus" value="3"/>
+            <input [(ngModel)]="selected.parent.modus" type="radio" id="modus-3" formControlName="modus" value="3"/>
             <label for="modus-3">3</label>
             &nbsp;
-            <input [(ngModel)]="staffService.currentPart.modus" type="radio" id="modus-2" formControlName="modus" value="2"/>
+            <input [(ngModel)]="selected.parent.modus" type="radio" id="modus-2" formControlName="modus" value="2"/>
             <label for="modus-2">2</label>
             &nbsp;
-            <input [(ngModel)]="staffService.currentPart.modus" type="radio" id="modus-na" formControlName="modus" value="N/A"/>
+            <input [(ngModel)]="selected.parent.modus" type="radio" id="modus-na" formControlName="modus" value="N/A"/>
             <label for="modus-na">N/A</label>
         </fieldset>
         <fieldset>
             <legend class="mensuration">tempus</legend>
-            <input [(ngModel)]="staffService.currentPart.tempus" type="radio" id="tempus-3" formControlName="tempus" value="3"/>
+            <input [(ngModel)]="selected.parent.tempus" type="radio" id="tempus-3" formControlName="tempus" value="3"/>
             <label for="tempus-3">3</label>
             &nbsp;
-            <input [(ngModel)]="staffService.currentPart.tempus" type="radio" id="tempus-2" formControlName="tempus" value="2"/>
+            <input [(ngModel)]="selected.parent.tempus" type="radio" id="tempus-2" formControlName="tempus" value="2"/>
             <label for="tempus-2">2</label>
             &nbsp;
-            <input [(ngModel)]="staffService.currentPart.tempus" type="radio" id="tempus-na" formControlName="tempus" value="N/A"/>
+            <input [(ngModel)]="selected.parent.tempus" type="radio" id="tempus-na" formControlName="tempus" value="N/A"/>
             <label for="tempus-na">N/A</label>
         </fieldset>
         <fieldset>
             <legend class="mensuration">prolatio</legend>
-            <input [(ngModel)]="staffService.currentPart.prolatio" type="radio" id="prolatio-3" formControlName="prolatio" value="3"/>
+            <input [(ngModel)]="selected.parent.prolatio" type="radio" id="prolatio-3" formControlName="prolatio" value="3"/>
             <label for="prolatio-3">3</label>
             &nbsp;
-            <input [(ngModel)]="staffService.currentPart.prolatio" type="radio" id="prolatio-2" formControlName="prolatio" value="2"/>
+            <input [(ngModel)]="selected.parent.prolatio" type="radio" id="prolatio-2" formControlName="prolatio" value="2"/>
             <label for="prolatio-2">2</label>
             &nbsp;
-            <input [(ngModel)]="staffService.currentPart.prolatio" type="radio" id="prolatio-na" formControlName="prolatio" value="N/A"/>
+            <input [(ngModel)]="selected.parent.prolatio" type="radio" id="prolatio-na" formControlName="prolatio" value="N/A"/>
             <label for="prolatio-na">N/A</label>
         </fieldset>
     </div>
 </form>
 <div #example (click)="handleClick($event)"></div>
-<div id="tenor-section" *ngIf="staffService.selected && staffService._selectedStaff.voice === 'tenor'">
+<div id="tenor-section" *ngIf="selected && selected.voice === 'tenor'">
     <p>
         If the piece has repetitions of the tenor that are not written out in full,
         please specify here. See "Music Input Help" for details.
@@ -60,9 +60,9 @@
     <button class="primary-button" mat-stroked-button (click)="repTenorButton()">Set End of Repeating Tenor</button>
     &nbsp;
     <label>Total Number of Tenor Statements:&nbsp;
-        <input [(ngModel)]="staffService._repeatingTenor.repetitions" type="number" min="1">
+        <input [(ngModel)]="selected.parent.repetitions" type="number" min="1">
     </label>
 </div>
-<button color=primary class="primary-button" *ngIf="staffService.selected" mat-stroked-button (click)="finishStep()">
+<button color=primary class="primary-button" *ngIf="selected" mat-stroked-button (click)="finishStep()">
     Continue to Score Editor
 </button>

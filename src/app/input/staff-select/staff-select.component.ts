@@ -18,6 +18,7 @@ export class StaffSelectComponent implements OnInit {
   keySigMode = false;
   pitchSig: string = null;
   accidSig: string = null;
+  selected = null;
   constructor(
     private stateService: StateService,
     private route: ActivatedRoute,
@@ -27,6 +28,7 @@ export class StaffSelectComponent implements OnInit {
   ngOnInit() {
     selectedSystem.subscribe({
       next: (staff) => {
+        this.selected = staff;
         this.container.nativeElement.innerHTML = '';
         if (staff === null) return;
         let element = vrvToolkit.humdrumToSVG(staff.contents.getHumdrumScore());

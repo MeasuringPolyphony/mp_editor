@@ -39,6 +39,7 @@ export class ToolbarComponent implements OnInit {
     let system = this.currentStaff;
     let part = system.parent;
     part.removeSystem(system.id);
+    this.selectedSystem.next(null);
   }
 
 }

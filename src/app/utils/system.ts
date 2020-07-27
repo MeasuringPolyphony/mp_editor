@@ -1,4 +1,4 @@
-import { IRI, BoundingBox } from './definitions';
+import { IRI, BoundingBox, Voice } from './definitions';
 import { MusicList } from './MusicItem';
 import { Part } from './part';
 import { v4 as uuid } from 'uuid';
@@ -67,6 +67,19 @@ export class System {
 
   get id(): string {
     return this.sb.id;
+  }
+
+  get voice(): Voice {
+    return this.parent.voice;
+  }
+
+  set voice(voice: Voice) {
+    if (voice !== this.parent.voice) {
+      let newPart = this.parent.parent.getOrCreatePart(voice);
+      let idx = this.parent.systems.indexOf(this);
+      this.parent.systems.splice(idx, 1);
+      newPart.addSystem(this);
+    }
   }
 
   getContents(): Element[] {

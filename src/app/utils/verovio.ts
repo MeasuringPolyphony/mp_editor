@@ -31,7 +31,7 @@ class VrvObj {
   }
 
   humdrumToSVG(humdrumData: string): SVGSVGElement {
-    this.vrvToolkit.loadDat(humdrumData);
+    this.vrvToolkit.loadData(humdrumData);
     let data = this.vrvToolkit.renderToSVG(1);
     const parser = new DOMParser();
     return parser.parseFromString(data, 'image/svg+xml').documentElement as unknown as SVGSVGElement;

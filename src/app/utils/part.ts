@@ -75,6 +75,7 @@ export class Part {
     let facsimile: Element = this.parent._meiDoc.querySelector('facsimile');
     for (let system of this.systems) {
       let contents = system.getContents();
+      console.debug(contents);
       if (contents.filter(el => { return el.tagName === 'note'; }).length === 0) {
         continue;
       }

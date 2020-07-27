@@ -71,6 +71,7 @@ export class System {
 
   getContents(): Element[] {
     let rawMei = vrvToolkit.humdrumToMEI(this.contents.getHumdrumScore());
+    console.debug(rawMei);
     let parser = new DOMParser();
     let elements: Element[] = [];
     let humdrumMei = parser.parseFromString(rawMei, 'application/xml');
@@ -80,9 +81,11 @@ export class System {
       elements.push(clef);
     }
     let layer = humdrumMei.querySelector('layer');
+    console.debug(layer);
     if (layer !== null) {
       for (let child of Array.from(layer.children)) {
         this._recurseId(child);
+        elements.push(child);
       }
     }
     return elements;

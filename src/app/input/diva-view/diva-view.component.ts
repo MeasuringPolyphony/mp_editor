@@ -8,7 +8,7 @@ import { IRI, Voice } from '../../utils/definitions';
 import { System, Pb, Sb } from '../../utils/system';
 import { Part } from '../../utils/part';
 import { StateService } from '../../state-service.service';
-import { selectedSystem } from '../utils';
+import { InputService } from '../input.service';
 
 import Diva from 'diva.js';
 
@@ -25,7 +25,7 @@ export class DivaViewComponent implements OnInit, OnDestroy {
 
   @Input() iiifManifest: IRI;
 
-  constructor (private stateService: StateService) {}
+  constructor (private selectedSystem: InputService, private stateService: StateService) {}
 
   ngOnInit() {
     this.diva = new Diva('diva-wrapper', {
@@ -38,13 +38,13 @@ export class DivaViewComponent implements OnInit, OnDestroy {
 
     // this.diva.disableDragScrollable();
 
-    selectedSystem.subscribe(() => {
+    this.selectedSystem.subscribe(() => {
       this.refreshOverlay(this.diva.getActivePageIndex());
     });
   }
 
   ngOnDestroy() {
-    selectedSystem.selected = null;
+    this.selectedSystem.selected = null;
     try {
       this.diva.deactivate();
       this.diva.destroy();
@@ -77,7 +77,7 @@ export class DivaViewComponent implements OnInit, OnDestroy {
 
       let staff = this.stateService.mei.getSystem(target.id);
       if (staff !== null) {
-        selectedSystem.selected = staff;
+        this.selectedSystem.selected = staff;
         target.classList.add("selectedZone");
       }
     }
@@ -165,8 +165,8 @@ export class DivaViewComponent implements OnInit, OnDestroy {
 
       // Determine Part
       let part: Part;
-      if (selectedSystem.selected !== null) {
-        part = selectedSystem.selected.parent;
+      if (this.selectedSystem.selected !== null) {
+        part = this.selectedSystem.selected.parent;
       } else {
         part = this.stateService.mei.getOrCreatePart(Voice.triplum);
       }
@@ -177,7 +177,7 @@ export class DivaViewComponent implements OnInit, OnDestroy {
       part.addSystem(newSystem);
 
       // Mark as selected
-      selectedSystem.selected = newSystem;
+      this.selectedSystem.selected = newSystem;
 
       // Clean up
       this.refreshOverlay(pageIndex);
@@ -230,7 +230,7 @@ export class DivaViewComponent implements OnInit, OnDestroy {
     for (const staff of systemsOnPage) {
       let item = staff.sb.svg;
       svgParent.appendChild(item);
-      if (selectedSystem.selected === staff) {
+      if (this.selectedSystem.selected === staff) {
         item.classList.add("selectedZone");
       }
     }

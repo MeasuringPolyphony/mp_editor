@@ -207,7 +207,7 @@ export class NoteItem implements MusicItem {
       case PitchClass.B: pname = "b"; break;
     }
     if (this.m_oct >= 4) {
-      for (let i = 4; i < this.m_oct; i++) {
+      for (let i = 4; i <= this.m_oct; i++) {
         output += pname;
       }
     } else {

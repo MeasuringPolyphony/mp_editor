@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IRI } from '../utils/definitions';
+import { MEIDocument } from '../utils/mei';
 import { formIIIFManifest } from '../tools';
 import { StateService } from '../state-service.service';
 
@@ -32,6 +33,10 @@ export class InputComponent implements OnInit {
     this.source = this.route.snapshot.paramMap.get('source');
     this.identifier = decodeURIComponent(this.route.snapshot.paramMap.get('identifier'));
     this.iiifManifest = formIIIFManifest(this.source, this.identifier);
+
+    if (!this.stateService.mei) {
+      this.stateService.mei = new MEIDocument(this.iiifManifest);
+    }
 
     if (this.stateService.mei.metadata != undefined) {
       this.shortTitle = this.stateService.mei.metadata.shortTitle;

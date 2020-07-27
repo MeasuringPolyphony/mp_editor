@@ -2,16 +2,16 @@
     <h1>Enter Music</h1>
     <fieldset>
         <legend class="music-subentry">Voice:&nbsp;</legend>
-        <input [(ngModel)]="selected.voice" type="radio" id="voice-triplum" formControlName="voice" value="triplum"/>
+        <input [(ngModel)]="selected.parent.voice" type="radio" id="voice-triplum" formControlName="voice" value="triplum"/>
         <label for="voice-triplum">triplum</label>
         &nbsp;
-        <input [(ngModel)]="selected.voice" type="radio" id="voice-motetus" formControlName="voice" value="motetus"/>
+        <input [(ngModel)]="selected.parent.voice" type="radio" id="voice-motetus" formControlName="voice" value="motetus"/>
         <label for="voice-motetus">motetus</label>
         &nbsp;
-        <input [(ngModel)]="selected.voice" type="radio" id="voice-tenor" formControlName="voice" value="tenor"/>
+        <input [(ngModel)]="selected.parent.voice" type="radio" id="voice-tenor" formControlName="voice" value="tenor"/>
         <label for="voice-tenor">tenor</label>
         &nbsp;
-        <input [(ngModel)]="selected.voice" type="radio" id="voice-contratenor" formControlName="voice" value="contratenor"/>
+        <input [(ngModel)]="selected.parent.voice" type="radio" id="voice-contratenor" formControlName="voice" value="contratenor"/>
         <label for="voice-contratenor">contratenor</label>
     </fieldset>
     <h3 class="music-subentry">Select Mensuration:</h3>

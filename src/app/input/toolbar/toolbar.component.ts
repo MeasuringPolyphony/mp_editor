@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StateService } from '../../state-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { System } from '../../utils/system';
-import { selectedSystem } from '../utils';
+import { InputService } from '../input.service';
 
 import * as vkbeautify from 'vkbeautify';
 
@@ -15,12 +15,13 @@ export class ToolbarComponent implements OnInit {
   currentStaff: System;
 
   constructor(
+    private selectedSystem: InputService,
     private stateService: StateService,
     public dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    selectedSystem.subscribe(system => {
+    this.selectedSystem.subscribe(system => {
       this.currentStaff = system;
     });
   }
@@ -35,7 +36,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   deleteStaff() {
-    let system = this.stateService.mei.getSystem(this.currentStaff.id);
+    let system = this.currentStaff;
     let part = system.parent;
     part.removeSystem(system.id);
   }

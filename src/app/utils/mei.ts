@@ -1,6 +1,7 @@
 import { Part, Tenor } from './part';
-import { System, Pb } from './system';
-import { Voice } from './definitions';
+import { System, Pb, Sb } from './system';
+import { ClefItem, NoteItem, RestItem } from './MusicItem';
+import { Voice, Mensuration } from './definitions';
 import { IRI } from './definitions';
 
 
@@ -20,6 +21,102 @@ export class MEIDocument {
     this.notationType = 'mensural.black'; // Will change with ars antiqua
     this.parts = [];
     this._createSkeletonMEI();
+  }
+
+  static fromXML(source: XMLDocument): MEIDocument {
+    let doc = source.documentElement;
+    let iiif = "";
+    try {
+      let sourceElement = doc.querySelector("source");
+      iiif = sourceElement.getAttribute("target");
+    } catch (e) {
+      console.debug(e);
+    }
+    let mei = new MEIDocument(iiif);
+
+    // Try to get metadata
+    let titleStmt = doc.querySelector("titleStmt");
+    if (titleStmt) {
+      if (titleStmt.querySelector("title")) {
+        mei.metadata.shortTitle = titleStmt.querySelector("title").textContent;
+      }
+      if (titleStmt.querySelector("persName") && titleStmt.querySelector("persName").getAttribute("role") === "encoder") {
+        mei.metadata.encoderName = titleStmt.querySelector("persName").textContent;
+      }
+      if (titleStmt.querySelector("composer")) {
+        mei.metadata.composerName = titleStmt.querySelector("composer").textContent;
+      }
+    }
+
+    let facsimile = doc.querySelector("facsimile");
+    let graphics = Array.from(facsimile.querySelectorAll("graphic"));
+    let zones = Array.from(facsimile.querySelectorAll("zone"));
+
+    // Start processing parts
+    const parts = Array.from(doc.querySelectorAll("part"));
+    for (const part of parts) {
+      let staffDef = part.querySelector("staffDef");
+      console.assert(staffDef.hasAttribute("label"));
+      let voice = staffDef.getAttribute("label");
+      let partObj = voice !== "tenor" ? new Part(mei, part.getAttribute("xml:id")) : new Tenor(mei, part.getAttribute("xml:id"));
+      mei.parts.push(partObj);
+
+      if (staffDef.hasAttribute("notationsubtype")) {
+        mei.notationSubtype = staffDef.getAttribute("notationsubtype");
+      }
+      if (staffDef.hasAttribute("modusminor")) {
+        partObj.modus = Mensuration[staffDef.getAttribute("modusminor")];
+      }
+      if (staffDef.hasAttribute("tempus")) {
+        partObj.tempus = Mensuration[staffDef.getAttribute("tempus")];
+      }
+      if (staffDef.hasAttribute("prolatio")) {
+        partObj.prolatio = Mensuration[staffDef.getAttribute("prolatio")];
+      }
+
+      const layer = part.querySelector("layer");
+      const layerChildren = Array.from(layer.querySelectorAll("pb,sb,clef,note,rest"));
+      let activePb: Pb = null;
+      let activeSystem: System = null;
+      for (const child of layerChildren) {
+        if (child.tagName === "pb") {
+          let facs = child.getAttribute("facs").split("#")[1];
+          console.assert(graphics.some(el => { return el.getAttribute("xml:id") === facs; }));
+          let graphic = graphics.find((el) => { return el.getAttribute("xml:id") === facs; });
+          activePb = new Pb(graphic.getAttribute("target"), child.getAttribute("xml:id"));
+        } else if (child.tagName === "sb") {
+          let sb: Sb;
+          if (child.hasAttribute("facs")) {
+            let facs = child.getAttribute("facs").split("#")[1];
+            console.assert(zones.some(el => { return el.getAttribute("xml:id") === facs; }));
+            let zone = zones.find(el => { return el.getAttribute("xml:id") === facs; });
+            sb = new Sb(
+              {
+                ulx: Number(zone.getAttribute("ulx")),
+                uly: Number(zone.getAttribute("uly")),
+                lrx: Number(zone.getAttribute("lrx")),
+                lry: Number(zone.getAttribute("lry"))
+              },
+              child.getAttribute("xml:id")
+            );
+          } else {
+            sb = new Sb({ulx: 0, uly: 0, lrx: 0, lry: 0}, child.getAttribute("xml:id"));
+          }
+          activeSystem = new System();
+          activeSystem.sb = sb;
+          activeSystem.pb = activePb;
+          partObj.addSystem(activeSystem);
+        } else if (child.tagName === "clef") {
+          let clef = ClefItem.parseXML(child);
+          activeSystem.contents.m_list.push(clef);
+        } else if (child.tagName === "rest") {
+          let rest = RestItem.parseXML(child);
+          activeSystem.contents.m_list.push(rest);
+        }
+      }
+    }
+
+    return mei;
   }
 
   generateXML(): Document {

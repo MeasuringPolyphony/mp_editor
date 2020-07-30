@@ -3,6 +3,21 @@
  * From: https://github.com/craigsapp/mensural-input/blob/master/scripts/musiclist.js
  */
 
+function parseRhythm(rhythm: string): number {
+  let val: number;
+  switch (rhythm) {
+    case "semibrevis": val = 1; break;
+    case "brevis": val = 0; break;
+    case "maxima": val = 7; break;
+    case "longa": val = 9; break;
+    case "minima": val = 2; break;
+    case "semiminima": val = 4; break;
+    case "fusa": val = 8; break;
+    case "semifusa": val = 6; break;
+  }
+  return val;
+}
+
 export enum PitchClass {
   C = 0,
   D = 1,
@@ -82,6 +97,24 @@ export class ClefItem implements MusicItem {
     }
     return output;
   }
+
+  static parseXML(element: Element): ClefItem {
+    let clef = new ClefItem();
+    if (element.hasAttribute("xml:id")) {
+      clef.m_id = element.getAttribute("xml:id");
+    }
+    switch (element.getAttribute("shape")) {
+      case "F": clef.m_pname = PitchClass.F; break;
+      case "G": clef.m_pname = PitchClass.G; break;
+      case "C":
+      default: break;
+    }
+    try {
+      let line: number = parseInt(element.getAttribute("line"));
+      clef.m_clefLine = line;
+    } catch (e) {}
+    return clef;
+  }
 }
 
 export class RestItem implements MusicItem {
@@ -121,6 +154,10 @@ export class RestItem implements MusicItem {
     }
     output += "\t.";
     return output;
+  }
+
+  static parseXML(element: Element): RestItem {
+
   }
 }
 

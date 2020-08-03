@@ -39,7 +39,8 @@ export class StaffSelectComponent implements OnInit {
   }
 
   updateSVG() {
-    let element = vrvToolkit.humdrumToSVG(this.selectedSystem.selected.contents.getHumdrumScore());
+    let white = this.selectedSystem.selected.parent.parent.notationType === "mensural.white";
+    let element = vrvToolkit.humdrumToSVG(this.selectedSystem.selected.contents.getHumdrumScore({white: white}));
     this.container.nativeElement.innerHTML = '';
     this.container.nativeElement.appendChild(element);
 

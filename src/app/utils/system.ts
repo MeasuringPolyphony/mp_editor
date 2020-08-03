@@ -83,7 +83,9 @@ export class System {
   }
 
   getContents(): Element[] {
-    let rawMei = vrvToolkit.humdrumToMEI(this.contents.getHumdrumScore());
+    let whiteMensural = this.parent.parent.notationType === "mensural.white";
+    console.debug(this.parent.parent.notationType);
+    let rawMei = vrvToolkit.humdrumToMEI(this.contents.getHumdrumScore({white: whiteMensural}));
     console.debug(rawMei);
     let parser = new DOMParser();
     let elements: Element[] = [];

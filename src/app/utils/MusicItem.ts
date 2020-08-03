@@ -573,17 +573,19 @@ export class MusicList {
   }
 
   getHumdrumScore (opts?: object) {
+    if (!opts) {
+      opts = {};
+    }
     let output = [];
     output.push("**mens\t**text");
-  	output.push("*black\t*");
+    if (opts['white'] !== true) {
+  	   output.push("*black\t*");
+    }
   	var i: number;
   	var lines: string;
   	var noteCounter = 0;
   	var restCounter = 0;
   	var hyphen = false;
-  	if (!opts) {
-  		opts = {};
-    	}
   	var options = opts;
   	for (i=0; i<this.m_list.length; i++) {
   		var item = this.m_list[i];

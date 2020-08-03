@@ -10,15 +10,21 @@ export const NAMESPACE = 'http://www.music-encoding.org/ns/mei';
 export class MEIDocument {
   parts: Part[];
   metadata: Metadata;  // Should this be broken up better?
-  notationType: string;
   notationSubtype: string;
 
   _meiDoc: Document;
 
+  get notationType(): string {
+    if (this.notationSubtype === "Ars antiqua" || this.notationSubtype === "Ars nova") {
+      return "mensural.black";
+    } else {
+      return "mensural.white";
+    }
+  }
+
   constructor (manuscriptIRI: IRI) {  // This is for creating a new document
     this.metadata = new Metadata();
     this.metadata.sourceIRI = manuscriptIRI;
-    this.notationType = 'mensural.black'; // Will change with ars antiqua
     this.parts = [];
     this._createSkeletonMEI();
   }

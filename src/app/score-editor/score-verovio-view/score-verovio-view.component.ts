@@ -277,7 +277,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       }
       switch (staffDef.getAttribute("notationtype")) {
         case "mensural.white":
-          console.warn("Mensural White is not currently supported!");
+          output = ScoringUp.ArsNova.lining_up(quasiDoc);
           break;
         case "mensural.black":
           switch(staffDef.getAttribute("notationsubtype")) {

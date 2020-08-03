@@ -285,7 +285,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
               output = ScoringUp.ArsAntiqua.lining_up(quasiDoc);
               break;
             case "Ars nova":
-              console.warn("Ars antiqua is currently not supported!");
+              output = ScoringUp.ArsNova.lining_up(quasiDoc);
               break;
             default:
               console.warn("Only 'Ars antiqua' and 'Ars nova' are supported!");

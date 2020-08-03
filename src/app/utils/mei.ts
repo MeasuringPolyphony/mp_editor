@@ -112,6 +112,9 @@ export class MEIDocument {
         } else if (child.tagName === "rest") {
           let rest = RestItem.parseXML(child);
           activeSystem.contents.m_list.push(rest);
+        } else if (child.tagName === "note") {
+          let note = NoteItem.parseXML(child);
+          activeSystem.contents.m_list.push(note);
         }
       }
     }

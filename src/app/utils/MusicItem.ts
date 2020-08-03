@@ -285,6 +285,54 @@ export class NoteItem implements MusicItem {
 
     return output;
   }
+
+  static parseXML(element: Element): NoteItem {
+    let note = new NoteItem();
+    // Set info from element attributes
+    if (element.hasAttribute("xml:id")) {
+      note.m_id = element.getAttribute("xml:id");
+    }
+    if (element.hasAttribute("oct")) {
+      note.m_oct = parseInt(element.getAttribute("oct"));
+    }
+    if (element.hasAttribute("dur")) {
+      note.m_rhythm = parseRhythm(element.getAttribute("dur"));
+    }
+    if (element.hasAttribute("pname")) {
+      note.m_pname = PitchClass[element.getAttribute("pname").toUpperCase()];
+    }
+
+    // Check next sibling for dot
+    if (element.nextElementSibling && element.nextElementSibling.tagName === "dot") {
+      note.m_dot = true;
+    }
+
+    // Check children for accid, text
+    if (element.querySelector("accid")) {
+      const accid = element.querySelector("accid");
+      switch (accid.getAttribute("accid")) {
+        case "s": note.m_accid = Accid.SHARP; break;
+        case "f": note.m_accid = Accid.FLAT; break;
+        case "n": note.m_accid = Accid.NATURAL; break;
+        default: break;
+      }
+    }
+    if (element.querySelector("syl")) {
+      const syl = element.querySelector("syl");
+      note.m_text = syl.textContent;
+    }
+
+    // Check parent for ligature
+    if (element.parentElement.tagName === "ligature") {
+      if (element === element.parentElement.firstElementChild) {
+        note.m_lig = LigStatus.START;
+      } else if (element === element.parentElement.lastElementChild) {
+        note.m_lig = LigStatus.END;
+      }
+    }
+
+    return note;
+  }
 }
 
 export class MusicList {

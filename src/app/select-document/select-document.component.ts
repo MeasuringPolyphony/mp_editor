@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { Router } from '@angular/router';
 
+import { MEIDocument } from '../utils/mei';
+import { StateService } from '../state-service.service';
 import * as Tools from '../tools';
 
 @Component({
@@ -14,6 +16,7 @@ export class SelectDocumentComponent implements OnInit {
 
   type: string = 'gallica';
   identifier: string = '12148/btv1b8454675g';
+  file: File = null;
 
   invalid = false;
 
@@ -22,7 +25,11 @@ export class SelectDocumentComponent implements OnInit {
     resourceURL: new FormControl('', [Validators.required, RxwebValidators.url()])
   });
 
-  constructor(private router: Router) { }
+  loadMEIForm = new FormGroup({
+    fileInput: new FormControl('', Validators.required)
+  });
+
+  constructor(private router: Router, private stateService: StateService) { }
 
   ngOnInit() {
   }
@@ -68,6 +75,43 @@ export class SelectDocumentComponent implements OnInit {
     }
     console.debug(identifier);
     this.router.navigate(['/input', source, encodeURIComponent(identifier)]);
+  }
+
+  meiSubmit() {
+    console.debug("MEI Submit");
+    console.debug(this.file);
+    if (this.file === null) { return; }
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+      let rawText = reader.result as string;
+      let parser = new DOMParser();
+      let doc = parser.parseFromString(rawText, "application/xml");
+      let mei = MEIDocument.fromXML(doc)
+      console.debug(mei);
+
+      // Try to determine IIIF
+      let iiif = mei.metadata.sourceIRI;
+      let source: string, identifier: string;
+      if (Tools.gallicaIIIFRegexp.test(iiif)) {
+        source = "gallica";
+        identifier = iiif.match(Tools.gallicaIIIFRegexp)[1];
+      }
+      else if (Tools.ecodicesIIIFRegexp.test(iiif)) {
+        source = "ecodices";
+        identifier = iiif.match(Tools.ecodicesIIIFRegexp)[1];
+      }
+      else {
+        window.alert("Sorry! This seems to be a valid file, but this IIIF manifest cannot be loaded.");
+        return;
+      }
+      this.stateService.mei = mei;
+      this.router.navigate(['/input', source, encodeURIComponent(identifier)]);
+    });
+    reader.readAsText(this.file);
+  }
+
+  onFileChange(evt) {
+    this.file = evt.target['files'][0];
   }
 
   get encodedIdSample(): string {

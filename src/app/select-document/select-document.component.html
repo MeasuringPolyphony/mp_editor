@@ -1,5 +1,5 @@
 <div id="document-select">
-    <div>
+    <div id="load-manuscript">
         <h1>Load Manuscript</h1>
         <form [formGroup]="selectionForm" (submit)="submit()">
             <div style="display:block;">
@@ -24,5 +24,18 @@
         <a [routerLink]="['/input', 'gallica', encodedIdSample]">
             <button color=primary class="primary-button" mat-stroked-button>Use Sample Document</button>
         </a>
+    </div>
+    <div id="load-mei">
+        <h1>Load from Parts MEI</h1>
+        <form [formGroup]="loadMEIForm" (submit)="meiSubmit()">
+            <div style="display:block;">
+                <label class="label">Compatible Parts-MEI File:&nbsp;
+                    <input type="file" (change)="onFileChange($event)" formControlName="fileInput" accept="application/mei+xml, application/xml, .mei, .xml">
+                </label>
+            </div>
+            <div>
+                <button type="submit" [disabled]="!loadMEIForm.valid" mat-stroked-button>Load File</button>
+            </div>
+        </form>
     </div>
 </div>

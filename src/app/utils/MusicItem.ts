@@ -157,7 +157,14 @@ export class RestItem implements MusicItem {
   }
 
   static parseXML(element: Element): RestItem {
-
+    let rest = new RestItem();
+    if (element.hasAttribute("xml:id")) {
+      rest.m_id = element.getAttribute("xml:id");
+    }
+    if (element.hasAttribute("dur")) {
+      rest.m_rhythm = parseRhythm(element.getAttribute("dur"));
+    }
+    return rest;
   }
 }
 

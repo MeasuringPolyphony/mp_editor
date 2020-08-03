@@ -59,6 +59,7 @@ export class MEIDocument {
       console.assert(staffDef.hasAttribute("label"));
       let voice = staffDef.getAttribute("label");
       let partObj = voice !== "tenor" ? new Part(mei, part.getAttribute("xml:id")) : new Tenor(mei, part.getAttribute("xml:id"));
+      partObj.voice = Voice[voice];
       mei.parts.push(partObj);
 
       if (staffDef.hasAttribute("notationsubtype")) {
@@ -84,6 +85,14 @@ export class MEIDocument {
           console.assert(graphics.some(el => { return el.getAttribute("xml:id") === facs; }));
           let graphic = graphics.find((el) => { return el.getAttribute("xml:id") === facs; });
           activePb = new Pb(graphic.getAttribute("target"), child.getAttribute("xml:id"));
+
+          // Determine Pb index
+          fetch(iiif).then(response => {
+            return response.json();
+          }).then((manifest: object) => {
+            let canvases: object[] = manifest["sequences"][0]["canvases"];
+            activePb.index = canvases.findIndex(canvas => { return canvas["@id"] === activePb.canvasIRI});
+          });
         } else if (child.tagName === "sb") {
           let sb: Sb;
           if (child.hasAttribute("facs")) {

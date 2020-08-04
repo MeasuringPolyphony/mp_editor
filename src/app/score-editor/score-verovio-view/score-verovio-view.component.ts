@@ -295,6 +295,10 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
           console.warn("Only mensural notation types are supported.");
           break;
       }
+      if (output !== null) {
+        ScoringUp.PostProcessing.replace_ligatures_by_brackets(output);
+        ScoringUp.PostProcessing.remove_num_and_numbase(output);
+      }
     }
     catch(e) {
       console.error(e);

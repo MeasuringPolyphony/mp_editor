@@ -72,13 +72,13 @@ export class MEIDocument {
         mei.notationSubtype = staffDef.getAttribute("notationsubtype");
       }
       if (staffDef.hasAttribute("modusminor")) {
-        partObj.modus = Mensuration[staffDef.getAttribute("modusminor")];
+        partObj.modus = staffDef.getAttribute("modusminor") as Mensuration;
       }
       if (staffDef.hasAttribute("tempus")) {
-        partObj.tempus = Mensuration[staffDef.getAttribute("tempus")];
+        partObj.tempus = staffDef.getAttribute("tempus") as Mensuration;
       }
       if (staffDef.hasAttribute("prolatio")) {
-        partObj.prolatio = Mensuration[staffDef.getAttribute("prolatio")];
+        partObj.prolatio = staffDef.getAttribute("prolatio") as Mensuration;
       }
 
       const layer = part.querySelector("layer");

@@ -55,7 +55,7 @@ export class MEIDocument {
     }
 
     let facsimile = doc.querySelector("facsimile");
-    let graphics = Array.from(facsimile.querySelectorAll("graphic"));
+    let surfaces = Array.from(facsimile.querySelectorAll("surface"));
     let zones = Array.from(facsimile.querySelectorAll("zone"));
 
     // Start processing parts
@@ -88,8 +88,9 @@ export class MEIDocument {
       for (const child of layerChildren) {
         if (child.tagName === "pb") {
           let facs = child.getAttribute("facs").split("#")[1];
-          console.assert(graphics.some(el => { return el.getAttribute("xml:id") === facs; }));
-          let graphic = graphics.find((el) => { return el.getAttribute("xml:id") === facs; });
+          console.assert(surfaces.some(el => { return el.getAttribute("xml:id") === facs; }));
+          let surface = surfaces.find(el => { return el.getAttribute("xml:id") === facs; });
+          let graphic = surface.querySelector("graphic");
           activePb = new Pb(graphic.getAttribute("target"), child.getAttribute("xml:id"));
 
           // Determine Pb index

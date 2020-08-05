@@ -94,12 +94,11 @@ export class Part {
           graphic = this.parent._meiDoc.createElementNS(NAMESPACE, 'graphic');
           graphic.setAttribute('xml:id', 'm-' + uuid());
           graphic.setAttribute('target', system.pb.canvasIRI);
-          graphic.setAttribute('ulx', '0');
-          graphic.setAttribute('uly', '0');
           surface.appendChild(graphic);
           facsimile.appendChild(surface);
         }
-        pb.setAttribute('facs', '#' + graphic.getAttribute('xml:id'));
+        let surface = graphic.closest("surface");
+        pb.setAttribute('facs', '#' + surface.getAttribute('xml:id'));
         currentPage = system.pb.canvasIRI;
         layer.appendChild(pb);
       }

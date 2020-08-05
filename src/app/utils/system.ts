@@ -100,6 +100,9 @@ export class System {
     if (layer !== null) {
       for (let child of Array.from(layer.children)) {
         this._recurseId(child);
+        if (child.tagName === "note" && child.hasAttribute("dots")) {
+          child.removeAttribute("dots");
+        }
         elements.push(child);
       }
     }

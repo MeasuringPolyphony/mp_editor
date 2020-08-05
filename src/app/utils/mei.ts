@@ -15,7 +15,7 @@ export class MEIDocument {
   _meiDoc: Document;
 
   get notationType(): string {
-    if (this.notationSubtype === "Ars antiqua" || this.notationSubtype === "Ars nova") {
+    if (/Ars[_ ](antiqua|nova)/.test(this.notationSubtype)) {
       return "mensural.black";
     } else {
       return "mensural.white";

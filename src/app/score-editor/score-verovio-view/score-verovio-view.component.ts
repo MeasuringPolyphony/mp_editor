@@ -281,10 +281,10 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
           break;
         case "mensural.black":
           switch(staffDef.getAttribute("notationsubtype")) {
-            case "Ars antiqua":
+            case "Ars_antiqua":
               output = ScoringUp.ArsAntiqua.lining_up(quasiDoc);
               break;
-            case "Ars nova":
+            case "Ars_nova":
               output = ScoringUp.ArsNova.lining_up(quasiDoc);
               break;
             default:

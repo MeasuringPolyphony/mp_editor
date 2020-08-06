@@ -114,7 +114,6 @@ export class Part {
 
       let sb = this.parent._meiDoc.createElementNS(NAMESPACE, 'sb');
       sb.setAttribute('facs', '#' + zone.getAttribute('xml:id'));
-      sb.setAttribute('xml:id', system.sb.id);
       layer.appendChild(sb);
 
       // Add contents. Child here should have correct xml:id including children

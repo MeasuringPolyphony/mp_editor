@@ -111,22 +111,25 @@ export class System {
 
   _recurseId(element: Element) {
     let id = element.getAttribute('xml:id');
-    if (id) {
-      let regexpInfo = id.match(/L(\d+)$/);
+    let found = false;
+    if (id && /(note|rest|clef|pb|sb)/.test(element.tagName)) {
+      let regexpInfo = id.match(/L(\d+)[\w\d]+$/);
       if (regexpInfo) {
         let line = parseInt(regexpInfo[1]);
         let match = this.contents.m_list.filter(el => {
           return el.m_line === line;
         });
         if (match.length > 0) {
+          found = true;
           element.setAttribute('xml:id', match[0].m_id);
-          for (let child of Array.from(element.children)) {
-            this._recurseId(child);
-          }
-          return;
         }
       }
     }
-    element.setAttribute('xml:id', 'm-' + uuid());
+    if (!found) {
+      element.setAttribute('xml:id', 'm-' + uuid());
+    }
+    for (let child of Array.from(element.children)) {
+      this._recurseId(child);
+    }
   }
 }

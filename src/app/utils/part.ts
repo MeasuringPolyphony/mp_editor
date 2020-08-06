@@ -106,7 +106,8 @@ export class Part {
 
       // Handle sb
       let zone = this.parent._meiDoc.createElementNS(NAMESPACE, 'zone');
-      zone.setAttribute('xml:id', system.sb.id);
+      let zoneId = 'm' + uuid();
+      zone.setAttribute('xml:id', zoneId);
       zone.setAttribute('ulx', Math.round(system.sb.zone.ulx).toString());
       zone.setAttribute('uly', Math.round(system.sb.zone.uly).toString());
       zone.setAttribute('lrx', Math.round(system.sb.zone.lrx).toString());
@@ -115,6 +116,7 @@ export class Part {
 
       let sb = this.parent._meiDoc.createElementNS(NAMESPACE, 'sb');
       sb.setAttribute('facs', '#' + zone.getAttribute('xml:id'));
+      sb.setAttribute('xml:id', system.sb.id);
       layer.appendChild(sb);
 
       // Add contents. Child here should have correct xml:id including children

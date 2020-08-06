@@ -99,6 +99,7 @@ export class Part {
         }
         let surface = graphic.closest("surface");
         pb.setAttribute('facs', '#' + surface.getAttribute('xml:id'));
+        pb.setAttribute('xml:id', system.pb.id);
         currentPage = system.pb.canvasIRI;
         layer.appendChild(pb);
       }

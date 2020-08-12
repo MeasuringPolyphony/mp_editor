@@ -94,12 +94,16 @@ export class MEIDocument {
           activePb = new Pb(graphic.getAttribute("target"), child.getAttribute("xml:id"));
 
           // Determine Pb index
-          fetch(iiif).then(response => {
-            return response.json();
-          }).then((manifest: object) => {
-            let canvases: object[] = manifest["sequences"][0]["canvases"];
-            activePb.index = canvases.findIndex(canvas => { return canvas["@id"] === activePb.canvasIRI});
-          });
+          function setIndex(pb: Pb) {
+            fetch(iiif).then(response => {
+              return response.json();
+            }).then((manifest: object) => {
+              let canvases: object[] = manifest["sequences"][0]["canvases"];
+              pb.index = canvases.findIndex(canvas => { return canvas["@id"] === pb.canvasIRI; });
+            });
+          }
+
+          setIndex(activePb);
         } else if (child.tagName === "sb") {
           let sb: Sb;
           if (child.hasAttribute("facs")) {

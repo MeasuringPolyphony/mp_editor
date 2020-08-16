@@ -64,7 +64,7 @@ export class MEIDocument {
       let staffDef = part.querySelector("staffDef");
       console.assert(staffDef.hasAttribute("label"));
       let voice = staffDef.getAttribute("label");
-      let partObj = voice !== "tenor" ? new Part(mei, part.getAttribute("xml:id")) : new Tenor(mei, part.getAttribute("xml:id"));
+      let partObj: Part | Tenor = voice !== "tenor" ? new Part(mei, part.getAttribute("xml:id")) : new Tenor(mei, part.getAttribute("xml:id"));
       partObj.voice = Voice[voice];
       mei.parts.push(partObj);
 
@@ -82,6 +82,19 @@ export class MEIDocument {
       }
 
       const layer = part.querySelector("layer");
+      // Handle repeating tenor if tenor
+      if (partObj.voice === Voice.tenor) {
+        const dir = part.querySelector("dir");
+        if (dir) {
+          const tenorObj = partObj as Tenor;
+          tenorObj.repetitions = Number(dir.getAttribute("n")) + 1
+          const matchResults = dir.getAttribute("plist").match(/^#[-\w\d]+ #([-\w\d]+)$/);
+          if (matchResults.length > 1) {
+            tenorObj.endingId = matchResults[1];
+          }
+        }
+      }
+      // Handle regular children
       const layerChildren = Array.from(layer.querySelectorAll("pb,sb,clef,note,rest"));
       let activePb: Pb = null;
       let activeSystem: System = null;
@@ -146,7 +159,8 @@ export class MEIDocument {
     this._createSkeletonMEI();
     let parts = this._meiDoc.querySelector('parts');
     for (let part of this.parts) {
-      let partElement = part.generatePartXML();
+      let partElement = (part.voice === Voice.tenor) ?
+        (part as Tenor).generatePartXML() : part.generatePartXML();
       parts.appendChild(partElement);
     }
     return this._meiDoc;

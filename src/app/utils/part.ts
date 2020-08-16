@@ -156,9 +156,10 @@ export class Tenor extends Part {
   constructor(doc: MEIDocument, id?: string) {
     super(doc, id);
     this.voice = Voice.tenor;
+    this.repetitions = 1;   // default
   }
 
-  createPartElement(): Element {
+  generatePartXML(): Element {
     let part = super.generatePartXML();
     // Set repeating tenor if necessary
     if (this.repetitions > 1) {

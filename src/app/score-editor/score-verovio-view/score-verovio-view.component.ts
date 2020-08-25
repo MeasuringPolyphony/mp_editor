@@ -6,8 +6,7 @@ import * as ScoringUp from 'scoring-up';
 import { vrvToolkit } from '../../utils/verovio';
 import { StateService } from '../../state-service.service';
 import { SelectedStaffService } from '../selected-staff.service';
-
-import { wrapper, scoreDoc } from '../definitions';
+import { DocService } from '../doc.service';
 
 const pnameOrder = [ 'c', 'd', 'e', 'f', 'g', 'a', 'b'];
 
@@ -35,18 +34,18 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     public stateService: StateService,
-    private staffService: SelectedStaffService
-  ) {
-    wrapper.meiDoc = this.stateService.mei.generateXML();
-  }
+    private staffService: SelectedStaffService,
+    private doc: DocService
+  ) {  }
 
   ngOnInit() {
-    scoreDoc.subscribe((doc) => {
+    this.doc.parts = this.stateService.mei.generateXML();
+    this.doc._scoreSubject.subscribe((doc) => {
       this.container.nativeElement.innerHTML = '';
       const svg = vrvToolkit.meiToSVG(doc);
       this.container.nativeElement.appendChild(svg);
       this.setSelected();
-    })
+    });
   }
 
   setEditorialMode() {
@@ -78,12 +77,12 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
           partsId = this.corrToSicMap.get(partsId);
         }
         // Get nearest pb  and sb
-        const resolver = wrapper.meiDoc.createNSResolver(wrapper.meiDoc.ownerDocument == null ? wrapper.meiDoc.documentElement : wrapper.meiDoc.ownerDocument.documentElement);
+        const resolver = this.doc.parts.createNSResolver(this.doc.parts.ownerDocument == null ? this.doc.parts.documentElement : this.doc.parts.ownerDocument.documentElement);
         const meiRes = () => { return 'http://www.music-encoding.org/ns/mei'; };
-        const ref = wrapper.meiDoc.evaluate("//*[@xml:id='" + partsId + "']", wrapper.meiDoc, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-        let result = wrapper.meiDoc.evaluate("./preceding::mei:pb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        const ref = this.doc.parts.evaluate("//*[@xml:id='" + partsId + "']", this.doc.parts, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        let result = this.doc.parts.evaluate("./preceding::mei:pb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
         const pb = result.snapshotItem(result.snapshotLength - 1) as Element;
-        result = wrapper.meiDoc.evaluate("./preceding::mei:sb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        result = this.doc.parts.evaluate("./preceding::mei:sb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
         const sb = result.snapshotItem(result.snapshotLength - 1) as Element;
         // Get corresponding zones (strip away fragment symbol)
         const pbFacsId = pb.getAttribute("facs")[0] === "#" ?
@@ -92,11 +91,13 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
         const sbFacsId = sb.getAttribute("facs")[0] === "#" ?
           sb.getAttribute("facs").substring(1) :
           sb.getAttribute("facs");
+        console.debug(sbFacsId);
 
         // The following SHOULD use XPath but I haven't been able to get it to work
         const pbGraphic = Array.from(
-          wrapper.meiDoc.getElementsByTagName("graphic")
-        ).filter(el => { return el.getAttribute("xml:id") === pbFacsId; }).pop();
+          this.doc.parts.getElementsByTagName("surface")
+        ).filter(el => { return el.getAttribute("xml:id") === pbFacsId; }).pop()
+          .querySelector("graphic");
         const sbZone = Array.from(
           pbGraphic.children
         ).filter(el => { return el.getAttribute("xml:id") === sbFacsId; }).pop()
@@ -107,6 +108,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
           lrx: sbZone.getAttribute("lrx"),
           lry: sbZone.getAttribute("lry")
         };
+        console.debug(iri);
         this.staffService.staffLocation = [iri, bbox];
       }
       catch (_e) {
@@ -116,7 +118,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    scoreDoc.next(this.runScoringUp(wrapper.meiDoc));
+    this.doc.score = this.runScoringUp(this.doc.parts);
   }
 
   handleClick(event: MouseEvent) {
@@ -139,20 +141,20 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       let doc: XMLDocument;
       if (this.stateService.editorialMode) {
         if (this.quasiScore === null) {
-          this.quasiScore = this.getQuasiScore(wrapper.meiDoc);
+          this.quasiScore = this.getQuasiScore(this.doc.parts);
         }
         doc = this.quasiScore;
       }
       else {
-        doc = wrapper.meiDoc;
+        doc = this.doc.parts;
       }
-      const resolver = wrapper.meiDoc.createNSResolver(wrapper.meiDoc.ownerDocument == null ? wrapper.meiDoc.documentElement : wrapper.meiDoc.ownerDocument.documentElement);
-      const result = wrapper.meiDoc.evaluate("//*[@xml:id='" + this.selectedId + "']", wrapper.meiDoc, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+      const resolver = this.doc.parts.createNSResolver(this.doc.parts.ownerDocument == null ? this.doc.parts.documentElement : this.doc.parts.ownerDocument.documentElement);
+      const result = this.doc.parts.evaluate("//*[@xml:id='" + this.selectedId + "']", this.doc.parts, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
       if (!result.singleNodeValue) return;
       let target = result.singleNodeValue as Element;
       // Ensure corrected element in MEI
       if (this.stateService.editorialMode) {
-        target = this.ensureCorrElement(target, wrapper.meiDoc);
+        target = this.ensureCorrElement(target, this.doc.parts);
       }
       if (target.tagName === "note") {
         switch (event.key) {
@@ -165,7 +167,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
               }
             }
             else {
-              let dot = wrapper.meiDoc.createElementNS("http://www.music-encoding.org/ns/mei", "dot");
+              let dot = this.doc.parts.createElementNS("http://www.music-encoding.org/ns/mei", "dot");
               dot.setAttribute("xml:id", "m-" + uuid());
               target.insertAdjacentElement("afterend", dot);
             }
@@ -260,7 +262,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       }
 
       event.preventDefault();
-      scoreDoc.next(this.runScoringUp(wrapper.meiDoc));
+      this.doc.score = this.runScoringUp(this.doc.parts);
     }
   }
 

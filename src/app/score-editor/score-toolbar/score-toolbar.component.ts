@@ -5,7 +5,7 @@ import { refineScore } from 'scoring-up';
 import * as vkbeautify from 'vkbeautify';
 
 import { StateService } from '../../state-service.service';
-import { wrapper, scoreDoc } from '../definitions';
+import { DocService } from '../doc.service';
 
 @Component({
   selector: 'app-score-toolbar',
@@ -18,11 +18,12 @@ export class ScoreToolbarComponent implements OnInit {
 
   constructor(public stateService: StateService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private doc: DocService
   ) { }
 
   ngOnInit() {
-    scoreDoc.subscribe((doc) => {
+    this.doc._scoreSubject.subscribe((doc) => {
       this.currentDoc = doc;
     });
   }
@@ -46,7 +47,7 @@ export class ScoreToolbarComponent implements OnInit {
     if (this.stateService.mei != null) {
       const target = event.target as HTMLAnchorElement;
       const serializer = new XMLSerializer();
-      const content = vkbeautify.xml(serializer.serializeToString(wrapper.meiDoc));
+      const content = vkbeautify.xml(serializer.serializeToString(this.doc.parts));
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
     }

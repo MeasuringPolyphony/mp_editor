@@ -3,6 +3,8 @@
  * From: https://github.com/craigsapp/mensural-input/blob/master/scripts/musiclist.js
  */
 
+import { v4 } from "uuid";
+
 function parseRhythm(rhythm: string): number {
   let val: number;
   switch (rhythm) {
@@ -602,6 +604,9 @@ export class MusicList {
   		if (options["export"]) {
   			options["mark"] = false;
   		}
+      if (item.m_id === undefined) {
+        item.m_id = 'm-' + v4();
+      }
   		lines = item.getHumdrumLine(options);
   		if (item.m_type === "note") {
   			if ((item as NoteItem).m_text.match(/-$/)) {

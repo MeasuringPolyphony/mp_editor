@@ -67,18 +67,25 @@ export class MEIDocument {
       let partObj: Part | Tenor = voice !== "tenor" ? new Part(mei, part.getAttribute("xml:id")) : new Tenor(mei, part.getAttribute("xml:id"));
       partObj.voice = Voice[voice];
       mei.parts.push(partObj);
+      let mensur = staffDef.querySelector("mensur");
 
       if (staffDef.hasAttribute("notationsubtype")) {
         mei.notationSubtype = staffDef.getAttribute("notationsubtype");
       }
       if (staffDef.hasAttribute("modusminor")) {
         partObj.modus = staffDef.getAttribute("modusminor") as Mensuration;
+      } else if (mensur && mensur.hasAttribute("modusminor")) {
+        partObj.modus = mensur.getAttribute("modusminor") as Mensuration;
       }
       if (staffDef.hasAttribute("tempus")) {
         partObj.tempus = staffDef.getAttribute("tempus") as Mensuration;
+      } else if (mensur && mensur.hasAttribute("tempus")) {
+        partObj.tempus = mensur.getAttribute("tempus") as Mensuration;
       }
       if (staffDef.hasAttribute("prolatio")) {
         partObj.prolatio = staffDef.getAttribute("prolatio") as Mensuration;
+      } else if (mensur && mensur.hasAttribute("prolatio")) {
+        partObj.prolatio = mensur.getAttribute("prolatio") as Mensuration;
       }
 
       const layer = part.querySelector("layer");

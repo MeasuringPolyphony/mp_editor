@@ -51,14 +51,16 @@ export class Part {
 
     let staffDef = scoreDef.querySelector('staffDef');
     staffDef.setAttribute('label', this.voice.toString());
+    let mensur = this.parent._meiDoc.createElementNS(NAMESPACE, 'mensur');
+    staffDef.appendChild(mensur);
     if (this.modus !== Mensuration.NA) {
-      staffDef.setAttribute('modusminor', this.modus.toString());
+      mensur.setAttribute('modusminor', this.modus.toString());
     }
     if (this.tempus !== Mensuration.NA) {
-      staffDef.setAttribute('tempus', this.tempus.toString());
+      mensur.setAttribute('tempus', this.tempus.toString());
     }
     if (this.prolatio !== Mensuration.NA) {
-      staffDef.setAttribute('prolatio', this.prolatio.toString());
+      mensur.setAttribute('prolatio', this.prolatio.toString());
     }
 
     let section = this.parent._meiDoc.createElementNS(NAMESPACE, 'section');

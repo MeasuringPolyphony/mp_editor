@@ -4,10 +4,24 @@ import { MusicList } from './MusicItem';
 
 // The voice a staff belongs to
 export enum Voice {
-  triplum='triplum',
+  altus='altus',
+  cantus='cantus',
+  contratenor='contratenor',
+  contratenor1='contratenor I',
+  contratenor2='contratenor II',
+  discantus='discantus',
+  duplum='duplum',
+  lowervoice1='lower voice I',
+  lowervoice2='lower voice II',
   motetus='motetus',
+  quadruplum='quadruplum',
+  quintus='quintus',
+  superius='superius',
+  uppervoice1='upper voice I',
+  uppervoice2='uppervoice II',
   tenor='tenor',
-  contratenor='contratenor'
+  triplum='triplum',
+  bassus='bassus'
 }
 
 // Values for modus, tempus, and prolatio

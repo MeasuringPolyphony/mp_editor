@@ -64,7 +64,7 @@ export class MEIDocument {
       let staffDef = part.querySelector("staffDef");
       console.assert(staffDef.hasAttribute("label"));
       let voice = staffDef.getAttribute("label");
-      let partObj: Part | Tenor = voice !== "tenor" ? new Part(mei, part.getAttribute("xml:id")) : new Tenor(mei, part.getAttribute("xml:id"));
+      let partObj: Part | Tenor = /^[tT]enor/.test(voice) ? new Tenor(mei, part.getAttribute("xml:id")) : new Part(mei, part.getAttribute("xml:id"));
       partObj.voice = Voice[voice];
       mei.parts.push(partObj);
       let mensur = staffDef.querySelector("mensur");
@@ -90,7 +90,7 @@ export class MEIDocument {
 
       const layer = part.querySelector("layer");
       // Handle repeating tenor if tenor
-      if (partObj.voice === Voice.tenor) {
+      if (/^[tT]enor/.test(partObj.voice)) {
         const dir = part.querySelector("dir");
         if (dir) {
           const tenorObj = partObj as Tenor;
@@ -166,7 +166,7 @@ export class MEIDocument {
     this._createSkeletonMEI();
     let parts = this._meiDoc.querySelector('parts');
     for (let part of this.parts) {
-      let partElement = (part.voice === Voice.tenor) ?
+      let partElement = /^[tT]enor/.test(part.voice) ?
         (part as Tenor).generatePartXML() : part.generatePartXML();
       parts.appendChild(partElement);
     }
@@ -248,7 +248,7 @@ export class MEIDocument {
     if (this.parts.some(part => { return part.voice === voice; })) {
       return this.getPart(voice);
     }
-    let part = (voice === Voice.tenor) ? new Tenor(this) : new Part(this);
+    let part = /^[tT]enor/.test(voice) ? new Tenor(this) : new Part(this);
     part.voice = voice;
     this.parts.push(part);
     return part;

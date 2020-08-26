@@ -15,6 +15,7 @@ import { Voice } from '../../utils/definitions';
 })
 export class StaffSelectComponent implements OnInit {
   @ViewChild('example') container: ElementRef;
+  voices = Object.entries(Voice);
   keySigMode = false;
   pitchSig: string = null;
   accidSig: string = null;
@@ -44,7 +45,7 @@ export class StaffSelectComponent implements OnInit {
     this.container.nativeElement.innerHTML = '';
     this.container.nativeElement.appendChild(element);
 
-    if (this.selectedSystem.selected.parent.voice === Voice.tenor) {
+    if (/^[tT]enor/.test(this.selectedSystem.selected.parent.voice)) {
       const tenor = this.selectedSystem.selected.parent as Tenor;
       if (tenor.endingId !== undefined) {
         let endNote = element.getElementById(tenor.endingId);

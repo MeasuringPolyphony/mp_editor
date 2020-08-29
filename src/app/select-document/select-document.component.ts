@@ -68,6 +68,13 @@ export class SelectDocumentComponent implements OnInit {
           return;
         }
         break;
+      case 'iiif':
+        console.debug('iiif case')
+        if (Tools.genericIIIFRegexp.test(resourceURL)) {
+          console.debug("generic iiif");
+          identifier = encodeURIComponent(resourceURL);
+        }
+        break;
       default:
         console.debug(source);
         this.invalid = true;
@@ -99,6 +106,10 @@ export class SelectDocumentComponent implements OnInit {
       else if (Tools.ecodicesIIIFRegexp.test(iiif)) {
         source = "ecodices";
         identifier = iiif.match(Tools.ecodicesIIIFRegexp)[1];
+      }
+      else if (Tools.genericIIIFRegexp.test(iiif)) {
+        source = "iiif";
+        identifier = encodeURIComponent(iiif);
       }
       else {
         window.alert("Sorry! This seems to be a valid file, but this IIIF manifest cannot be loaded.");

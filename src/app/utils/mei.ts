@@ -71,6 +71,8 @@ export class MEIDocument {
 
       if (staffDef.hasAttribute("notationsubtype")) {
         mei.notationSubtype = staffDef.getAttribute("notationsubtype");
+      } else {
+        mei.notationSubtype = "";
       }
       if (staffDef.hasAttribute("modusminor")) {
         partObj.modus = staffDef.getAttribute("modusminor") as Mensuration;

@@ -168,6 +168,9 @@ export class MEIDocument {
     this._createSkeletonMEI();
     let parts = this._meiDoc.querySelector('parts');
     for (let part of this.parts) {
+      if (part.systems.length === 0) {
+        continue;
+      }
       let partElement = /^[tT]enor/.test(part.voice) ?
         (part as Tenor).generatePartXML() : part.generatePartXML();
       parts.appendChild(partElement);

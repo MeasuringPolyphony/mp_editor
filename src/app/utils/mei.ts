@@ -173,6 +173,7 @@ export class MEIDocument {
       }
       let partElement = /^[tT]enor/.test(part.voice) ?
         (part as Tenor).generatePartXML() : part.generatePartXML();
+      if (partElement.querySelector('layer').children.length === 0) continue;
       parts.appendChild(partElement);
     }
     return this._meiDoc;

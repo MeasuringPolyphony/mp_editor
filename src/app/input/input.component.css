@@ -13,6 +13,7 @@ app-diva-view {
 }
 
 #right-side {
+    overflow-y: scroll;
     grid-column: 3 / 4;
     margin: 1em;
 }

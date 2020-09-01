@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
-import { IRI, Staff } from '../../input/definitions';
+import { IRI } from '../../utils/definitions';
 
 import { SelectedStaffService } from '../selected-staff.service';
 
@@ -33,6 +33,8 @@ export class ScoreDivaViewComponent implements OnInit, OnDestroy {
     this.staffService.getStaffLocation().subscribe(([iri, bbox]) =>  {
       this.iri = iri;
       this.bbox = bbox;
+      console.debug(iri);
+      console.debug(bbox);
       this.redraw();
     });
   }

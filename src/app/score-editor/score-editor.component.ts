@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { IRI } from '../input/definitions';
+import { IRI } from '../utils/definitions';
 import { StateService } from '../state-service.service';
+import { MEIDocument } from '../utils/mei';
 import { formIIIFManifest } from '../tools';
 
 @Component({
@@ -15,7 +16,7 @@ export class ScoreEditorComponent implements OnInit {
   source: string;
   identifier: string;
   iiifManifest: IRI;
-  meiDoc: XMLDocument;
+  meiDoc: MEIDocument;
 
   constructor(
     private router: Router,
@@ -35,5 +36,4 @@ export class ScoreEditorComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

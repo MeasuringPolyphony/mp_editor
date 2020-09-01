@@ -1,13 +1,27 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { MusicList } from './musiclist';
+import { MusicList } from './MusicItem';
 
 // The voice a staff belongs to
 export enum Voice {
-  triplum='triplum',
+  altus='altus',
+  cantus='cantus',
+  contratenor='contratenor',
+  contratenor1='contratenor I',
+  contratenor2='contratenor II',
+  discantus='discantus',
+  duplum='duplum',
+  lowervoice1='lower voice I',
+  lowervoice2='lower voice II',
   motetus='motetus',
+  quadruplum='quadruplum',
+  quintus='quintus',
+  superius='superius',
+  uppervoice1='upper voice I',
+  uppervoice2='uppervoice II',
   tenor='tenor',
-  contratenor='contratenor'
+  triplum='triplum',
+  bassus='bassus'
 }
 
 // Values for modus, tempus, and prolatio
@@ -17,7 +31,7 @@ export enum Mensuration {
   NA='N/A'
 }
 
-type BoundingBox = {
+export type BoundingBox = {
   ulx: number;
   uly: number;
   lrx: number;
@@ -52,7 +66,7 @@ export class Staff {
     index: number,
     voice?: Voice,
     id?: string,
-    musicList?: any
+    musicList?: MusicList
   ) {
     if (id) {
       this.id = id;

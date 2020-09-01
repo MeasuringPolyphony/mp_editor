@@ -1,11 +1,12 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StaffService } from '../staff.service';
-import { C_PitchClass, D_PitchClass, E_PitchClass, F_PitchClass, G_PitchClass, A_PitchClass, B_PitchClass } from '../musiclist';
-import { HNPService } from '../../hnp.service';
-import { MeiService } from '../mei.service';
+import { PitchClass, NoteItem, RestItem, Accid, LigStatus } from '../../utils/MusicItem';
 import { StateService } from '../../state-service.service';
+import { InputService } from '../input.service';
+import { vrvToolkit } from '../../utils/verovio';
+import { Tenor } from '../../utils/part';
+import { Voice } from '../../utils/definitions';
 
 @Component({
   selector: 'app-staff-select',
@@ -14,41 +15,43 @@ import { StateService } from '../../state-service.service';
 })
 export class StaffSelectComponent implements OnInit {
   @ViewChild('example') container: ElementRef;
+  voices = Object.entries(Voice);
   keySigMode = false;
   pitchSig: string = null;
   accidSig: string = null;
+  selected = null;
   constructor(
-    public staffService: StaffService,
-    private hnpService: HNPService,
-    private meiService: MeiService,
+    private selectedSystem: InputService,
     private stateService: StateService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
 
   ngOnInit() {
-    this.staffService.selectedStaff.subscribe({
+    this.selectedSystem.subscribe({
       next: (staff) => {
+        this.selected = staff;
         this.container.nativeElement.innerHTML = '';
         if (staff === null) return;
-        let element = this.hnpService.humdrumToSVG(staff.musicList.getHumdrumScore());
+        let element = vrvToolkit.humdrumToSVG(staff.contents.getHumdrumScore());
         this.container.nativeElement.appendChild(element);
       }
     });
   }
 
   updateSVG() {
-    let element = this.hnpService.humdrumToSVG(this.staffService._selectedStaff.musicList.getHumdrumScore());
+    let white = this.selectedSystem.selected.parent.parent.notationType === "mensural.white";
+    let element = vrvToolkit.humdrumToSVG(this.selectedSystem.selected.contents.getHumdrumScore({white: white}));
     this.container.nativeElement.innerHTML = '';
     this.container.nativeElement.appendChild(element);
 
-    if (this.staffService._selectedStaff.id === this.staffService._repeatingTenor.staffId &&
-        this.staffService._repeatingTenor.elementId !== null) {
-      let endNote = element.getElementById(this.staffService._repeatingTenor.elementId);
-      if (endNote !== null) {
-        endNote.setAttribute('fill', '#00f');
-      } else {
-        this.staffService._repeatingTenor.elementId = null;
+    if (/^[tT]enor/.test(this.selectedSystem.selected.parent.voice)) {
+      const tenor = this.selectedSystem.selected.parent as Tenor;
+      if (tenor.endingId !== undefined) {
+        let endNote = element.getElementById(tenor.endingId);
+        if (endNote !== null) {
+          endNote.setAttribute('fill', '#00f');
+        }
       }
     }
   }
@@ -66,7 +69,7 @@ export class StaffSelectComponent implements OnInit {
       if (target.nodeName === 'g') {
         let matches: Array<string>;
         if (matches = target.id.match(/-.*L(\d+)/)) {
-          this.staffService._selectedStaff.musicList.selectItemByLine(parseInt(matches[1]))
+          this.selectedSystem.selected.contents.selectItemByLine(parseInt(matches[1]))
           this.updateSVG();
           break;
         }
@@ -76,29 +79,28 @@ export class StaffSelectComponent implements OnInit {
   }
 
   finishStep() {
-    const mei = this.meiService.generateFullMEI();
+    // const mei = this.meiService.generateFullMEI();
     const type = this.route.snapshot.paramMap.get('source');
     const identifier = this.route.snapshot.paramMap.get('identifier');
-    this.stateService.mei = mei;
+    // this.stateService.mei = mei;
     this.router.navigate(['/score', type, identifier]);
   }
 
   repTenorButton() {
-    this.staffService._repeatingTenor.staffId = this.staffService._selectedStaff.id;
-
+    const tenor = this.stateService.mei.getPart(Voice.tenor) as Tenor;
     try {
         let layer = this.container.nativeElement.querySelector('.layer');
-        this.staffService._repeatingTenor.elementId = layer.lastElementChild.id;
+        tenor.endingId = layer.lastElementChild.id;
     } catch (e) {
       console.debug(e);
-      this.staffService._repeatingTenor.elementId = null;
+      tenor.endingId = undefined;
     }
     this.updateSVG();
   }
 
   @HostListener('document:keydown', ['$event'])
   handleKeyPress(event: KeyboardEvent) {
-    if (this.staffService._selectedStaff == null) return;
+    if (this.selectedSystem.selected == null) return;
 
     if (this.keySigMode) {
       this.handleKeySigPress(event);
@@ -109,7 +111,7 @@ export class StaffSelectComponent implements OnInit {
 
     // Based on processKeypress function in mensural-input
     if (event.metaKey) return;
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = this.selectedSystem.selected.contents;
     if ((musicList.m_index >=0) && (event.key.length === 1)) {
       if ((event.key >= '0') && (event.key <= '9')) {
         this.processDigit(Number(event.key), event);
@@ -147,59 +149,59 @@ export class StaffSelectComponent implements OnInit {
           event.preventDefault();
           break;
         case 'C':
-          musicList.addPitchFar(C_PitchClass);
+          musicList.addPitchFar(PitchClass.C);
           event.preventDefault();
           break;
         case 'c':
-          musicList.addPitchNear(C_PitchClass);
+          musicList.addPitchNear(PitchClass.C);
           event.preventDefault();
           break;
         case 'D':
-          musicList.addPitchFar(D_PitchClass);
+          musicList.addPitchFar(PitchClass.D);
           event.preventDefault();
           break;
         case 'd':
-          musicList.addPitchNear(D_PitchClass);
+          musicList.addPitchNear(PitchClass.D);
           event.preventDefault();
           break;
         case 'E':
-          musicList.addPitchFar(E_PitchClass);
+          musicList.addPitchFar(PitchClass.E);
           event.preventDefault();
           break;
         case 'e':
-          musicList.addPitchNear(E_PitchClass);
+          musicList.addPitchNear(PitchClass.E);
           event.preventDefault();
           break;
         case 'F':
-          musicList.addPitchFar(F_PitchClass);
+          musicList.addPitchFar(PitchClass.F);
           event.preventDefault();
           break;
         case 'f':
-          musicList.addPitchNear(F_PitchClass);
+          musicList.addPitchNear(PitchClass.F);
           event.preventDefault();
           break;
         case 'G':
-          musicList.addPitchFar(G_PitchClass);
+          musicList.addPitchFar(PitchClass.G);
           event.preventDefault();
           break;
         case 'g':
-          musicList.addPitchNear(G_PitchClass);
+          musicList.addPitchNear(PitchClass.G);
           event.preventDefault();
           break;
         case 'A':
-          musicList.addPitchFar(A_PitchClass);
+          musicList.addPitchFar(PitchClass.A);
           event.preventDefault();
           break;
         case 'a':
-          musicList.addPitchNear(A_PitchClass);
+          musicList.addPitchNear(PitchClass.A);
           event.preventDefault();
           break;
         case 'B':
-          musicList.addPitchFar(B_PitchClass);
+          musicList.addPitchFar(PitchClass.B);
           event.preventDefault();
           break;
         case 'b':
-          musicList.addPitchNear(B_PitchClass);
+          musicList.addPitchNear(PitchClass.B);
           event.preventDefault();
           break;
         case 'r':
@@ -274,7 +276,7 @@ export class StaffSelectComponent implements OnInit {
   }
 
   processDigit(digit: number, _event: KeyboardEvent) {
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = this.selectedSystem.selected.contents;
     if (musicList.m_list.length === 0) {
       if (digit !== 3) {
         musicList.m_rhythm = digit;
@@ -301,7 +303,12 @@ export class StaffSelectComponent implements OnInit {
     else if ((item.m_type === 'note') || (item.m_type === 'rest')) {
       if (!ending) {
         if (digit !== 3) {
-          item.m_rhythm = digit;
+          if (item.m_type === "note") {
+            (item as NoteItem).m_rhythm = digit;
+          }
+          else {
+            (item as RestItem).m_rhythm = digit;
+          }
           musicList.m_index += 1;
           musicList.m_rhythm = digit;
           musicList.runNotationCallback();
@@ -314,7 +321,7 @@ export class StaffSelectComponent implements OnInit {
   }
 
   processDotKey() {
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = this.selectedSystem.selected.contents;
     if (musicList.m_list.length === 0) {
       return;
     }
@@ -324,14 +331,15 @@ export class StaffSelectComponent implements OnInit {
     }
     let item = musicList.m_list[index];
     if (item.m_type === 'note') {
-      item.m_dot = !item.m_dot;
+      let note = item as NoteItem;
+      note.m_dot = !note.m_dot;
       musicList.runNotationCallback();
       return;
     }
   }
 
   processLig(isStart: boolean) {
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = this.selectedSystem.selected.contents;
     if (musicList.m_list.length === 0) {
       return;
     }
@@ -341,10 +349,11 @@ export class StaffSelectComponent implements OnInit {
     }
     let item = musicList.m_list[index];
     if (item.m_type === 'note') {
+      let note = item as NoteItem;
       if (isStart) {
-        item.m_ligStart = !item.m_ligStart;
+        note.m_lig = note.m_lig === LigStatus.START ? LigStatus.NONE : LigStatus.START;
       } else {
-        item.m_ligEnd = !item.m_ligEnd;
+        note.m_lig = note.m_lig === LigStatus.END ? LigStatus.NONE : LigStatus.END;
       }
       musicList.runNotationCallback();
       return;
@@ -382,7 +391,7 @@ export class StaffSelectComponent implements OnInit {
       case 'n':
         if (this.pitchSig !== null && this.accidSig === null) {
           this.accidSig = event.key;
-          let musicList = this.staffService._selectedStaff.musicList;
+          let musicList = this.selectedSystem.selected.contents;
           musicList.processKeySig(this.pitchSig, this.accidSig);
           console.debug("Process with " + this.pitchSig + " and " + this.accidSig);
         }
@@ -395,7 +404,7 @@ export class StaffSelectComponent implements OnInit {
   }
 
   processAccidental(accid: string) {
-    let musicList = this.staffService._selectedStaff.musicList;
+    let musicList = this.selectedSystem.selected.contents;
     if (musicList.m_list.length === 0) {
       return;
     }
@@ -405,18 +414,19 @@ export class StaffSelectComponent implements OnInit {
     }
     let item = musicList.m_list[index];
     if (item.m_type === 'note') {
+      let note = item as NoteItem;
       switch(accid) {
         case 'N':
-          item.m_accid = 0;
+          note.m_accid = Accid.NONE;
           break;
         case '#':
-          item.m_accid = 1;
+          note.m_accid = Accid.SHARP;
           break;
         case '-':
-          item.m_accid = 2;
+          note.m_accid = Accid.FLAT;
           break;
         case 'n':
-          item.m_accid = 3;
+          note.m_accid = Accid.NATURAL;
           break;
       }
       musicList.runNotationCallback();

@@ -14,7 +14,6 @@ import { StaffSelectComponent } from './staff-select/staff-select.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { InputComponent } from './input.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { StorageComponent } from './storage/storage.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +22,6 @@ import { StorageComponent } from './storage/storage.component';
     StaffSelectComponent,
     ToolbarComponent,
     InputComponent,
-    StorageComponent
   ],
   imports: [
     CommonModule,
@@ -36,9 +34,6 @@ import { StorageComponent } from './storage/storage.component';
     MatDialogModule,
     MatFormFieldModule,
     MatSelectModule
-  ],
-  entryComponents: [
-    StorageComponent
   ],
   exports: [
     InputComponent

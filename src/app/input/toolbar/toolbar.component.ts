@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MeiService } from '../mei.service';
-import { StaffService } from '../staff.service';
+import { StateService } from '../../state-service.service';
 import { MatDialog } from '@angular/material/dialog';
+import { System } from '../../utils/system';
+import { InputService } from '../input.service';
 
 import * as vkbeautify from 'vkbeautify';
-
-import { StorageComponent, DialogResult } from '../storage/storage.component';
-import { Staff } from '../definitions';
-import { MusicList, MusicItem } from '../musiclist';
 
 @Component({
   selector: 'app-toolbar',
@@ -15,66 +12,23 @@ import { MusicList, MusicItem } from '../musiclist';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
+  currentStaff: System;
 
   constructor(
-    private meiService: MeiService,
-    public staffService: StaffService,
+    private selectedSystem: InputService,
+    private stateService: StateService,
     public dialog: MatDialog
   ) { }
 
   ngOnInit() {
-  }
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(StorageComponent);
-    dialogRef.afterClosed().subscribe((result: DialogResult) => {
-      console.debug("Closed!");
-      switch (result.action) {
-        case 'save':
-          const state = {
-            voices: [...(this.staffService.voices.entries())].map(value => {
-              return {
-                voice: value[0],
-                mensurations: value[1]
-              };
-            }),
-            staves: this.staffService.staves,
-            metadata: this.meiService.metadata
-          };
-          localStorage.setItem(
-            "input-slot-" + result.selected.toString(),
-            JSON.stringify(state)
-          );
-          break;
-        case 'load':
-          const stateString = localStorage.getItem("input-slot-" + result.selected.toString());
-          try {
-            const state = JSON.parse(stateString);
-            this.staffService.setVoices(state.voices);
-            this.meiService.metadata = state.metadata;
-            for (let staff of state.staves as Staff[]) {
-              Object.setPrototypeOf(staff, Staff.prototype);
-              Object.setPrototypeOf(staff.musicList, MusicList.prototype);
-              staff.musicList.m_list.forEach(item => {
-                Object.setPrototypeOf(item, MusicItem.prototype);
-                item.init();
-              });
-              this.staffService.initIndex(staff.index, staff.canvas);
-              this.staffService.addStaff(staff.index, staff);
-            }
-            this.staffService.selected = this.staffService.staves[0];
-          }
-          catch (e) {
-            console.error(e);
-          }
-          break;
-      }
+    this.selectedSystem.subscribe(system => {
+      this.currentStaff = system;
     });
   }
 
   saveClick(evt: MouseEvent) {
     let target = evt.target as HTMLAnchorElement;
-    const mei = this.meiService.generateFullMEI();
+    const mei = this.stateService.mei.generateXML();
     const serializer = new XMLSerializer();
     const content = vkbeautify.xml(serializer.serializeToString(mei));
     const blob = new Blob([content], {type: 'application/xml'});
@@ -82,7 +36,10 @@ export class ToolbarComponent implements OnInit {
   }
 
   deleteStaff() {
-    this.staffService.triggerDelete();
+    let system = this.currentStaff;
+    let part = system.parent;
+    part.removeSystem(system.id);
+    this.selectedSystem.next(null);
   }
 
 }

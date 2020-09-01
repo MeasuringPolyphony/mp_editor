@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { vrvToolkit } from './utils/verovio';
 
 
 @Component({
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor() { }
+  constructor() {
+    vrvToolkit.setup();
+  }
 }

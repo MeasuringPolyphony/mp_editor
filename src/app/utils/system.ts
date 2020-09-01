@@ -1,5 +1,5 @@
-import { IRI, BoundingBox, Voice } from './definitions';
-import { MusicList } from './MusicItem';
+import { IRI, BoundingBox, Voice, Mensuration } from './definitions';
+import { MusicList, MensurItem } from './MusicItem';
 import { Part } from './part';
 import { v4 as uuid } from 'uuid';
 import { vrvToolkit } from './verovio';
@@ -94,7 +94,6 @@ export class System {
     let whiteMensural = this.parent.parent.notationType === "mensural.white";
     console.debug(this.parent.parent.notationType);
     let rawMei = vrvToolkit.humdrumToMEI(this.contents.getHumdrumScore({white: whiteMensural}));
-    console.debug(rawMei);
     let parser = new DOMParser();
     let elements: Element[] = [];
     let humdrumMei = parser.parseFromString(rawMei, 'application/xml');
@@ -102,6 +101,11 @@ export class System {
     if (clef !== null) {
       this._recurseId(clef);
       elements.push(clef);
+    }
+    let mensur = humdrumMei.querySelector('mensur');
+    if (mensur !== null) {
+      this._recurseId(mensur);
+      elements.push(mensur);
     }
     let layer = humdrumMei.querySelector('layer');
     console.debug(layer);
@@ -120,7 +124,7 @@ export class System {
   _recurseId(element: Element) {
     let id = element.getAttribute('xml:id');
     let found = false;
-    if (id && /(note|rest|clef|pb|sb)/.test(element.tagName)) {
+    if (id && /(note|rest|clef|pb|sb|mensur)/.test(element.tagName)) {
       let regexpInfo = id.match(/L(\d+)[\w\d]+$/);
       if (regexpInfo) {
         let line = parseInt(regexpInfo[1]);
@@ -130,6 +134,18 @@ export class System {
         if (match.length > 0) {
           found = true;
           element.setAttribute('xml:id', match[0].m_id);
+          if (match[0].m_type === "mensur") {
+            let mensur = match[0] as MensurItem;
+            if (mensur.m_modus !== Mensuration.NA) {
+              element.setAttribute("modusminor", mensur.m_modus.toString());
+            }
+            if (mensur.m_tempus !== Mensuration.NA) {
+              element.setAttribute("tempus", mensur.m_tempus.toString());
+            }
+            if (mensur.m_prolatio !== Mensuration.NA) {
+              element.setAttribute("prolatio", mensur.m_prolatio.toString());
+            }
+          }
         }
       }
     }

@@ -4,6 +4,7 @@
  */
 
 import { v4 } from "uuid";
+import { Mensuration } from './definitions';
 
 function parseRhythm(rhythm: string): number {
   let val: number;
@@ -167,6 +168,42 @@ export class RestItem implements MusicItem {
       rest.m_rhythm = parseRhythm(element.getAttribute("dur"));
     }
     return rest;
+  }
+}
+
+export class MensurItem implements MusicItem {
+  readonly m_type = "mensur";
+  m_line = -1;
+  m_modus: Mensuration;
+  m_tempus: Mensuration;
+  m_prolatio: Mensuration;
+  m_id: string;
+
+  constructor() {
+    this.m_modus = Mensuration.NA;
+    this.m_tempus = Mensuration.NA;
+    this.m_prolatio = Mensuration.NA;
+  }
+
+  getHumdrumLine(): string {
+    return "*met(C)\t*";
+  }
+
+  static parseXML(element: Element): MensurItem {
+    let mensur = new MensurItem();
+    if (element.hasAttribute("xml:id")) {
+      mensur.m_id = element.getAttribute("xml:id");
+    }
+    if (element.hasAttribute("modusminor")) {
+      mensur.m_modus = Mensuration[element.getAttribute("modus")];
+    }
+    if (element.hasAttribute("tempus")) {
+      mensur.m_tempus = Mensuration[element.getAttribute("tempus")];
+    }
+    if (element.hasAttribute("prolatio")) {
+      mensur.m_prolatio = Mensuration[element.getAttribute("prolatio")];
+    }
+    return mensur;
   }
 }
 
@@ -362,6 +399,11 @@ export class MusicList {
   addRest () {
     if (this.m_list.length === 0) return;
     this.m_list.push(new RestItem(this.m_rhythm));
+    this.runNotationCallback();
+  }
+
+  addMensur () {
+    this.m_list.push(new MensurItem());
     this.runNotationCallback();
   }
 

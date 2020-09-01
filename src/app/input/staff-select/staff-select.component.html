@@ -7,7 +7,7 @@
             </select>
         </label>
     </fieldset>
-    <h3 class="music-subentry">Select Mensuration:</h3>
+    <h3 class="music-subentry">Select Initial Mensuration:</h3>
     <div class="flex-container">
         <fieldset>
             <legend class="mensuration">modus</legend>
@@ -45,6 +45,43 @@
     </div>
 </form>
 <div #example (click)="handleClick($event)"></div>
+<div id="mensur-change" *ngIf="selected && selected.contents.m_index >= 0 && selected.contents.m_list[selected.contents.m_index].m_type == 'mensur'">
+    <form [formGroup]="mensurForm">
+    <fieldset>
+        <legend class="mensuration">modus</legend>
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_modus" type="radio" id="modus2-3" formControlName="modus2" value="3"/>
+        <label for="modus2-3">3</label>
+        &nbsp;
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_modus" type="radio" id="modus2-2" formControlName="modus2" value="2"/>
+        <label for="modus2-2">2</label>
+        &nbsp;
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_modus" type="radio" id="modus2-na" formControlName="modus2" value="N/A"/>
+        <label for="modus2-na">N/A</label>
+    </fieldset>
+    <fieldset>
+        <legend class="mensuration">tempus</legend>
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_tempus" type="radio" id="tempus2-3" formControlName="tempus2" value="3"/>
+        <label for="tempus2-3">3</label>
+        &nbsp;
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_tempus" type="radio" id="tempus2-2" formControlName="tempus2" value="2"/>
+        <label for="tempus2-2">2</label>
+        &nbsp;
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_tempus" type="radio" id="tempus2-na" formControlName="tempus2" value="N/A"/>
+        <label for="tempus2-na">N/A</label>
+    </fieldset>
+    <fieldset>
+        <legend class="mensuration">prolatio</legend>
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_prolatio" type="radio" id="prolatio2-3" formControlName="prolatio2" value="3"/>
+        <label for="prolatio2-3">3</label>
+        &nbsp;
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_prolatio" type="radio" id="prolatio2-2" formControlName="prolatio2" value="2"/>
+        <label for="prolatio2-2">2</label>
+        &nbsp;
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_prolatio" type="radio" id="prolatio2-na" formControlName="prolatio2" value="N/A"/>
+        <label for="prolatio2-na">N/A</label>
+    </fieldset>
+    </form>
+</div>
 <div id="tenor-section" *ngIf="selected && selected.voice === 'tenor'">
     <p>
         If the piece has repetitions of the tenor that are not written out in full,

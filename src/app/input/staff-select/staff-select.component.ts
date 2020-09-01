@@ -60,7 +60,13 @@ export class StaffSelectComponent implements OnInit {
     voice: new FormControl(''),
     modus: new FormControl(''),
     tempus: new FormControl(''),
-    prolatio: new FormControl('')
+    prolatio: new FormControl(''),
+  });
+
+  mensurForm = new FormGroup({
+    modus2: new FormControl(''),
+    tempus2: new FormControl(''),
+    prolatio2: new FormControl(''),
   });
 
   handleClick(event: MouseEvent) {
@@ -202,6 +208,13 @@ export class StaffSelectComponent implements OnInit {
           break;
         case 'b':
           musicList.addPitchNear(PitchClass.B);
+          event.preventDefault();
+          break;
+        case 'm':
+        case 'M':
+          if (!musicList.hasOpenLigature() && musicList.m_list[musicList.m_list.length - 1].m_type === "clef") {
+            musicList.addMensur();
+          }
           event.preventDefault();
           break;
         case 'r':

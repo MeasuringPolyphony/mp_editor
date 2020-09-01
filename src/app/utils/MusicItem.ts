@@ -457,6 +457,21 @@ export class MusicList {
     this.runNotationCallback();
   }
 
+  hasOpenLigature(): boolean {
+    let open = false;
+    for (let item of this.m_list) {
+      if (item.m_type === "note") {
+        let note = item as NoteItem;
+        if (note.m_lig === LigStatus.START) {
+          open = true;
+        } else if (note.m_lig === LigStatus.END) {
+          open = false;
+        }
+      }
+    }
+    return open;
+  }
+
   selectBackward() {
     if (this.m_index > 0) {
       this.m_index--;

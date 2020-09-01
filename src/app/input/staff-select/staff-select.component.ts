@@ -206,7 +206,11 @@ export class StaffSelectComponent implements OnInit {
           break;
         case 'r':
         case 'R':
-          musicList.addRest();
+          if (!musicList.hasOpenLigature()) {
+            musicList.addRest();
+          } else {
+            alert("Can't enter a rest in an open ligature! Please close first.")
+          }
           event.preventDefault();
           break;
         case '.':
@@ -256,11 +260,19 @@ export class StaffSelectComponent implements OnInit {
           event.preventDefault();
           break;
         case '[':
-          this.processLig(true);
+          if (!musicList.hasOpenLigature()) {
+            this.processLig(true);
+          } else {
+            alert("A ligature is already open!");
+          }
           event.preventDefault();
           break;
         case ']':
-          this.processLig(false);
+          if (musicList.hasOpenLigature()) {
+            this.processLig(false);
+          } else {
+            alert("No open ligature to close!");
+          }
           event.preventDefault();
           break;
         case '#':

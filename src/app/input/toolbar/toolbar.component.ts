@@ -35,6 +35,14 @@ export class ToolbarComponent implements OnInit {
     target.setAttribute('href', window.URL.createObjectURL(blob));
   }
 
+  saveHumdrumClick(evt: MouseEvent) {
+    let target = evt.target as HTMLAnchorElement;
+    const white = this.currentStaff.parent.parent.notationType === "mensural.white";
+    const content = this.currentStaff.contents.getHumdrumScore({white: white});
+    const blob = new Blob([content], {type: 'text/plain'});
+    target.setAttribute('href', window.URL.createObjectURL(blob));
+  }
+
   deleteStaff() {
     let system = this.currentStaff;
     let part = system.parent;

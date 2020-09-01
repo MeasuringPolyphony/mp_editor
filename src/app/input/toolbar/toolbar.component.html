@@ -4,6 +4,11 @@
             Download MEI File
         </a>
     </button>
+    <button mat-stroked-button *ngIf="currentStaff">
+        <a download type="text/plain" (click)="saveHumdrumClick($event)">
+            Download System Humdrum
+        </a>
+    </button>
     <button mat-stroked-button *ngIf="currentStaff" (click)="deleteStaff()">
         Delete Staff
     </button>

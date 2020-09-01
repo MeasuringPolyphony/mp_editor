@@ -195,13 +195,13 @@ export class MensurItem implements MusicItem {
       mensur.m_id = element.getAttribute("xml:id");
     }
     if (element.hasAttribute("modusminor")) {
-      mensur.m_modus = Mensuration[element.getAttribute("modus")];
+      mensur.m_modus = element.getAttribute("modus") as Mensuration;
     }
     if (element.hasAttribute("tempus")) {
-      mensur.m_tempus = Mensuration[element.getAttribute("tempus")];
+      mensur.m_tempus = element.getAttribute("tempus") as Mensuration;
     }
     if (element.hasAttribute("prolatio")) {
-      mensur.m_prolatio = Mensuration[element.getAttribute("prolatio")];
+      mensur.m_prolatio = element.getAttribute("prolatio") as Mensuration;
     }
     return mensur;
   }

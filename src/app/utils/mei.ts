@@ -1,6 +1,6 @@
 import { Part, Tenor } from './part';
 import { System, Pb, Sb } from './system';
-import { ClefItem, NoteItem, RestItem } from './MusicItem';
+import { ClefItem, NoteItem, RestItem, MensurItem } from './MusicItem';
 import { Voice, Mensuration } from './definitions';
 import { IRI } from './definitions';
 
@@ -104,7 +104,7 @@ export class MEIDocument {
         }
       }
       // Handle regular children
-      const layerChildren = Array.from(layer.querySelectorAll("pb,sb,clef,note,rest"));
+      const layerChildren = Array.from(layer.querySelectorAll("pb,sb,clef,note,rest,mensur"));
       let activePb: Pb = null;
       let activeSystem: System = null;
       for (const child of layerChildren) {
@@ -157,6 +157,9 @@ export class MEIDocument {
         } else if (child.tagName === "note") {
           let note = NoteItem.parseXML(child);
           activeSystem.contents.m_list.push(note);
+        } else if (child.tagName === "mensur") {
+          let mensur = MensurItem.parseXML(child);
+          activeSystem.contents.m_list.push(mensur);
         }
       }
     }

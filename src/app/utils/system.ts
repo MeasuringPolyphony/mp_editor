@@ -62,7 +62,15 @@ export class System {
   static compare(a: System, b: System): number {
     let diff = a.pb.index - b.pb.index;
     if (diff !== 0) return diff;
-    return a.sb.zone.uly - b.sb.zone.uly;
+    // Check for intersection on y-axis. If so, left-most. Else highest.
+    const aZone = a.sb.zone;
+    const bZone = b.sb.zone;
+    if ((aZone.lry <= bZone.lry && aZone.lry >= bZone.uly) || (aZone.uly <= bZone.lry && aZone.uly >= bZone.uly) ||
+      (bZone.lry <= aZone.lry && bZone.lry >= aZone.uly) || (bZone.uly <= aZone.lry && bZone.lry >= aZone.uly)) {
+      return aZone.ulx - bZone.ulx;
+    } else {
+      return a.sb.zone.uly - b.sb.zone.uly;
+    }
   }
 
   get id(): string {

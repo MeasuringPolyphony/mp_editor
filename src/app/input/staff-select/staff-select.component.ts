@@ -212,7 +212,7 @@ export class StaffSelectComponent implements OnInit {
           break;
         case 'm':
         case 'M':
-          if (!musicList.hasOpenLigature() && musicList.m_list[musicList.m_list.length - 1].m_type === "clef") {
+          if (!musicList.hasOpenLigature()) {
             musicList.addMensur();
           }
           event.preventDefault();

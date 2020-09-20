@@ -186,7 +186,16 @@ export class MensurItem implements MusicItem {
   }
 
   getHumdrumLine(): string {
-    return "*met(C)\t*";
+    if (this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Two)
+      return "*met(C)\t*";
+    if (this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Two)
+      return "*met(O)\t*";
+    if (this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Three)
+      return "*met(C.)\t*";
+    if (this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Three)
+      return "*met(O.)\t*";
+    else
+      return "*met(C)\t*";
   }
 
   static parseXML(element: Element): MensurItem {

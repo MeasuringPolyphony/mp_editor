@@ -44,6 +44,12 @@ export enum LigStatus {
   END,
 }
 
+export enum PlicaStatus {
+  NONE,
+  UP,
+  DOWN,
+}
+
 export interface MusicItem {
   m_type: string;
   m_id: string;
@@ -227,6 +233,7 @@ export class NoteItem implements MusicItem {
   m_text: string;
   m_lig: LigStatus;
   m_id: string;
+  m_plica: PlicaStatus;
 
   constructor() {
     this.m_pname = PitchClass.C;
@@ -236,6 +243,7 @@ export class NoteItem implements MusicItem {
     this.m_dot = false;
     this.m_text = "";
     this.m_lig = LigStatus.NONE;
+    this.m_plica = PlicaStatus.NONE;
   }
 
   raisePitch (amount?: number) {
@@ -320,6 +328,9 @@ export class NoteItem implements MusicItem {
     if (options["mark"]) {
       output += "@";
     }
+    if (this.m_plica !== PlicaStatus.NONE) {
+      output += "&";
+    }
 
     output += "\t";
     if (this.m_text) {
@@ -348,6 +359,14 @@ export class NoteItem implements MusicItem {
     }
     if (element.hasAttribute("pname")) {
       note.m_pname = PitchClass[element.getAttribute("pname").toUpperCase()];
+    }
+    if (element.hasAttribute("plica")) {
+      if (element.getAttribute("plica") === "up") {
+        note.m_plica = PlicaStatus.UP;
+      }
+      else {
+        note.m_plica = PlicaStatus.DOWN;
+      }
     }
 
     // Check next sibling for dot
@@ -693,6 +712,7 @@ export class MusicList {
   	output.push("*-\t*-");
   	if (!options["export"]) {
   		output.push("!!!RDF**kern: @ = marked note");
+      output.push("!!!RDF**kern: & = marked note, color=green")
   		//output.push("!!!RDF**kern: i = marked note, color=blue");
   		//output.push("!!!RDF**mens: @ = marked note");
   	}

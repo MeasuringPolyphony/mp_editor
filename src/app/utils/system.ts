@@ -1,5 +1,5 @@
 import { IRI, BoundingBox, Voice, Mensuration } from './definitions';
-import { MusicList, MensurItem } from './MusicItem';
+import { MusicList, NoteItem, MensurItem, PlicaStatus } from './MusicItem';
 import { Part } from './part';
 import { v4 as uuid } from 'uuid';
 import { vrvToolkit } from './verovio';
@@ -150,6 +150,15 @@ export class System {
             }
             if (element.hasAttribute('dot')) {
               element.removeAttribute('dot');
+            }
+          }
+          else if (match[0].m_type === 'note') {
+            let note = match[0] as NoteItem;
+            if (note.m_plica === PlicaStatus.UP) {
+              element.setAttribute('plica', 'up');
+            }
+            else if (note.m_plica === PlicaStatus.DOWN) {
+              element.setAttribute('plica', 'down');
             }
           }
         }

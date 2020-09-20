@@ -103,7 +103,7 @@ export class System {
       elements.push(clef);
     }
     let mensur = humdrumMei.querySelector('mensur');
-    if (mensur !== null) {
+    if (mensur !== null && mensur.closest('layer') === null) {
       this._recurseId(mensur);
       elements.push(mensur);
     }
@@ -144,6 +144,12 @@ export class System {
             }
             if (mensur.m_prolatio !== Mensuration.NA) {
               element.setAttribute("prolatio", mensur.m_prolatio.toString());
+            }
+            if (element.hasAttribute('sign')) {
+              element.removeAttribute('sign');
+            }
+            if (element.hasAttribute('dot')) {
+              element.removeAttribute('dot');
             }
           }
         }

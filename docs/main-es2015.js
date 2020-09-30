@@ -1497,7 +1497,13 @@ class StaffSelectComponent {
         const tenor = this.stateService.mei.getPart(_utils_definitions__WEBPACK_IMPORTED_MODULE_4__["Voice"].tenor);
         try {
             let layer = this.container.nativeElement.querySelector('.layer');
-            tenor.endingId = layer.lastElementChild.id;
+            let id = layer.lastElementChild.id;
+            let regexpInfo = id.match(/L(\d+)[\w\d]+$/);
+            let line = parseInt(regexpInfo[1]);
+            let match = this.selectedSystem.selected.contents.m_list.filter(el => {
+                return el.m_line === line;
+            });
+            tenor.endingId = match[0].m_id;
         }
         catch (e) {
             console.debug(e);

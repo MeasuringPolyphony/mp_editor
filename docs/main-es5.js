@@ -2943,7 +2943,13 @@
 
             try {
               var layer = this.container.nativeElement.querySelector('.layer');
-              tenor.endingId = layer.lastElementChild.id;
+              var id = layer.lastElementChild.id;
+              var regexpInfo = id.match(/L(\d+)[\w\d]+$/);
+              var line = parseInt(regexpInfo[1]);
+              var match = this.selectedSystem.selected.contents.m_list.filter(function (el) {
+                return el.m_line === line;
+              });
+              tenor.endingId = match[0].m_id;
             } catch (e) {
               console.debug(e);
               tenor.endingId = undefined;

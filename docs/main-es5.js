@@ -8538,12 +8538,20 @@
 
             var aZone = a.sb.zone;
             var bZone = b.sb.zone;
+            var threshold = 0.25;
+            var diff1 = aZone.lry - bZone.uly;
+            var diff2 = bZone.lry - aZone.uly;
 
-            if (aZone.lry <= bZone.lry && aZone.lry >= bZone.uly || aZone.uly <= bZone.lry && aZone.uly >= bZone.uly || bZone.lry <= aZone.lry && bZone.lry >= aZone.uly || bZone.uly <= aZone.lry && bZone.lry >= aZone.uly) {
-              return aZone.ulx - bZone.ulx;
-            } else {
-              return a.sb.zone.uly - b.sb.zone.uly;
+            if (diff1 > 0 && diff2 > 0) {
+              var overlap = Math.min(diff1, diff2);
+              var avHeight = (aZone.lry - aZone.uly + bZone.lry - bZone.uly) / 2;
+
+              if (overlap > threshold * avHeight) {
+                return aZone.ulx - bZone.ulx;
+              }
             }
+
+            return a.sb.zone.uly - b.sb.zone.uly;
           }
         }]);
 

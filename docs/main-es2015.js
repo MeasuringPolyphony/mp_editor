@@ -4874,13 +4874,17 @@ class System {
         // Check for intersection on y-axis. If so, left-most. Else highest.
         const aZone = a.sb.zone;
         const bZone = b.sb.zone;
-        if ((aZone.lry <= bZone.lry && aZone.lry >= bZone.uly) || (aZone.uly <= bZone.lry && aZone.uly >= bZone.uly) ||
-            (bZone.lry <= aZone.lry && bZone.lry >= aZone.uly) || (bZone.uly <= aZone.lry && bZone.lry >= aZone.uly)) {
-            return aZone.ulx - bZone.ulx;
+        const threshold = 0.25;
+        const diff1 = aZone.lry - bZone.uly;
+        const diff2 = bZone.lry - aZone.uly;
+        if (diff1 > 0 && diff2 > 0) {
+            const overlap = Math.min(diff1, diff2);
+            const avHeight = (aZone.lry - aZone.uly + bZone.lry - bZone.uly) / 2;
+            if (overlap > threshold * avHeight) {
+                return aZone.ulx - bZone.ulx;
+            }
         }
-        else {
-            return a.sb.zone.uly - b.sb.zone.uly;
-        }
+        return a.sb.zone.uly - b.sb.zone.uly;
     }
     get id() {
         return this.sb.id;

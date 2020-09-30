@@ -96,7 +96,13 @@ export class StaffSelectComponent implements OnInit {
     const tenor = this.stateService.mei.getPart(Voice.tenor) as Tenor;
     try {
         let layer = this.container.nativeElement.querySelector('.layer');
-        tenor.endingId = layer.lastElementChild.id;
+        let id = layer.lastElementChild.id;
+        let regexpInfo = id.match(/L(\d+)[\w\d]+$/);
+        let line = parseInt(regexpInfo[1]);
+        let match = this.selectedSystem.selected.contents.m_list.filter(el => {
+          return el.m_line === line;
+        });
+        tenor.endingId = match[0].m_id;
     } catch (e) {
       console.debug(e);
       tenor.endingId = undefined;

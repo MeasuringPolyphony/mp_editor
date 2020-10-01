@@ -4704,7 +4704,7 @@ class Part {
         for (let system of this.systems) {
             let contents = system.getContents();
             console.debug(contents);
-            if (contents.filter(el => { return el.tagName === 'note'; }).length === 0) {
+            if (contents.filter(el => { return el.tagName !== 'clef' && el.tagName !== 'rest'; }).length === 0) {
                 continue;
             }
             // Handle paging
@@ -4790,8 +4790,15 @@ class Tenor extends Part {
             let dir = this.parent._meiDoc.createElementNS(_mei__WEBPACK_IMPORTED_MODULE_3__["NAMESPACE"], 'dir');
             dir.setAttribute('n', (this.repetitions - 1).toString());
             dir.setAttribute('layer', '1');
-            let firstNoteId = part.querySelector('note').getAttribute('xml:id');
-            let endingId = (this.endingId !== undefined) ? this.endingId : part.querySelector('layer').lastElementChild.getAttribute('xml:id');
+            console.debug(part);
+            console.debug(part.querySelector('note,ligature,rest'));
+            let firstNoteId = part.querySelector('note,ligature,rest').getAttribute('xml:id');
+            // let endingId = (this.endingId !== undefined) ? this.endingId : part.querySelector('layer').lastElementChild.getAttribute('xml:id');
+            // Get ending ligature if it's in one
+            console.debug(part);
+            console.debug(this.endingId);
+            let endItem = (this.endingId !== undefined) ? Array.from(part.querySelectorAll('note')).find(el => { return el.getAttribute('xml:id') === this.endingId; }) : part.querySelector('layer').lastElementChild;
+            let endingId = (endItem.closest('ligature') === null) ? endItem.getAttribute('xml:id') : endItem.closest('ligature').getAttribute('xml:id');
             dir.setAttribute('plist', '#' + firstNoteId + ' #' + endingId);
             dir.setAttribute('follows', '#' + endingId);
             let staff = part.querySelector('staff');

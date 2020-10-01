@@ -8129,7 +8129,7 @@
                 console.debug(contents);
 
                 if (contents.filter(function (el) {
-                  return el.tagName === 'note';
+                  return el.tagName !== 'clef' && el.tagName !== 'rest';
                 }).length === 0) {
                   return "continue";
                 } // Handle paging
@@ -8253,6 +8253,8 @@
         _createClass(Tenor, [{
           key: "generatePartXML",
           value: function generatePartXML() {
+            var _this13 = this;
+
             var part = _get(_getPrototypeOf(Tenor.prototype), "generatePartXML", this).call(this); // Set repeating tenor if necessary
 
 
@@ -8268,8 +8270,17 @@
 
               dir.setAttribute('n', (this.repetitions - 1).toString());
               dir.setAttribute('layer', '1');
-              var firstNoteId = part.querySelector('note').getAttribute('xml:id');
-              var endingId = this.endingId !== undefined ? this.endingId : part.querySelector('layer').lastElementChild.getAttribute('xml:id');
+              console.debug(part);
+              console.debug(part.querySelector('note,ligature,rest'));
+              var firstNoteId = part.querySelector('note,ligature,rest').getAttribute('xml:id'); // let endingId = (this.endingId !== undefined) ? this.endingId : part.querySelector('layer').lastElementChild.getAttribute('xml:id');
+              // Get ending ligature if it's in one
+
+              console.debug(part);
+              console.debug(this.endingId);
+              var endItem = this.endingId !== undefined ? Array.from(part.querySelectorAll('note')).find(function (el) {
+                return el.getAttribute('xml:id') === _this13.endingId;
+              }) : part.querySelector('layer').lastElementChild;
+              var endingId = endItem.closest('ligature') === null ? endItem.getAttribute('xml:id') : endItem.closest('ligature').getAttribute('xml:id');
               dir.setAttribute('plist', '#' + firstNoteId + ' #' + endingId);
               dir.setAttribute('follows', '#' + endingId);
               var staff = part.querySelector('staff');

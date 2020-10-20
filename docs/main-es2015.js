@@ -4252,12 +4252,13 @@ class MusicList {
 /*!**************************************!*\
   !*** ./src/app/utils/definitions.ts ***!
   \**************************************/
-/*! exports provided: Voice, Mensuration, Staff */
+/*! exports provided: Voice, voiceToOrdinal, Mensuration, Staff */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Voice", function() { return Voice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "voiceToOrdinal", function() { return voiceToOrdinal; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Mensuration", function() { return Mensuration; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Staff", function() { return Staff; });
 /* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
@@ -4287,6 +4288,49 @@ var Voice;
     Voice["triplum"] = "triplum";
     Voice["bassus"] = "bassus";
 })(Voice || (Voice = {}));
+// comparator for voices
+function voiceToOrdinal(v) {
+    switch (v) {
+        case Voice.altus:
+            return 8;
+        case Voice.cantus:
+            return 5;
+        case Voice.contratenor:
+            return 10;
+        case Voice.contratenor1:
+            return 10.1;
+        case Voice.contratenor2:
+            return 10.2;
+        case Voice.discantus:
+            return 5;
+        case Voice.duplum:
+            return 3;
+        case Voice.lowervoice1:
+            return 100;
+        case Voice.lowervoice2:
+            return 100.1;
+        case Voice.motetus:
+            return 3;
+        case Voice.quadruplum:
+            return 1;
+        case Voice.quintus:
+            return 8;
+        case Voice.superius:
+            return 5;
+        case Voice.uppervoice1:
+            return -1.1;
+        case Voice.uppervoice2:
+            return -1;
+        case Voice.tenor:
+            return 9;
+        case Voice.triplum:
+            return 2;
+        case Voice.bassus:
+            return 20;
+        default:
+            return 0;
+    }
+}
 // Values for modus, tempus, and prolatio
 var Mensuration;
 (function (Mensuration) {
@@ -4521,6 +4565,7 @@ class MEIDocument {
     generateXML() {
         this._createSkeletonMEI();
         let parts = this._meiDoc.querySelector('parts');
+        this.parts.sort(_part__WEBPACK_IMPORTED_MODULE_0__["Part"].compare);
         for (let part of this.parts) {
             if (part.systems.length === 0) {
                 continue;
@@ -4603,6 +4648,7 @@ class MEIDocument {
         let part = /^[tT]enor/.test(voice) ? new _part__WEBPACK_IMPORTED_MODULE_0__["Tenor"](this) : new _part__WEBPACK_IMPORTED_MODULE_0__["Part"](this);
         part.voice = voice;
         this.parts.push(part);
+        this.parts.sort(_part__WEBPACK_IMPORTED_MODULE_0__["Part"].compare);
         return part;
     }
     getPb(index) {
@@ -4658,6 +4704,9 @@ class Part {
         this.modus = _definitions__WEBPACK_IMPORTED_MODULE_1__["Mensuration"].NA;
         this.tempus = _definitions__WEBPACK_IMPORTED_MODULE_1__["Mensuration"].NA;
         this.prolatio = _definitions__WEBPACK_IMPORTED_MODULE_1__["Mensuration"].NA;
+    }
+    static compare(a, b) {
+        return Object(_definitions__WEBPACK_IMPORTED_MODULE_1__["voiceToOrdinal"])(a.voice) - Object(_definitions__WEBPACK_IMPORTED_MODULE_1__["voiceToOrdinal"])(b.voice);
     }
     addSystem(system) {
         system.parent = this;

@@ -24,6 +24,50 @@ export enum Voice {
   bassus='bassus'
 }
 
+// comparator for voices
+export function voiceToOrdinal(v: Voice): number {
+  switch (v) {
+    case Voice.altus:
+      return 8;
+    case Voice.cantus:
+      return 5;
+    case Voice.contratenor:
+      return 10;
+    case Voice.contratenor1:
+      return 10.1;
+    case Voice.contratenor2:
+      return 10.2;
+    case Voice.discantus:
+      return 5;
+    case Voice.duplum:
+      return 3;
+    case Voice.lowervoice1:
+      return 100;
+    case Voice.lowervoice2:
+      return 100.1;
+    case Voice.motetus:
+      return 3;
+    case Voice.quadruplum:
+      return 1;
+    case Voice.quintus:
+      return 8;
+    case Voice.superius:
+      return 5;
+    case Voice.uppervoice1:
+      return -1.1;
+    case Voice.uppervoice2:
+      return -1;
+    case Voice.tenor:
+      return 9;
+    case Voice.triplum:
+      return 2;
+    case Voice.bassus:
+      return 20;
+    default:
+      return 0;
+  }
+}
+
 // Values for modus, tempus, and prolatio
 export enum Mensuration {
   Three='3',

@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-import { Voice, Mensuration, IRI } from './definitions';
+import { Voice, Mensuration, IRI, voiceToOrdinal } from './definitions';
 import { System } from './system';
 import { MEIDocument, NAMESPACE } from './mei';
 
@@ -26,6 +26,10 @@ export class Part {
     this.modus = Mensuration.NA;
     this.tempus = Mensuration.NA;
     this.prolatio = Mensuration.NA;
+  }
+
+  static compare(a: Part, b: Part): number {
+    return voiceToOrdinal(a.voice) - voiceToOrdinal(b.voice);
   }
 
   addSystem(system: System) {

@@ -170,6 +170,7 @@ export class MEIDocument {
   generateXML(): Document {
     this._createSkeletonMEI();
     let parts = this._meiDoc.querySelector('parts');
+    this.parts.sort(Part.compare);
     for (let part of this.parts) {
       if (part.systems.length === 0) {
         continue;
@@ -260,6 +261,7 @@ export class MEIDocument {
     let part = /^[tT]enor/.test(voice) ? new Tenor(this) : new Part(this);
     part.voice = voice;
     this.parts.push(part);
+    this.parts.sort(Part.compare);
     return part;
   }
 

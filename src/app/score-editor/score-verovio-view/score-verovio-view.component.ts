@@ -29,7 +29,6 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   @ViewChild('verovio') container: ElementRef;
 
   selectedId: string = null;
-  quasiScore: XMLDocument = null;
   corrToSicMap: Map<string, string> = new Map();
 
   constructor(
@@ -139,15 +138,6 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   handleKeyPress(event: KeyboardEvent) {
     if (this.selectedId !== null) {
       let doc: XMLDocument;
-      if (this.stateService.editorialMode) {
-        if (this.quasiScore === null) {
-          this.quasiScore = this.getQuasiScore(this.doc.parts);
-        }
-        doc = this.quasiScore;
-      }
-      else {
-        doc = this.doc.parts;
-      }
       const resolver = this.doc.parts.createNSResolver(this.doc.parts.ownerDocument == null ? this.doc.parts.documentElement : this.doc.parts.ownerDocument.documentElement);
       const result = this.doc.parts.evaluate("//*[@xml:id='" + this.selectedId + "']", this.doc.parts, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
       if (!result.singleNodeValue) return;
@@ -271,12 +261,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     try {
       const staffDef = meiDoc.getElementsByTagName("staffDef")[0];
       let quasiDoc: XMLDocument;
-      if (this.stateService.editorialMode) {
-        quasiDoc = this.quasiScore.cloneNode(true) as XMLDocument;
-      }
-      else {
-        quasiDoc = ScoringUp.merge(meiDoc.cloneNode(true));
-      }
+      quasiDoc = ScoringUp.merge(meiDoc.cloneNode(true));
       switch (staffDef.getAttribute("notationtype")) {
         case "mensural.white":
           output = ScoringUp.ArsNova.lining_up(quasiDoc);
@@ -312,15 +297,6 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getQuasiScore(partsMEI: XMLDocument): XMLDocument {
-    let quasi = null;
-    try {
-      quasi = ScoringUp.merge(partsMEI.cloneNode(true));
-    } catch (e) {
-      console.error(e);
-    }
-    return quasi;
-  }
 
   ensureCorrElement(target: Element, meiDoc: XMLDocument): Element {
     if (target.closest('corr')) {

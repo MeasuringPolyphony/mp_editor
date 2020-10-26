@@ -2679,7 +2679,6 @@ class ScoreVerovioViewComponent {
         this.staffService = staffService;
         this.doc = doc;
         this.selectedId = null;
-        this.quasiScore = null;
         this.corrToSicMap = new Map();
     }
     ngOnInit() {
@@ -2772,15 +2771,6 @@ class ScoreVerovioViewComponent {
     handleKeyPress(event) {
         if (this.selectedId !== null) {
             let doc;
-            if (this.stateService.editorialMode) {
-                if (this.quasiScore === null) {
-                    this.quasiScore = this.getQuasiScore(this.doc.parts);
-                }
-                doc = this.quasiScore;
-            }
-            else {
-                doc = this.doc.parts;
-            }
             const resolver = this.doc.parts.createNSResolver(this.doc.parts.ownerDocument == null ? this.doc.parts.documentElement : this.doc.parts.ownerDocument.documentElement);
             const result = this.doc.parts.evaluate("//*[@xml:id='" + this.selectedId + "']", this.doc.parts, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
             if (!result.singleNodeValue)
@@ -2938,12 +2928,7 @@ class ScoreVerovioViewComponent {
         try {
             const staffDef = meiDoc.getElementsByTagName("staffDef")[0];
             let quasiDoc;
-            if (this.stateService.editorialMode) {
-                quasiDoc = this.quasiScore.cloneNode(true);
-            }
-            else {
-                quasiDoc = scoring_up__WEBPACK_IMPORTED_MODULE_2__["merge"](meiDoc.cloneNode(true));
-            }
+            quasiDoc = scoring_up__WEBPACK_IMPORTED_MODULE_2__["merge"](meiDoc.cloneNode(true));
             switch (staffDef.getAttribute("notationtype")) {
                 case "mensural.white":
                     output = scoring_up__WEBPACK_IMPORTED_MODULE_2__["ArsNova"].lining_up(quasiDoc);
@@ -2977,16 +2962,6 @@ class ScoreVerovioViewComponent {
         finally {
             return output;
         }
-    }
-    getQuasiScore(partsMEI) {
-        let quasi = null;
-        try {
-            quasi = scoring_up__WEBPACK_IMPORTED_MODULE_2__["merge"](partsMEI.cloneNode(true));
-        }
-        catch (e) {
-            console.error(e);
-        }
-        return quasi;
     }
     ensureCorrElement(target, meiDoc) {
         if (target.closest('corr')) {

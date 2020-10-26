@@ -12,6 +12,7 @@ class VrvObj {
       spacingNonLinear: 0.35,
       lyricSize: 3,
       breaks: 'none',
+      choiceXPathQuery: './corr',
     }
   }
 

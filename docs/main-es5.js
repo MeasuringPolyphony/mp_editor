@@ -8679,7 +8679,8 @@
             scale: 90,
             spacingNonLinear: 0.35,
             lyricSize: 3,
-            breaks: 'none'
+            breaks: 'none',
+            choiceXPathQuery: './corr'
           };
         }
 

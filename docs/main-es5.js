@@ -1246,11 +1246,11 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](46, "em");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](47, "Save/Load My Work");
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](47, "Download MEI File");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](48, " button. Current information in the input editor can be saved to one of the available workspaces. That workspace can be loaded later if the same browser is used and the browser storage hasn't been cleared. ");
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](48, " button. This will download the file as a parts-based MEI file that can be reloaded at a later point from the home screen. ");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -1434,7 +1434,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](110, "li");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](111, " Capital letters choose direction of pitch class which is greater then lower case letters.");
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](111, " Capital letters choose direction of pitch class which is greater than lower case letters.");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -1454,7 +1454,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](117, "span", 8);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](118, "shift-Up/down");
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](118, "Shift-up/down");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -1756,7 +1756,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](220, "li");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](221, " Add dash at end of text for note to continue word to next note.");
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](221, " Adding a dash at the end of text input for a note marks that this is part of a word that continues to the next note.");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 

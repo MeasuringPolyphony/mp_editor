@@ -1,6 +1,6 @@
 <div id="document-select">
     <div id="load-manuscript">
-        <h1>Load Manuscript</h1>
+        <h1>Load a manuscript</h1>
         <form [formGroup]="selectionForm" (submit)="submit()">
             <div style="display:block;">
                 <label class="label">Manuscript Repository:&nbsp;
@@ -21,13 +21,16 @@
                 <button type="submit" [disabled]="!selectionForm.valid" mat-stroked-button>Submit</button>
             </div>
         </form>
-        <br/><br/>
-        <a [routerLink]="['/input', 'gallica', encodedIdSample]">
-            <button color=primary class="primary-button" mat-stroked-button>Use Sample Document</button>
-        </a>
+        <br/>
+        <p>
+          For example, to transcribe a piece from the famous Roman de Fauvel manuscript,
+          choose <em>Gallica</em> in the dropdown and paste this URL:
+          <br/>
+          <code>https://gallica.bnf.fr/ark:/12148/btv1b8454675g</code>
+        </p>
     </div>
     <div id="load-mei">
-        <h1>Load from Parts MEI</h1>
+        <h1>Load an .mei file</h1>
         <form [formGroup]="loadMEIForm" (submit)="meiSubmit()">
             <div style="display:block;">
                 <label class="label">Compatible Parts-MEI File:&nbsp;
@@ -39,4 +42,25 @@
             </div>
         </form>
     </div>
+</div>
+<div id="prototype-message">
+  <p>
+    This prototype for an online mensural music editor, funded by
+    <a href="https://www.brandeis.edu">Brandeis University</a>
+    and the
+    <a href="https://www.neh.gov">National Endowment for the Humanities</a>,
+    allows students and experts alike to encode transcriptions of polyphony
+    directly into mensural notation, and links the music transcriptions
+    to zones of the digital images of the medieval manuscripts. For more information
+    about this project, click <a href="https://measuringpolyphony.org">here</a>.
+  </p>
+  <br/>
+  <div id="funder-logos">
+    <a href="https://www.neh.gov">
+      <img src="assets/img/NEH-Preferred-Seal820.jpg" alt="National Endowment for the Humanities Logo" class="funder-logo">
+    </a>
+    <a href="https://www.brandeis.edu">
+      <img src="assets/img/brandeis-logo-stacked-seal-blue-digital.png" alt="Brandeis University Logo" class="funder-logo">
+    </a>
+  </div>
 </div>

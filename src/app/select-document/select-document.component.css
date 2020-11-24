@@ -13,6 +13,27 @@
     justify-self: center;
 }
 
+#prototype-message {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+#prototype-message p {
+    grid-column: 2 / 4;
+    text-align: center;
+}
+
+#prototype-message #funder-logos {
+    grid-column: 4;
+    display: flex;
+    margin-left: auto;
+    padding-right: 1rem;
+}
+
+#load-manuscript p {
+    text-align: center;
+}
+
 form {
     display: grid;
 }
@@ -23,4 +44,12 @@ form * {
 
 a {
     margin-top: 2em;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+.funder-logo {
+  height: 4rem;
 }

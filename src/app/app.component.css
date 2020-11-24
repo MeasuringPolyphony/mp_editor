@@ -133,13 +133,14 @@ p
 	margin-top: 28px;
 }
 
-#transcriptionDiv {
-    width: 100%;
+#additionalButtons {
+    display: flex;
+    margin-left: auto;
 }
 
-#new-transcription-button {
-    float: right;
-    /*background-color: white;*/
+.additionalButtons {
+    color: white;
+    padding-left: 1rem;
 }
 
 @media (min-width: 992px)

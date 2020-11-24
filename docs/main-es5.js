@@ -6826,10 +6826,13 @@
 
             if (element.hasAttribute("pname")) {
               note.m_pname = PitchClass[element.getAttribute("pname").toUpperCase()];
-            }
+            } // Check children for a plica
 
-            if (element.hasAttribute("plica")) {
-              if (element.getAttribute("plica") === "up") {
+
+            if (element.querySelector("plica")) {
+              var plica = element.querySelector("plica");
+
+              if (element.hasAttribute("dir") && element.getAttribute("dir") == "up") {
                 note.m_plica = PlicaStatus.UP;
               } else {
                 note.m_plica = PlicaStatus.DOWN;
@@ -8405,6 +8408,12 @@
       var _verovio__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! ./verovio */
       "./src/app/utils/verovio.ts");
+      /* harmony import */
+
+
+      var _mei__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! ./mei */
+      "./src/app/utils/mei.ts");
 
       var Pb = function Pb(iri, id) {
         _classCallCheck(this, Pb);
@@ -8549,12 +8558,25 @@
                       element.removeAttribute('dot');
                     }
                   } else if (match[0].m_type === 'note') {
-                    var note = match[0];
+                    var note = match[0]; // Ensure child is followed by a dot. If not, ad one.
+
+                    if (element.hasAttribute('dots') && (!element.nextElementSibling || element.nextElementSibling.tagName !== 'dot')) {
+                      var dot = element.ownerDocument.createElementNS(_mei__WEBPACK_IMPORTED_MODULE_4__["NAMESPACE"], 'dot');
+                      element.insertAdjacentElement('afterend', dot);
+                      element.removeAttribute('dots');
+                    }
 
                     if (note.m_plica === _MusicItem__WEBPACK_IMPORTED_MODULE_1__["PlicaStatus"].UP) {
-                      element.setAttribute('plica', 'up');
+                      var plica = element.ownerDocument.createElementNS(_mei__WEBPACK_IMPORTED_MODULE_4__["NAMESPACE"], 'plica');
+                      plica.setAttribute("dir", "up");
+                      element.appendChild(plica);
                     } else if (note.m_plica === _MusicItem__WEBPACK_IMPORTED_MODULE_1__["PlicaStatus"].DOWN) {
-                      element.setAttribute('plica', 'down');
+                      var _plica = element.ownerDocument.createElementNS(_mei__WEBPACK_IMPORTED_MODULE_4__["NAMESPACE"], 'plica');
+
+                      _plica.setAttribute("dir", "down");
+
+                      element.appendChild(_plica);
+                      ;
                     }
                   }
                 }

@@ -3,6 +3,7 @@ import { MusicList, NoteItem, MensurItem, PlicaStatus } from './MusicItem';
 import { Part } from './part';
 import { v4 as uuid } from 'uuid';
 import { vrvToolkit } from './verovio';
+import { NAMESPACE } from './mei';
 
 export class Pb {
   canvasIRI: IRI;
@@ -161,10 +162,14 @@ export class System {
           else if (match[0].m_type === 'note') {
             let note = match[0] as NoteItem;
             if (note.m_plica === PlicaStatus.UP) {
-              element.setAttribute('plica', 'up');
+              const plica = element.ownerDocument.createElementNS(NAMESPACE, 'plica');
+              plica.setAttribute("dir", "up");
+              element.appendChild(plica);
             }
             else if (note.m_plica === PlicaStatus.DOWN) {
-              element.setAttribute('plica', 'down');
+              const plica = element.ownerDocument.createElementNS(NAMESPACE, 'plica');
+              plica.setAttribute("dir", "down");
+              element.appendChild(plica);;
             }
           }
         }

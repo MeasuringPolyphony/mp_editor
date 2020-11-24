@@ -360,11 +360,13 @@ export class NoteItem implements MusicItem {
     if (element.hasAttribute("pname")) {
       note.m_pname = PitchClass[element.getAttribute("pname").toUpperCase()];
     }
-    if (element.hasAttribute("plica")) {
-      if (element.getAttribute("plica") === "up") {
+
+    // Check children for a plica
+    if (element.querySelector("plica")) {
+      const plica = element.querySelector("plica");
+      if (element.hasAttribute("dir") && element.getAttribute("dir") == "up") {
         note.m_plica = PlicaStatus.UP;
-      }
-      else {
+      } else {
         note.m_plica = PlicaStatus.DOWN;
       }
     }

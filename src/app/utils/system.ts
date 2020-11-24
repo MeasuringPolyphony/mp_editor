@@ -161,6 +161,13 @@ export class System {
           }
           else if (match[0].m_type === 'note') {
             let note = match[0] as NoteItem;
+            // Ensure child is followed by a dot. If not, ad one.
+            if (element.hasAttribute('dots') &&
+              (!element.nextElementSibling || element.nextElementSibling.tagName !== 'dot')) {
+              const dot = element.ownerDocument.createElementNS(NAMESPACE, 'dot');
+              element.insertAdjacentElement('afterend', dot);
+              element.removeAttribute('dots');
+            }
             if (note.m_plica === PlicaStatus.UP) {
               const plica = element.ownerDocument.createElementNS(NAMESPACE, 'plica');
               plica.setAttribute("dir", "up");

@@ -317,6 +317,12 @@ export class NoteItem implements MusicItem {
       }
     }
 
+    if (this.m_plica === PlicaStatus.DOWN) {
+      output += "p";
+    } else if (this.m_plica === PlicaStatus.UP) {
+      output += "P";
+    }
+
     if (this.m_accid !== Accid.NONE) {
       output += this.m_accid.toString();
     }
@@ -327,9 +333,6 @@ export class NoteItem implements MusicItem {
 
     if (options["mark"]) {
       output += "@";
-    }
-    if (this.m_plica !== PlicaStatus.NONE) {
-      output += "&";
     }
 
     output += "\t";
@@ -714,7 +717,7 @@ export class MusicList {
   	output.push("*-\t*-");
   	if (!options["export"]) {
   		output.push("!!!RDF**kern: @ = marked note");
-      output.push("!!!RDF**kern: & = marked note, color=green")
+      // output.push("!!!RDF**kern: & = marked note, color=green")
   		//output.push("!!!RDF**kern: i = marked note, color=blue");
   		//output.push("!!!RDF**mens: @ = marked note");
   	}

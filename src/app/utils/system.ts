@@ -168,16 +168,6 @@ export class System {
               element.insertAdjacentElement('afterend', dot);
               element.removeAttribute('dots');
             }
-            if (note.m_plica === PlicaStatus.UP) {
-              const plica = element.ownerDocument.createElementNS(NAMESPACE, 'plica');
-              plica.setAttribute("dir", "up");
-              element.appendChild(plica);
-            }
-            else if (note.m_plica === PlicaStatus.DOWN) {
-              const plica = element.ownerDocument.createElementNS(NAMESPACE, 'plica');
-              plica.setAttribute("dir", "down");
-              element.appendChild(plica);;
-            }
           }
         }
       }

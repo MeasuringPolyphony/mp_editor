@@ -11,9 +11,16 @@
                     <label class="metadataInput">Composer name:&nbsp;
                         <input id="composerName" formControlName="composerName"/>
                     </label><br>
-                    <label class="metadataInput">Your name:&nbsp;
-                        <input id="userName" formControlName="userName"/>
-                    </label><br>
+                    <div class="contributor" *ngFor="let contributor of temp.controls">
+                        <ng-container [formGroup]="contributor">
+                            <select formControlName="type">
+                                <option value="encoder">Encoder</option>
+                                <option value="proofreader">Proofreader</option>
+                                <option value="editor">Editor</option>
+                            </select>
+                            <input formControlName="name"/>
+                        </ng-container>
+                    </div>
                     <label class="metadataInput">Notation:&nbsp;
                         <select id="notationSubtype" formControlName="notationSubtype">
                             <option value="Ars_antiqua">Black Mensural &mdash; Ars antiqua</option>

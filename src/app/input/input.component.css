@@ -20,6 +20,7 @@ app-diva-view {
 
 .metadataInput {
     width: 26em;
+    padding-bottom: 1em;
 }
 
 .metadataInput input {
@@ -29,6 +30,14 @@ app-diva-view {
 .metadataInput select {
     float: right;
     width: 17em;
+}
+
+.contributor {
+    width: 26em;
+}
+
+.contributor input {
+    float: right;
 }
 
 /*app-toolbar {

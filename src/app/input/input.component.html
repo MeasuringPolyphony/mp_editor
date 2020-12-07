@@ -6,33 +6,23 @@
                 <form *ngIf="inputStep===0" [formGroup]="metadataForm" (submit)="onSetMetadata()">
                     <h1 id="metadata-header">Enter Metadata</h1>
                     <label class="metadataInput">Short title:&nbsp;
-                        <input id="shortTitle" formControlName="shortTitle"/>
+                        <input id="shortTitle" formControlName="shortTitle" required/>
                     </label><br>
                     <label class="metadataInput">Composer name:&nbsp;
-                        <input id="composerName" formControlName="composerName"/>
+                        <input id="composerName" formControlName="composerName" required/>
                     </label><br>
-                    <div class="contributor" *ngFor="let contributor of temp.controls">
-                        <ng-container [formGroup]="contributor">
-                            <select formControlName="type">
-                                <option value="encoder">Encoder</option>
-                                <option value="proofreader">Proofreader</option>
-                                <option value="editor">Editor</option>
-                            </select>
-                            <input formControlName="name"/>
-                        </ng-container>
-                    </div>
                     <label class="metadataInput">Notation:&nbsp;
-                        <select id="notationSubtype" formControlName="notationSubtype">
+                        <select id="notationSubtype" formControlName="notationSubtype" required>
                             <option value="Ars_antiqua">Black Mensural &mdash; Ars antiqua</option>
                             <option value="Ars_nova">Black Mensural &mdash; Ars nova</option>
                             <option value="">White Mensural</option>
                         </select>
                     </label><br>
                     <label class="metadataInput">Manuscript Siglum:&nbsp;
-                        <input id="siglum" formControlName="siglum"/>
+                        <input id="siglum" formControlName="siglum" required/>
                     </label><br>
                     <label class="metadataInput">Genre:&nbsp;
-                        <select id="genre" formControlName="genre">
+                        <select id="genre" formControlName="genre" required>
                             <option value="Motet">Motet</option>
                             <option value="Song">Song</option>
                             <option value="Conductus">Conductus</option>
@@ -40,6 +30,22 @@
                             <option value="Plainchant">Plainchant</option>
                         </select>
                     </label><br>
+                    <div *ngFor="let contributor of temp.controls">
+                        <ng-container [formGroup]="contributor">
+                          <label class="contributor">Contributor:&nbsp;
+                            <select formControlName="type" required>
+                                <option value="encoder">Encoder</option>
+                                <option value="proofreader">Proofreader</option>
+                                <option value="editor">Editor</option>
+                            </select>
+                            <input formControlName="name" required/>
+                          </label>
+                        </ng-container>
+                    </div>
+                    <div>
+                      <button color=primary class="primary-button" mat-stroked-button type="button" (click)="addContributor()">Add Contributor</button>
+                    </div>
+                    <br>
                     <button color=primary class="primary-button" mat-stroked-button type="submit">Continue to Music Input</button>
                 </form>
             </mat-tab>

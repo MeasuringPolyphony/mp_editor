@@ -19,8 +19,7 @@ app-diva-view {
 }
 
 .metadataInput {
-    width: 26em;
-    padding-bottom: 1em;
+    width: 30em;
 }
 
 .metadataInput input {
@@ -33,7 +32,7 @@ app-diva-view {
 }
 
 .contributor {
-    width: 26em;
+    width: 30em;
 }
 
 .contributor input {

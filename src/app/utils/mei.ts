@@ -1,7 +1,7 @@
 import { Part, Tenor } from './part';
 import { System, Pb, Sb } from './system';
 import { ClefItem, NoteItem, RestItem, MensurItem } from './MusicItem';
-import { Voice, Mensuration } from './definitions';
+import { Voice, Mensuration, Contributor } from './definitions';
 import { IRI } from './definitions';
 
 
@@ -47,7 +47,7 @@ export class MEIDocument {
         mei.metadata.shortTitle = titleStmt.querySelector("title").textContent;
       }
       if (titleStmt.querySelector("persName") && titleStmt.querySelector("persName").getAttribute("role") === "encoder") {
-        mei.metadata.encoderName = titleStmt.querySelector("persName").textContent;
+      //  mei.metadata.encoderName = titleStmt.querySelector("persName").textContent;
       }
       if (titleStmt.querySelector("composer")) {
         mei.metadata.composerName = titleStmt.querySelector("composer").textContent;
@@ -220,7 +220,7 @@ export class MEIDocument {
     let respStmt = this._meiDoc.createElementNS(NAMESPACE, "respStmt");
     titleStmt.appendChild(respStmt);
     let persName = this._meiDoc.createElementNS(NAMESPACE, "persName");
-    persName.textContent = this.metadata.encoderName;
+    //persName.textContent = this.metadata.encoderName;
     persName.setAttribute("role", "encoder");
     respStmt.appendChild(persName);
     let pubStmt = this._meiDoc.createElementNS(NAMESPACE, "pubStmt");
@@ -283,7 +283,7 @@ class Metadata {
   shortTitle: string;
   sourceIRI: IRI;
   composerName: string;
-  encoderName: string;
+  contributors: Contributor[];
   siglum: string;
   genre: string;
 }

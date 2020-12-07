@@ -68,6 +68,11 @@ export function voiceToOrdinal(v: Voice): number {
   }
 }
 
+export type Contributor = {
+  type: string,
+  name: string
+};
+
 // Values for modus, tempus, and prolatio
 export enum Mensuration {
   Three='3',

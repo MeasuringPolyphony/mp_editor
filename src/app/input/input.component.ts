@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 
-import { IRI } from '../utils/definitions';
+import { Contributor, IRI } from '../utils/definitions';
 import { MEIDocument } from '../utils/mei';
 import { formIIIFManifest } from '../tools';
 import { StateService } from '../state-service.service';
@@ -17,17 +17,12 @@ export class InputComponent implements OnInit {
 
   // Metadata for MEI header
   metadataForm = new FormGroup({
-    shortTitle: new FormControl(''),
-    composerName: new FormControl(''),
-    contributors: new FormArray([
-      new FormGroup({
-        type: new FormControl(''),
-        name: new FormControl(''),
-      })
-    ]),
-    notationSubtype: new FormControl(''),
-    siglum: new FormControl(''),
-    genre: new FormControl(''),
+    shortTitle: new FormControl('', [Validators.required]),
+    composerName: new FormControl('', [Validators.required]),
+    contributors: new FormArray([]),
+    notationSubtype: new FormControl('', [Validators.required]),
+    siglum: new FormControl('', [Validators.required]),
+    genre: new FormControl('', [Validators.required]),
   });
 
   temp: FormArray;
@@ -69,18 +64,31 @@ export class InputComponent implements OnInit {
   }
 
   onSetMetadata() {
-    let value =this.metadataForm.value;
+    let value = this.metadataForm.value;
+
     this.stateService.mei.metadata = {
       shortTitle: value.shortTitle,
       composerName: value.composerName,
-      encoderName: "",
-      //encoderName: value.userName,
+      contributors: value.contributors.filter(entry => {
+        return (entry.type.length > 0) && (entry.name.length > 0);
+      }).map(entry => {
+        return entry as Contributor;
+      }),
       sourceIRI: this.iiifManifest,
       siglum: value.siglum,
       genre: value.genre,
     };
     this.stateService.mei.notationSubtype = value.notationSubtype;
     this.inputStep = InputComponent.InputStep.INPUT;
+  }
+
+  addContributor() {
+    this.temp.push(
+      new FormGroup({
+        type: new FormControl('', [Validators.required]),
+        name: new FormControl('', [Validators.required]),
+      })
+    )
   }
 }
 

@@ -46,8 +46,17 @@ export class MEIDocument {
       if (titleStmt.querySelector("title")) {
         mei.metadata.shortTitle = titleStmt.querySelector("title").textContent;
       }
-      if (titleStmt.querySelector("persName") && titleStmt.querySelector("persName").getAttribute("role") === "encoder") {
-      //  mei.metadata.encoderName = titleStmt.querySelector("persName").textContent;
+      for (let contributor of Array.from(titleStmt.querySelectorAll("persName"))) {
+        switch (contributor.getAttribute("role").toLowerCase()) {
+          case "encoder":
+          case "proofreader":
+          case "editor":
+          let c: Contributor = {
+            name: contributor.textContent,
+            type: contributor.getAttribute("role").toLowerCase(),
+          };
+          mei.metadata.contributors.push(c);
+        }
       }
       if (titleStmt.querySelector("composer")) {
         mei.metadata.composerName = titleStmt.querySelector("composer").textContent;
@@ -219,10 +228,12 @@ export class MEIDocument {
     titleStmt.appendChild(composer);
     let respStmt = this._meiDoc.createElementNS(NAMESPACE, "respStmt");
     titleStmt.appendChild(respStmt);
-    let persName = this._meiDoc.createElementNS(NAMESPACE, "persName");
-    //persName.textContent = this.metadata.encoderName;
-    persName.setAttribute("role", "encoder");
-    respStmt.appendChild(persName);
+    for (let contributor of this.metadata.contributors) {
+      let persName = this._meiDoc.createElementNS(NAMESPACE, "persName");
+      persName.textContent = contributor.name;
+      persName.setAttribute("role", contributor.type);
+      respStmt.appendChild(persName);
+    }
     let pubStmt = this._meiDoc.createElementNS(NAMESPACE, "pubStmt");
     fileDesc.appendChild(pubStmt);
 
@@ -283,7 +294,7 @@ class Metadata {
   shortTitle: string;
   sourceIRI: IRI;
   composerName: string;
-  contributors: Contributor[];
+  contributors: Contributor[] = [];
   siglum: string;
   genre: string;
 }

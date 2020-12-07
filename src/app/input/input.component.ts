@@ -48,10 +48,17 @@ export class InputComponent implements OnInit {
     if (this.stateService.mei.metadata != undefined) {
       this.metadataForm.controls.shortTitle.setValue(this.stateService.mei.metadata.shortTitle);
       this.metadataForm.controls.composerName.setValue(this.stateService.mei.metadata.composerName);
-      //this.metadataForm.controls.userName.setValue(this.stateService.mei.metadata.encoderName);
       this.metadataForm.controls.notationSubtype.setValue(this.stateService.mei.notationSubtype);
       this.metadataForm.controls.siglum.setValue(this.stateService.mei.metadata.siglum);
       this.metadataForm.controls.genre.setValue(this.stateService.mei.metadata.genre);
+      let contributors = this.metadataForm.get('contributors') as FormArray;
+      for (let contributor of this.stateService.mei.metadata.contributors) {
+        let temp = new FormGroup({
+          type: new FormControl(contributor.type, Validators.required),
+          name: new FormControl(contributor.name, Validators.required),
+        });
+        contributors.push(temp);
+      }
     }
 
     this.temp = this.metadataForm.get('contributors') as FormArray;

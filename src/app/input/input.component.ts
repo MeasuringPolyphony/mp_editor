@@ -19,6 +19,8 @@ export class InputComponent implements OnInit {
   composerName = "";
   userName = "";
   notationSubtype = "";
+  siglum = "";
+  genre = "";
 
   inputStep: InputComponent.InputStep;
 
@@ -43,6 +45,8 @@ export class InputComponent implements OnInit {
       this.composerName = this.stateService.mei.metadata.composerName;
       this.userName = this.stateService.mei.metadata.encoderName;
       this.notationSubtype = this.stateService.mei.notationSubtype;
+      this.siglum = this.stateService.mei.metadata.siglum;
+      this.genre = this.stateService.mei.metadata.genre;
     }
 
     console.debug(this.iiifManifest);
@@ -58,6 +62,8 @@ export class InputComponent implements OnInit {
       composerName: this.composerName,
       encoderName: this.userName,
       sourceIRI: this.iiifManifest,
+      siglum: this.siglum,
+      genre: this.genre,
     };
     this.stateService.mei.notationSubtype = this.notationSubtype;
     this.inputStep = InputComponent.InputStep.INPUT;

@@ -284,4 +284,6 @@ class Metadata {
   sourceIRI: IRI;
   composerName: string;
   encoderName: string;
+  siglum: string;
+  genre: string;
 }

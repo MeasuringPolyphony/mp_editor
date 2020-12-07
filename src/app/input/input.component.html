@@ -21,6 +21,18 @@
                             <option value="">White Mensural</option>
                         </select>
                     </label><br>
+                    <label class="metadataInput">Manuscript Siglum:&nbsp;
+                        <input [(ngModel)]="siglum" id="siglum" name="siglum"/>
+                    </label><br>
+                    <label class="metadataInput">Genre:&nbsp;
+                        <select [(ngModel)]="genre" id="genre" name="genre">
+                            <option value="Motet">Motet</option>
+                            <option value="Song">Song</option>
+                            <option value="Conductus">Conductus</option>
+                            <option value="Mass Movement">Mass Movement</option>
+                            <option value="Plainchant">Plainchant</option>
+                        </select>
+                    </label><br>
                     <button color=primary class="primary-button" mat-stroked-button type="submit">Continue to Music Input</button>
                 </form>
             </mat-tab>

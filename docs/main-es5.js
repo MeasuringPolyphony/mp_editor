@@ -6833,6 +6833,12 @@
               }
             }
 
+            if (this.m_plica === PlicaStatus.DOWN) {
+              output += "p";
+            } else if (this.m_plica === PlicaStatus.UP) {
+              output += "P";
+            }
+
             if (this.m_accid !== Accid.NONE) {
               output += this.m_accid.toString();
             }
@@ -6843,10 +6849,6 @@
 
             if (options["mark"]) {
               output += "@";
-            }
-
-            if (this.m_plica !== PlicaStatus.NONE) {
-              output += "&";
             }
 
             output += "\t";
@@ -7350,8 +7352,8 @@
             output.push("*-\t*-");
 
             if (!options["export"]) {
-              output.push("!!!RDF**kern: @ = marked note");
-              output.push("!!!RDF**kern: & = marked note, color=green"); //output.push("!!!RDF**kern: i = marked note, color=blue");
+              output.push("!!!RDF**kern: @ = marked note"); // output.push("!!!RDF**kern: & = marked note, color=green")
+              //output.push("!!!RDF**kern: i = marked note, color=blue");
               //output.push("!!!RDF**mens: @ = marked note");
             }
 
@@ -8620,19 +8622,6 @@
                       var dot = element.ownerDocument.createElementNS(_mei__WEBPACK_IMPORTED_MODULE_4__["NAMESPACE"], 'dot');
                       element.insertAdjacentElement('afterend', dot);
                       element.removeAttribute('dots');
-                    }
-
-                    if (note.m_plica === _MusicItem__WEBPACK_IMPORTED_MODULE_1__["PlicaStatus"].UP) {
-                      var plica = element.ownerDocument.createElementNS(_mei__WEBPACK_IMPORTED_MODULE_4__["NAMESPACE"], 'plica');
-                      plica.setAttribute("dir", "up");
-                      element.appendChild(plica);
-                    } else if (note.m_plica === _MusicItem__WEBPACK_IMPORTED_MODULE_1__["PlicaStatus"].DOWN) {
-                      var _plica = element.ownerDocument.createElementNS(_mei__WEBPACK_IMPORTED_MODULE_4__["NAMESPACE"], 'plica');
-
-                      _plica.setAttribute("dir", "down");
-
-                      element.appendChild(_plica);
-                      ;
                     }
                   }
                 }

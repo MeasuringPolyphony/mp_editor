@@ -3,29 +3,29 @@
     <div id="right-side">
         <mat-tab-group>
             <mat-tab label="Metadata Input" *ngIf="inputStep === 0">
-                <form *ngIf="inputStep===0" #metadataForm="ngForm" (submit)="onSetMetadata()">
+                <form *ngIf="inputStep===0" [formGroup]="metadataForm" (submit)="onSetMetadata()">
                     <h1 id="metadata-header">Enter Metadata</h1>
                     <label class="metadataInput">Short title:&nbsp;
-                        <input [(ngModel)]="shortTitle" id="shortTitle" name="shortTitle"/>
+                        <input id="shortTitle" formControlName="shortTitle"/>
                     </label><br>
                     <label class="metadataInput">Composer name:&nbsp;
-                        <input [(ngModel)]="composerName" id="composerName" name="composerName"/>
+                        <input id="composerName" formControlName="composerName"/>
                     </label><br>
                     <label class="metadataInput">Your name:&nbsp;
-                        <input [(ngModel)]="userName" id="userName" name="userName"/>
+                        <input id="userName" formControlName="userName"/>
                     </label><br>
                     <label class="metadataInput">Notation:&nbsp;
-                        <select [(ngModel)]="notationSubtype" id="notationSubtype" name="notationSubtype">
+                        <select id="notationSubtype" formControlName="notationSubtype">
                             <option value="Ars_antiqua">Black Mensural &mdash; Ars antiqua</option>
                             <option value="Ars_nova">Black Mensural &mdash; Ars nova</option>
                             <option value="">White Mensural</option>
                         </select>
                     </label><br>
                     <label class="metadataInput">Manuscript Siglum:&nbsp;
-                        <input [(ngModel)]="siglum" id="siglum" name="siglum"/>
+                        <input id="siglum" formControlName="siglum"/>
                     </label><br>
                     <label class="metadataInput">Genre:&nbsp;
-                        <select [(ngModel)]="genre" id="genre" name="genre">
+                        <select id="genre" formControlName="genre">
                             <option value="Motet">Motet</option>
                             <option value="Song">Song</option>
                             <option value="Conductus">Conductus</option>

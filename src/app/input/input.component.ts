@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl } from '@angular/forms';
 
 import { IRI } from '../utils/definitions';
 import { MEIDocument } from '../utils/mei';
@@ -15,12 +16,14 @@ export class InputComponent implements OnInit {
   iiifManifest: IRI;
 
   // Metadata for MEI header
-  shortTitle = "";
-  composerName = "";
-  userName = "";
-  notationSubtype = "";
-  siglum = "";
-  genre = "";
+  metadataForm = new FormGroup({
+    shortTitle: new FormControl(''),
+    composerName: new FormControl(''),
+    userName: new FormControl(''),
+    notationSubtype: new FormControl(''),
+    siglum: new FormControl(''),
+    genre: new FormControl(''),
+  });
 
   inputStep: InputComponent.InputStep;
 
@@ -41,12 +44,12 @@ export class InputComponent implements OnInit {
     }
 
     if (this.stateService.mei.metadata != undefined) {
-      this.shortTitle = this.stateService.mei.metadata.shortTitle;
-      this.composerName = this.stateService.mei.metadata.composerName;
-      this.userName = this.stateService.mei.metadata.encoderName;
-      this.notationSubtype = this.stateService.mei.notationSubtype;
-      this.siglum = this.stateService.mei.metadata.siglum;
-      this.genre = this.stateService.mei.metadata.genre;
+      this.metadataForm.controls.shortTitle.setValue(this.stateService.mei.metadata.shortTitle);
+      this.metadataForm.controls.composerName.setValue(this.stateService.mei.metadata.composerName);
+      this.metadataForm.controls.userName.setValue(this.stateService.mei.metadata.encoderName);
+      this.metadataForm.controls.notationSubtype.setValue(this.stateService.mei.notationSubtype);
+      this.metadataForm.controls.siglum.setValue(this.stateService.mei.metadata.siglum);
+      this.metadataForm.controls.genre.setValue(this.stateService.mei.metadata.genre);
     }
 
     console.debug(this.iiifManifest);
@@ -57,15 +60,16 @@ export class InputComponent implements OnInit {
   }
 
   onSetMetadata() {
+    let value =this.metadataForm.value;
     this.stateService.mei.metadata = {
-      shortTitle: this.shortTitle,
-      composerName: this.composerName,
-      encoderName: this.userName,
+      shortTitle: value.shortTitle,
+      composerName: value.composerName,
+      encoderName: value.userName,
       sourceIRI: this.iiifManifest,
-      siglum: this.siglum,
-      genre: this.genre,
+      siglum: value.siglum,
+      genre: value.genre,
     };
-    this.stateService.mei.notationSubtype = this.notationSubtype;
+    this.stateService.mei.notationSubtype = value.notationSubtype;
     this.inputStep = InputComponent.InputStep.INPUT;
   }
 }

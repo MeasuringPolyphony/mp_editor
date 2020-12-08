@@ -7,6 +7,7 @@ import { vrvToolkit } from '../../utils/verovio';
 import { StateService } from '../../state-service.service';
 import { SelectedStaffService } from '../selected-staff.service';
 import { DocService } from '../doc.service';
+import { NAMESPACE } from '../../utils/mei';
 
 const pnameOrder = [ 'c', 'd', 'e', 'f', 'g', 'a', 'b'];
 
@@ -213,6 +214,29 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
             }
             else {
               target.insertAdjacentElement('beforebegin', clone);
+            }
+            break;
+          case 'p':
+          case 'P':
+            let plica;
+            if (target.querySelector('plica')) {
+              plica = target.querySelector('plica');
+            } else {
+              plica = this.doc.parts.createElementNS(NAMESPACE, 'plica');
+              target.appendChild(plica);
+            }
+            if (event.key === 'P') {
+              if (plica.getAttribute('dir') === 'down') {
+                plica.remove();
+              } else {
+                plica.setAttribute('dir', 'down');
+              }
+            } else {
+              if (plica.getAttribute('dir') === 'up') {
+                plica.remove();
+              } else {
+                plica.setAttribute('dir', 'up');
+              }
             }
             break;
           case 'Backspace':

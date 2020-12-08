@@ -35,13 +35,13 @@ export class MEIDocument {
     try {
       let sourceElements = doc.querySelectorAll("source");
       for (let s of Array.from(sourceElements)) {
-        if (s.getAttribute("targettype") === "IIIF") {
-          iiif = s.getAttribute("target");
-          break;
+        for (let item of Array.from(s.querySelectorAll("item"))) {
+          if (iiif !== "") break;
+          if (item.getAttribute("targettype") === "IIIF") {
+            iiif = item.getAttribute("target");
+            break;
+          }
         }
-      }
-      if (sourceElements.length === 1 && iiif === "") {
-        iiif = sourceElements[0].getAttribute("target");
       }
     } catch (e) {
       console.debug(e);
@@ -49,6 +49,15 @@ export class MEIDocument {
     let mei = new MEIDocument(iiif);
 
     // Try to get metadata
+    for (let s of Array.from(doc.querySelectorAll("source"))) {
+      if (s.querySelector("titleStmt")) {
+        let identifier = s.querySelector("titleStmt")?.querySelector("title")?.querySelector("identifier");
+        if (identifier) {
+          mei.metadata.siglum = identifier.textContent;
+          break;
+        }
+      }
+    }
     let titleStmt = doc.querySelector("titleStmt");
     if (titleStmt) {
       if (titleStmt.querySelector("title")) {
@@ -270,10 +279,22 @@ export class MEIDocument {
     let sourceDesc = this._meiDoc.createElementNS(NAMESPACE, "sourceDesc");
     fileDesc.appendChild(sourceDesc);
     let source = this._meiDoc.createElementNS(NAMESPACE, "source");
-    source.setAttribute("target", this.metadata.sourceIRI);
-    source.setAttribute("targettype", "IIIF");
-
     sourceDesc.appendChild(source);
+
+    let titleStmt2 = this._meiDoc.createElementNS(NAMESPACE, "titleStmt");
+    source.appendChild(titleStmt2);
+    let title3 = this._meiDoc.createElementNS(NAMESPACE, "title");
+    titleStmt2.appendChild(title3);
+    let identifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
+    identifier.textContent = this.metadata.siglum;
+    title3.appendChild(identifier);
+
+    let itemList = this._meiDoc.createElementNS(NAMESPACE, "itemList");
+    source.appendChild(itemList);
+    let item = this._meiDoc.createElementNS(NAMESPACE, "item");
+    itemList.appendChild(item);
+    item.setAttribute("target", this.metadata.sourceIRI);
+    item.setAttribute("targettype", "IIIF");
 
     let workDesc = this._meiDoc.createElementNS(NAMESPACE, "workDesc");
     let work = this._meiDoc.createElementNS(NAMESPACE, "work");

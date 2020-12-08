@@ -7962,42 +7962,13 @@
 
             fileDesc.appendChild(pubStmt);
 
-            var sourceDesc = this._meiDoc.createElementNS(NAMESPACE, "sourceDesc");
+            var workList = this._meiDoc.createElementNS(NAMESPACE, "workList");
 
-            fileDesc.appendChild(sourceDesc);
-
-            var source = this._meiDoc.createElementNS(NAMESPACE, "source");
-
-            sourceDesc.appendChild(source);
-
-            var titleStmt2 = this._meiDoc.createElementNS(NAMESPACE, "titleStmt");
-
-            source.appendChild(titleStmt2);
-
-            var title3 = this._meiDoc.createElementNS(NAMESPACE, "title");
-
-            titleStmt2.appendChild(title3);
-
-            var identifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
-
-            identifier.textContent = this.metadata.siglum;
-            title3.appendChild(identifier);
-
-            var itemList = this._meiDoc.createElementNS(NAMESPACE, "itemList");
-
-            source.appendChild(itemList);
-
-            var item = this._meiDoc.createElementNS(NAMESPACE, "item");
-
-            itemList.appendChild(item);
-            item.setAttribute("target", this.metadata.sourceIRI);
-            item.setAttribute("targettype", "IIIF");
-
-            var workDesc = this._meiDoc.createElementNS(NAMESPACE, "workDesc");
+            meiHead.appendChild(workList);
 
             var work = this._meiDoc.createElementNS(NAMESPACE, "work");
 
-            workDesc.appendChild(work);
+            workList.appendChild(work);
 
             var title2 = this._meiDoc.createElementNS(NAMESPACE, "title");
 
@@ -8021,7 +7992,37 @@
 
             term.textContent = this.metadata.genre;
             termList.appendChild(term);
-            meiHead.appendChild(workDesc);
+
+            var manifestList = this._meiDoc.createElementNS(NAMESPACE, "manifestationList");
+
+            meiHead.appendChild(manifestList);
+
+            var manifestation = this._meiDoc.createElementNS(NAMESPACE, "manifestation");
+
+            manifestList.appendChild(manifestation);
+
+            var titleStmt2 = this._meiDoc.createElementNS(NAMESPACE, "titleStmt");
+
+            manifestation.appendChild(titleStmt2);
+
+            var title3 = this._meiDoc.createElementNS(NAMESPACE, "title");
+
+            titleStmt2.appendChild(title3);
+
+            var identifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
+
+            identifier.textContent = this.metadata.siglum;
+            title3.appendChild(identifier);
+
+            var itemList = this._meiDoc.createElementNS(NAMESPACE, "itemList");
+
+            manifestation.appendChild(itemList);
+
+            var item = this._meiDoc.createElementNS(NAMESPACE, "item");
+
+            itemList.appendChild(item);
+            item.setAttribute("target", this.metadata.sourceIRI);
+            item.setAttribute("targettype", "IIIF");
             return meiHead;
           }
         }, {
@@ -8126,15 +8127,15 @@
         }], [{
           key: "fromXML",
           value: function fromXML(source) {
-            var _a, _b;
+            var _a, _b, _c, _d;
 
             var doc = source.documentElement;
             var iiif = "";
 
             try {
-              var sourceElements = doc.querySelectorAll("source");
+              var manifestations = doc.querySelectorAll("manifestation");
 
-              for (var _i3 = 0, _Array$from = Array.from(sourceElements); _i3 < _Array$from.length; _i3++) {
+              for (var _i3 = 0, _Array$from = Array.from(manifestations); _i3 < _Array$from.length; _i3++) {
                 var s = _Array$from[_i3];
 
                 for (var _i4 = 0, _Array$from2 = Array.from(s.querySelectorAll("item")); _i4 < _Array$from2.length; _i4++) {
@@ -8153,7 +8154,7 @@
 
             var mei = new MEIDocument(iiif); // Try to get metadata
 
-            for (var _i5 = 0, _Array$from3 = Array.from(doc.querySelectorAll("source")); _i5 < _Array$from3.length; _i5++) {
+            for (var _i5 = 0, _Array$from3 = Array.from(doc.querySelectorAll("manifestation")); _i5 < _Array$from3.length; _i5++) {
               var _s2 = _Array$from3[_i5];
 
               if (_s2.querySelector("titleStmt")) {
@@ -8166,14 +8167,14 @@
               }
             }
 
-            var titleStmt = doc.querySelector("titleStmt");
+            var titleStmt = (_c = doc.querySelector("fileDesc")) === null || _c === void 0 ? void 0 : _c.querySelector("titleStmt");
 
             if (titleStmt) {
               if (titleStmt.querySelector("title")) {
                 mei.metadata.shortTitle = titleStmt.querySelector("title").textContent;
               }
 
-              for (var _i6 = 0, _Array$from4 = Array.from(titleStmt.querySelectorAll("persName")); _i6 < _Array$from4.length; _i6++) {
+              for (var _i6 = 0, _Array$from4 = Array.from((_d = titleStmt.querySelector("respStmt")) === null || _d === void 0 ? void 0 : _d.querySelectorAll("persName")); _i6 < _Array$from4.length; _i6++) {
                 var contributor = _Array$from4[_i6];
 
                 switch (contributor.getAttribute("role").toLowerCase()) {
@@ -8189,9 +8190,9 @@
               }
             }
 
-            var workDesc = doc.querySelector("workDesc");
+            var workList = doc.querySelector("workList");
 
-            if (workDesc) {
+            if (workList) {
               var work = doc.querySelector("work");
 
               if (work) {

@@ -4564,12 +4564,12 @@ class MEIDocument {
         }
     }
     static fromXML(source) {
-        var _a, _b;
+        var _a, _b, _c, _d;
         let doc = source.documentElement;
         let iiif = "";
         try {
-            let sourceElements = doc.querySelectorAll("source");
-            for (let s of Array.from(sourceElements)) {
+            let manifestations = doc.querySelectorAll("manifestation");
+            for (let s of Array.from(manifestations)) {
                 for (let item of Array.from(s.querySelectorAll("item"))) {
                     if (iiif !== "")
                         break;
@@ -4585,7 +4585,7 @@ class MEIDocument {
         }
         let mei = new MEIDocument(iiif);
         // Try to get metadata
-        for (let s of Array.from(doc.querySelectorAll("source"))) {
+        for (let s of Array.from(doc.querySelectorAll("manifestation"))) {
             if (s.querySelector("titleStmt")) {
                 let identifier = (_b = (_a = s.querySelector("titleStmt")) === null || _a === void 0 ? void 0 : _a.querySelector("title")) === null || _b === void 0 ? void 0 : _b.querySelector("identifier");
                 if (identifier) {
@@ -4594,12 +4594,12 @@ class MEIDocument {
                 }
             }
         }
-        let titleStmt = doc.querySelector("titleStmt");
+        let titleStmt = (_c = doc.querySelector("fileDesc")) === null || _c === void 0 ? void 0 : _c.querySelector("titleStmt");
         if (titleStmt) {
             if (titleStmt.querySelector("title")) {
                 mei.metadata.shortTitle = titleStmt.querySelector("title").textContent;
             }
-            for (let contributor of Array.from(titleStmt.querySelectorAll("persName"))) {
+            for (let contributor of Array.from((_d = titleStmt.querySelector("respStmt")) === null || _d === void 0 ? void 0 : _d.querySelectorAll("persName"))) {
                 switch (contributor.getAttribute("role").toLowerCase()) {
                     case "encoder":
                     case "proofreader":
@@ -4612,8 +4612,8 @@ class MEIDocument {
                 }
             }
         }
-        let workDesc = doc.querySelector("workDesc");
-        if (workDesc) {
+        let workList = doc.querySelector("workList");
+        if (workList) {
             let work = doc.querySelector("work");
             if (work) {
                 if (work.querySelector("title")) {
@@ -4809,26 +4809,10 @@ class MEIDocument {
         }
         let pubStmt = this._meiDoc.createElementNS(NAMESPACE, "pubStmt");
         fileDesc.appendChild(pubStmt);
-        let sourceDesc = this._meiDoc.createElementNS(NAMESPACE, "sourceDesc");
-        fileDesc.appendChild(sourceDesc);
-        let source = this._meiDoc.createElementNS(NAMESPACE, "source");
-        sourceDesc.appendChild(source);
-        let titleStmt2 = this._meiDoc.createElementNS(NAMESPACE, "titleStmt");
-        source.appendChild(titleStmt2);
-        let title3 = this._meiDoc.createElementNS(NAMESPACE, "title");
-        titleStmt2.appendChild(title3);
-        let identifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
-        identifier.textContent = this.metadata.siglum;
-        title3.appendChild(identifier);
-        let itemList = this._meiDoc.createElementNS(NAMESPACE, "itemList");
-        source.appendChild(itemList);
-        let item = this._meiDoc.createElementNS(NAMESPACE, "item");
-        itemList.appendChild(item);
-        item.setAttribute("target", this.metadata.sourceIRI);
-        item.setAttribute("targettype", "IIIF");
-        let workDesc = this._meiDoc.createElementNS(NAMESPACE, "workDesc");
+        let workList = this._meiDoc.createElementNS(NAMESPACE, "workList");
+        meiHead.appendChild(workList);
         let work = this._meiDoc.createElementNS(NAMESPACE, "work");
-        workDesc.appendChild(work);
+        workList.appendChild(work);
         let title2 = this._meiDoc.createElementNS(NAMESPACE, "title");
         title2.textContent = this.metadata.shortTitle;
         work.appendChild(title2);
@@ -4842,7 +4826,23 @@ class MEIDocument {
         let term = this._meiDoc.createElementNS(NAMESPACE, "term");
         term.textContent = this.metadata.genre;
         termList.appendChild(term);
-        meiHead.appendChild(workDesc);
+        let manifestList = this._meiDoc.createElementNS(NAMESPACE, "manifestationList");
+        meiHead.appendChild(manifestList);
+        let manifestation = this._meiDoc.createElementNS(NAMESPACE, "manifestation");
+        manifestList.appendChild(manifestation);
+        let titleStmt2 = this._meiDoc.createElementNS(NAMESPACE, "titleStmt");
+        manifestation.appendChild(titleStmt2);
+        let title3 = this._meiDoc.createElementNS(NAMESPACE, "title");
+        titleStmt2.appendChild(title3);
+        let identifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
+        identifier.textContent = this.metadata.siglum;
+        title3.appendChild(identifier);
+        let itemList = this._meiDoc.createElementNS(NAMESPACE, "itemList");
+        manifestation.appendChild(itemList);
+        let item = this._meiDoc.createElementNS(NAMESPACE, "item");
+        itemList.appendChild(item);
+        item.setAttribute("target", this.metadata.sourceIRI);
+        item.setAttribute("targettype", "IIIF");
         return meiHead;
     }
     getSystems() {

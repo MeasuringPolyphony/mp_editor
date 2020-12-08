@@ -30,7 +30,15 @@ export class ToolbarComponent implements OnInit {
     let target = evt.target as HTMLAnchorElement;
     const mei = this.stateService.mei.generateXML();
     const serializer = new XMLSerializer();
-    const content = vkbeautify.xml(serializer.serializeToString(mei));
+    const temp = serializer.serializeToString(mei);
+    const content = vkbeautify.xml(
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+      "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+      " type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"?>\n" +
+      "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+      " type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"?>\n" +
+      temp
+    );
     const blob = new Blob([content], {type: 'application/xml'});
     target.setAttribute('href', window.URL.createObjectURL(blob));
   }

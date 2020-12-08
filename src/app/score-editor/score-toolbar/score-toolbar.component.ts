@@ -37,7 +37,15 @@ export class ScoreToolbarComponent implements OnInit {
         this.stateService.scoreOptions.barlines
       );
       const serializer = new XMLSerializer();
-      const content = vkbeautify.xml(serializer.serializeToString(refinedDoc));
+      const temp = serializer.serializeToString(refinedDoc);
+      const content = vkbeautify.xml(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+        "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+        " type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"?>\n" +
+        "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+        " type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"?>\n" +
+        temp
+      );
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
     }
@@ -47,7 +55,15 @@ export class ScoreToolbarComponent implements OnInit {
     if (this.stateService.mei != null) {
       const target = event.target as HTMLAnchorElement;
       const serializer = new XMLSerializer();
-      const content = vkbeautify.xml(serializer.serializeToString(this.doc.parts));
+      const temp = serializer.serializeToString(this.doc.parts);
+      const content = vkbeautify.xml(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+        "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+        " type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"?>\n" +
+        "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+        " type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"?>\n" +
+        temp
+      );
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
     }

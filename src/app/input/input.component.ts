@@ -97,6 +97,10 @@ export class InputComponent implements OnInit {
       })
     )
   }
+
+  removeContributor(index: Number) {
+    this.temp.removeAt(index);
+  }
 }
 
 export namespace InputComponent {

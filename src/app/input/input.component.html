@@ -30,7 +30,7 @@
                             <option value="Plainchant">Plainchant</option>
                         </select>
                     </label><br>
-                    <div *ngFor="let contributor of temp.controls">
+                    <div *ngFor="let contributor of temp.controls; let i = index">
                         <ng-container [formGroup]="contributor">
                           <label class="contributor">Contributor:&nbsp;
                             <select formControlName="type" required>
@@ -40,6 +40,8 @@
                             </select>
                             <input formControlName="name" required/>
                           </label>
+                          &nbsp;
+                          <button color=secondary class="secondary-button" mat-stroked-button type="button" (click)="removeContributor(i)">Remove</button>
                         </ng-container>
                     </div>
                     <div>

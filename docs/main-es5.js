@@ -3793,7 +3793,8 @@
             var target = evt.target;
             var mei = this.stateService.mei.generateXML();
             var serializer = new XMLSerializer();
-            var content = vkbeautify__WEBPACK_IMPORTED_MODULE_1__["xml"](serializer.serializeToString(mei));
+            var temp = serializer.serializeToString(mei);
+            var content = vkbeautify__WEBPACK_IMPORTED_MODULE_1__["xml"]("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" + " type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"?>\n" + "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" + " type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"?>\n" + temp);
             var blob = new Blob([content], {
               type: 'application/xml'
             });
@@ -4899,7 +4900,8 @@
               var target = event.target;
               var refinedDoc = Object(scoring_up__WEBPACK_IMPORTED_MODULE_1__["refineScore"])(this.currentDoc.cloneNode(true), this.stateService.scoreOptions.modernClefs, this.stateService.scoreOptions.barlines);
               var serializer = new XMLSerializer();
-              var content = vkbeautify__WEBPACK_IMPORTED_MODULE_2__["xml"](serializer.serializeToString(refinedDoc));
+              var temp = serializer.serializeToString(refinedDoc);
+              var content = vkbeautify__WEBPACK_IMPORTED_MODULE_2__["xml"]("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" + " type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"?>\n" + "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" + " type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"?>\n" + temp);
               var blob = new Blob([content], {
                 type: 'application/xml'
               });
@@ -4912,7 +4914,8 @@
             if (this.stateService.mei != null) {
               var target = event.target;
               var serializer = new XMLSerializer();
-              var content = vkbeautify__WEBPACK_IMPORTED_MODULE_2__["xml"](serializer.serializeToString(this.doc.parts));
+              var temp = serializer.serializeToString(this.doc.parts);
+              var content = vkbeautify__WEBPACK_IMPORTED_MODULE_2__["xml"]("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" + " type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"?>\n" + "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" + " type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"?>\n" + temp);
               var blob = new Blob([content], {
                 type: 'application/xml'
               });

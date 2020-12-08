@@ -33,8 +33,16 @@ export class MEIDocument {
     let doc = source.documentElement;
     let iiif = "";
     try {
-      let sourceElement = doc.querySelector("source");
-      iiif = sourceElement.getAttribute("target");
+      let sourceElements = doc.querySelectorAll("source");
+      for (let s of Array.from(sourceElements)) {
+        if (s.getAttribute("targettype") === "IIIF") {
+          iiif = s.getAttribute("target");
+          break;
+        }
+      }
+      if (sourceElements.length === 1 && iiif === "") {
+        iiif = sourceElements[0].getAttribute("target");
+      }
     } catch (e) {
       console.debug(e);
     }
@@ -58,8 +66,33 @@ export class MEIDocument {
           mei.metadata.contributors.push(c);
         }
       }
-      if (titleStmt.querySelector("composer")) {
-        mei.metadata.composerName = titleStmt.querySelector("composer").textContent;
+    }
+    let workDesc = doc.querySelector("workDesc");
+    if (workDesc) {
+      let work = doc.querySelector("work");
+      if (work) {
+        if (work.querySelector("title")) {
+          mei.metadata.shortTitle = work.querySelector("title").textContent;
+        }
+        if (work.querySelector("composer")) {
+          mei.metadata.composerName = work.querySelector("composer").textContent;
+        }
+        if (work.querySelector("classification")) {
+          let terms = work.querySelector("classification").querySelector("termList");
+          if (terms) {
+            for (let term of Array.from(terms.querySelectorAll("term"))) {
+              switch (term.textContent) {
+                case "Motet":
+                case "Song":
+                case "Conductus":
+                case "Mass Movement":
+                case "Plainchant":
+                mei.metadata.genre = term.textContent;
+              }
+              if (mei.metadata.genre !== "") break;
+            }
+          }
+        }
       }
     }
 
@@ -177,9 +210,9 @@ export class MEIDocument {
   }
 
   generateXML(): Document {
+    this.parts.sort(Part.compare);
     this._createSkeletonMEI();
     let parts = this._meiDoc.querySelector('parts');
-    this.parts.sort(Part.compare);
     for (let part of this.parts) {
       if (part.systems.length === 0) {
         continue;
@@ -223,9 +256,6 @@ export class MEIDocument {
     let title = this._meiDoc.createElementNS(NAMESPACE, "title");
     title.textContent = this.metadata.shortTitle;
     titleStmt.appendChild(title);
-    let composer = this._meiDoc.createElementNS(NAMESPACE, "composer");
-    composer.textContent = this.metadata.composerName;
-    titleStmt.appendChild(composer);
     let respStmt = this._meiDoc.createElementNS(NAMESPACE, "respStmt");
     titleStmt.appendChild(respStmt);
     for (let contributor of this.metadata.contributors) {
@@ -241,7 +271,28 @@ export class MEIDocument {
     fileDesc.appendChild(sourceDesc);
     let source = this._meiDoc.createElementNS(NAMESPACE, "source");
     source.setAttribute("target", this.metadata.sourceIRI);
+    source.setAttribute("targettype", "IIIF");
+
     sourceDesc.appendChild(source);
+
+    let workDesc = this._meiDoc.createElementNS(NAMESPACE, "workDesc");
+    let work = this._meiDoc.createElementNS(NAMESPACE, "work");
+    workDesc.appendChild(work);
+    let title2 = this._meiDoc.createElementNS(NAMESPACE, "title");
+    title2.textContent = this.metadata.shortTitle;
+    work.appendChild(title2);
+    let composer = this._meiDoc.createElementNS(NAMESPACE, "composer");
+    composer.textContent = this.metadata.composerName;
+    work.appendChild(composer);
+    let classification = this._meiDoc.createElementNS(NAMESPACE, "classification");
+    work.appendChild(classification);
+    let termList = this._meiDoc.createElementNS(NAMESPACE, "termList");
+    classification.appendChild(termList);
+    let term = this._meiDoc.createElementNS(NAMESPACE, "term");
+    term.textContent = this.metadata.genre;
+    termList.appendChild(term);
+
+    meiHead.appendChild(workDesc);
 
     return meiHead;
   }

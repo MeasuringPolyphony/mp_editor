@@ -50,6 +50,11 @@ export enum PlicaStatus {
   DOWN,
 }
 
+export enum ColorStatus {
+  NONE,
+  COLORED,
+}
+
 export interface MusicItem {
   m_type: string;
   m_id: string;
@@ -234,6 +239,7 @@ export class NoteItem implements MusicItem {
   m_lig: LigStatus;
   m_id: string;
   m_plica: PlicaStatus;
+  m_color: ColorStatus;
 
   constructor() {
     this.m_pname = PitchClass.C;
@@ -244,6 +250,7 @@ export class NoteItem implements MusicItem {
     this.m_text = "";
     this.m_lig = LigStatus.NONE;
     this.m_plica = PlicaStatus.NONE;
+    this.m_color = ColorStatus.NONE;
   }
 
   raisePitch (amount?: number) {
@@ -321,6 +328,10 @@ export class NoteItem implements MusicItem {
       output += "p";
     } else if (this.m_plica === PlicaStatus.UP) {
       output += "P";
+    }
+
+    if (this.m_color === ColorStatus.COLORED) {
+      output += "~";
     }
 
     if (this.m_accid !== Accid.NONE) {

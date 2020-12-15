@@ -318,9 +318,9 @@ export class NoteItem implements MusicItem {
     }
 
     if (this.m_plica === PlicaStatus.DOWN) {
-      output += "p";
+      output += "k";
     } else if (this.m_plica === PlicaStatus.UP) {
-      output += "P";
+      output += "K";
     }
 
     if (this.m_accid !== Accid.NONE) {

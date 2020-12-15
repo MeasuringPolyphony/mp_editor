@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PitchClass, NoteItem, RestItem, Accid, LigStatus, PlicaStatus } from '../../utils/MusicItem';
+import { PitchClass, NoteItem, RestItem, Accid, LigStatus, PlicaStatus, ColorStatus } from '../../utils/MusicItem';
 import { StateService } from '../../state-service.service';
 import { InputService } from '../input.service';
 import { vrvToolkit } from '../../utils/verovio';
@@ -228,6 +228,10 @@ export class StaffSelectComponent implements OnInit {
           this.processPlica(event.key);
           event.preventDefault();
           break;
+        case '~':
+          this.processColor(event.key);
+          event.preventDefault();
+          break;
         case 'r':
         case 'R':
           if (!musicList.hasOpenLigature()) {
@@ -413,6 +417,26 @@ export class StaffSelectComponent implements OnInit {
       }
       else {
         note.m_plica = note.m_plica === PlicaStatus.UP ? PlicaStatus.NONE : PlicaStatus.UP;
+      }
+      musicList.runNotationCallback();
+      return;
+    }
+  }
+
+  processColor(key: string) {
+    let musicList = this.selectedSystem.selected.contents;
+    if (musicList.m_list.length === 0) {
+      return;
+    }
+    let index = musicList.m_index;
+    if (index < 0) {
+      index = musicList.m_list.length - 1;
+    }
+    let item = musicList.m_list[index];
+    if (item.m_type === 'note') {
+      let note = item as NoteItem;
+      if (key === '~') {
+        note.m_color = note.m_color === ColorStatus.COLORED ? ColorStatus.NONE : ColorStatus.COLORED;
       }
       musicList.runNotationCallback();
       return;

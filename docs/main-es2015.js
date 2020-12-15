@@ -3932,10 +3932,10 @@ class NoteItem {
             }
         }
         if (this.m_plica === PlicaStatus.DOWN) {
-            output += "p";
+            output += "k";
         }
         else if (this.m_plica === PlicaStatus.UP) {
-            output += "P";
+            output += "K";
         }
         if (this.m_accid !== Accid.NONE) {
             output += this.m_accid.toString();
@@ -4773,7 +4773,7 @@ class MEIDocument {
     _createSkeletonMEI() {
         this._meiDoc = document.implementation.createDocument(NAMESPACE, 'mei', null);
         let mei = this._meiDoc.documentElement;
-        mei.setAttribute('meiversion', '4.0.1');
+        mei.setAttribute('meiversion', '5.0.0-dev');
         // Create Header
         let head = this._generateHeader();
         // TODO Add more to header

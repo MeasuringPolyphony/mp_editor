@@ -7002,9 +7002,9 @@
             }
 
             if (this.m_plica === PlicaStatus.DOWN) {
-              output += "p";
+              output += "k";
             } else if (this.m_plica === PlicaStatus.UP) {
-              output += "P";
+              output += "K";
             }
 
             if (this.m_accid !== Accid.NONE) {
@@ -7894,7 +7894,7 @@
           value: function _createSkeletonMEI() {
             this._meiDoc = document.implementation.createDocument(NAMESPACE, 'mei', null);
             var mei = this._meiDoc.documentElement;
-            mei.setAttribute('meiversion', '4.0.1'); // Create Header
+            mei.setAttribute('meiversion', '5.0.0-dev'); // Create Header
 
             var head = this._generateHeader(); // TODO Add more to header
 

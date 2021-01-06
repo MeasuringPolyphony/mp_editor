@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { MEIDocument } from './utils/mei';
 
+export enum Barline {
+  NONE="none",
+  SEMIBREVE="semibreve",
+  BREVE="breve",
+  LONG="long",
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,7 +16,7 @@ export class StateService {
   private meiDoc: MEIDocument;
   public editorialMode: boolean;
   public scoreOptions: {
-    barlines: boolean,
+    barlines: Barline,
     modernClefs: boolean
   };
 
@@ -17,7 +24,7 @@ export class StateService {
     this.meiDoc = null;
     this.editorialMode = false;
     this.scoreOptions = {
-      barlines: false,
+      barlines: Barline.NONE,
       modernClefs: false
     };
   }

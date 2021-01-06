@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 
 import * as ScoringUp from 'scoring-up';
 import { vrvToolkit } from '../../utils/verovio';
-import { StateService } from '../../state-service.service';
+import { StateService, Barline } from '../../state-service.service';
 import { SelectedStaffService } from '../selected-staff.service';
 import { DocService } from '../doc.service';
 import { NAMESPACE } from '../../utils/mei';
@@ -31,6 +31,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
 
   selectedId: string = null;
   corrToSicMap: Map<string, string> = new Map();
+  barOptions = Object.entries(Barline);
 
   constructor(
     public stateService: StateService,
@@ -345,5 +346,13 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       corr.appendChild(sibCorr);
     }
     return corrTarget;
+  }
+
+  onBarChange() {
+    console.debug(this.stateService.scoreOptions.barlines);
+  }
+
+  onClefChange() {
+    console.debug(this.stateService.scoreOptions.modernClefs);
   }
 }

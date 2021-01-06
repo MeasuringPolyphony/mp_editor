@@ -23,7 +23,7 @@
     "@angular/router": "^10.2.4",
     "@rxweb/reactive-form-validators": "^1.9.9",
     "diva.js": "github:DDMAL/diva.js#lodash-imports",
-    "rxjs": "^6.5.5",
+    "rxjs": "^6.6.3",
     "scoring-up": "github:martha-thomae/JS_ScUp",
     "tslib": "^2.0.0",
     "vkbeautify": "^0.99.3",

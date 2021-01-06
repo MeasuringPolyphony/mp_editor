@@ -77,7 +77,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
           partsId = this.corrToSicMap.get(partsId);
         }
         // Get nearest pb  and sb
-        const resolver = this.doc.parts.createNSResolver(this.doc.parts.ownerDocument == null ? this.doc.parts.documentElement : this.doc.parts.ownerDocument.documentElement);
+        const resolver = this.doc.parts.createNSResolver(this.doc.parts.ownerDocument == null ? this.doc.parts.documentElement : (this.doc.parts.ownerDocument as Document).documentElement);
         const meiRes = () => { return 'http://www.music-encoding.org/ns/mei'; };
         const ref = this.doc.parts.evaluate("//*[@xml:id='" + partsId + "']", this.doc.parts, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         let result = this.doc.parts.evaluate("./preceding::mei:pb", ref, meiRes, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
@@ -139,7 +139,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   handleKeyPress(event: KeyboardEvent) {
     if (this.selectedId !== null) {
       let doc: XMLDocument;
-      const resolver = this.doc.parts.createNSResolver(this.doc.parts.ownerDocument == null ? this.doc.parts.documentElement : this.doc.parts.ownerDocument.documentElement);
+      const resolver = this.doc.parts.createNSResolver(this.doc.parts.ownerDocument == null ? this.doc.parts.documentElement : (this.doc.parts.ownerDocument as Document).documentElement!);
       const result = this.doc.parts.evaluate("//*[@xml:id='" + this.selectedId + "']", this.doc.parts, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
       if (!result.singleNodeValue) return;
       let target = result.singleNodeValue as Element;

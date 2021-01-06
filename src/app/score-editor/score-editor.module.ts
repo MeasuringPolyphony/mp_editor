@@ -10,13 +10,15 @@ import { ScoreEditorComponent } from './score-editor.component';
 import { ScoreDivaViewComponent } from './score-diva-view/score-diva-view.component';
 import { ScoreVerovioViewComponent } from './score-verovio-view/score-verovio-view.component';
 import { ScoreToolbarComponent } from './score-toolbar/score-toolbar.component';
+import { ScoreEditorHelpComponent } from './score-editor-help/score-editor-help.component';
 
 @NgModule({
   declarations: [
     ScoreDivaViewComponent,
     ScoreVerovioViewComponent,
     ScoreEditorComponent,
-    ScoreToolbarComponent
+    ScoreToolbarComponent,
+    ScoreEditorHelpComponent
   ],
   imports: [
     CommonModule,

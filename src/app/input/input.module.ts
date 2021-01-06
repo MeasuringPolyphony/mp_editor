@@ -14,6 +14,8 @@ import { StaffSelectComponent } from './staff-select/staff-select.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { InputComponent } from './input.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GeneralHelpComponent } from './general-help/general-help.component';
+import { MusicInputHelpComponent } from './music-input-help/music-input-help.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     StaffSelectComponent,
     ToolbarComponent,
     InputComponent,
+    GeneralHelpComponent,
+    MusicInputHelpComponent,
   ],
   imports: [
     CommonModule,

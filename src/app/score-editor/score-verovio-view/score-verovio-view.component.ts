@@ -309,6 +309,11 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       }
       if (output !== null) {
         ScoringUp.PostProcessing.replace_ligatures_by_brackets(output);
+        ScoringUp.PostProcessing.refine_score(
+          output,
+          this.stateService.scoreOptions.modernClefs,
+          this.stateService.scoreOptions.barlines
+        );
         // ScoringUp.PostProcessing.remove_num_and_numbase(output);
       }
     }
@@ -348,11 +353,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     return corrTarget;
   }
 
-  onBarChange() {
-    console.debug(this.stateService.scoreOptions.barlines);
-  }
-
-  onClefChange() {
-    console.debug(this.stateService.scoreOptions.modernClefs);
+  onRefinementChange() {
+    this.doc.score = this.runScoringUp(this.doc.parts);
   }
 }

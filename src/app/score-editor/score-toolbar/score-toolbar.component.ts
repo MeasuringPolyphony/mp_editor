@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { refineScore } from 'scoring-up';
 import * as vkbeautify from 'vkbeautify';
 
 import { StateService } from '../../state-service.service';
@@ -31,13 +30,8 @@ export class ScoreToolbarComponent implements OnInit {
   saveClick(event: MouseEvent) {
     if (this.currentDoc !== null) {
       const target = event.target as HTMLAnchorElement;
-      const refinedDoc = refineScore(
-        this.currentDoc.cloneNode(true),
-        this.stateService.scoreOptions.modernClefs,
-        this.stateService.scoreOptions.barlines
-      );
       const serializer = new XMLSerializer();
-      const temp = serializer.serializeToString(refinedDoc);
+      const temp = serializer.serializeToString(this.currentDoc);
       const content = vkbeautify.xml(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
         "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
@@ -80,12 +74,7 @@ export class ScoreToolbarComponent implements OnInit {
   copyToClipboard() {
     if (this.currentDoc !== null) {
       const serializer = new XMLSerializer();
-      const refinedDoc = refineScore(
-        this.currentDoc.cloneNode(true),
-        this.stateService.scoreOptions.modernClefs,
-        this.stateService.scoreOptions.barlines
-      );
-      const content = vkbeautify.xml(serializer.serializeToString(refinedDoc));
+      const content = vkbeautify.xml(serializer.serializeToString(this.currentDoc));
       navigator.clipboard.writeText(content).then(() => { alert("MEI Score Copied!"); }).catch(err => { console.debug(err); alert("Copy failed :("); });
     }
   }

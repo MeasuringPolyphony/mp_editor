@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { MEIDocument } from './utils/mei';
 
 export enum Barline {
-  NONE="none",
-  SEMIBREVE="semibreve",
-  BREVE="breve",
-  LONG="long",
+  NONE="None",
+  SEMIBREVE="semibrevis",
+  BREVE="brevis",
+  LONG="longa",
 }
 
 @Injectable({

@@ -2,14 +2,14 @@
 <div>
     <label>
         Bar by:&nbsp;
-        <select (change)="onBarChange()" [(ngModel)]="stateService.scoreOptions.barlines">
-          <option *ngFor="let opt of barOptions" value="{{opt[1]}}">{{opt[1]}}</option>
+        <select (change)="onRefinementChange()" [(ngModel)]="stateService.scoreOptions.barlines">
+          <option *ngFor="let opt of barOptions" value="{{opt[1]}}">{{opt[0].toLowerCase()}}</option>
         </select>
     </label>
     &nbsp;
     <label>
         Switch to Modern Clefs
-        <input (change)="onClefChange()" type="checkbox" [(ngModel)]="stateService.scoreOptions.modernClefs">
+        <input (change)="onRefinementChange()" type="checkbox" [(ngModel)]="stateService.scoreOptions.modernClefs">
     </label>
 </div>
 <div>

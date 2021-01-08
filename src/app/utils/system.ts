@@ -9,6 +9,7 @@ export class Pb {
   canvasIRI: IRI;
   index: number;
   id: string;
+  codedVal: string;
 
   constructor(iri: IRI, id?: string) {
     this.canvasIRI = iri;

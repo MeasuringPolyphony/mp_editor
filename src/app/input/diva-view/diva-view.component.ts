@@ -151,6 +151,7 @@ export class DivaViewComponent implements OnInit, OnDestroy {
         // Make new Pb
         pb = new Pb(this.diva.getCurrentCanvas());
         pb.index = pageIndex;
+        pb.codedVal = this.diva.settings.manifest.pages[pageIndex].l;
       }
 
       // Create sb

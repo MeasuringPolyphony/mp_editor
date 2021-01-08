@@ -166,13 +166,14 @@ export class MEIDocument {
           let graphic = surface.querySelector("graphic");
           activePb = new Pb(graphic.getAttribute("target"), child.getAttribute("xml:id"));
 
-          // Determine Pb index
+          // Determine Pb index and codedVal
           function setIndex(pb: Pb) {
             fetch(iiif).then(response => {
               return response.json();
             }).then((manifest: object) => {
               let canvases: object[] = manifest["sequences"][0]["canvases"];
               pb.index = canvases.findIndex(canvas => { return canvas["@id"] === pb.canvasIRI; });
+              pb.codedVal = canvases[pb.index]["label"];
             });
           }
 
@@ -350,8 +351,9 @@ export class MEIDocument {
     manifestation.appendChild(itemList);
     let item = this._meiDoc.createElementNS(NAMESPACE, "item");
     itemList.appendChild(item);
-    item.setAttribute("target", this.metadata.sourceIRI);
     item.setAttribute("targettype", "IIIF");
+    item.setAttribute("target", this.metadata.sourceIRI);
+    item.setAttribute("codedVal", this.parts[0]?.systems[0]?.pb.codedVal);
 
     return meiHead;
   }

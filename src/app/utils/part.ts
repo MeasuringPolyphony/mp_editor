@@ -55,6 +55,7 @@ export class Part {
 
     let staffDef = scoreDef.querySelector('staffDef');
     staffDef.setAttribute('label', this.voice.toString());
+    staffDef.setAttribute("xml:id", this.voice.toString());
     let mensur = this.parent._meiDoc.createElementNS(NAMESPACE, 'mensur');
     staffDef.appendChild(mensur);
     if (this.modus !== Mensuration.NA) {

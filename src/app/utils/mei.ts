@@ -265,27 +265,66 @@ export class MEIDocument {
     let title = this._meiDoc.createElementNS(NAMESPACE, "title");
     title.textContent = this.metadata.shortTitle;
     titleStmt.appendChild(title);
+    let composer1 = this._meiDoc.createElementNS(NAMESPACE, "composer");
+    composer1.textContent = this.metadata.composerName;
+    titleStmt.appendChild(composer1);
+
+    // Note funders (Brandeis + NEH)
+    let funder1 = this._meiDoc.createElementNS(NAMESPACE, "funder");
+    let funder2 = this._meiDoc.createElementNS(NAMESPACE, "funder");
+    let corpName1 = this._meiDoc.createElementNS(NAMESPACE, "corpName");
+    let corpName2 = this._meiDoc.createElementNS(NAMESPACE, "corpName");
+    corpName1.textContent = "Brandeis University";
+    funder1.appendChild(corpName1);
+    corpName2.textContent = "National Endowment for the Humanities (NEH)";
+    funder2.appendChild(corpName2);
+    titleStmt.appendChild(funder1);
+    titleStmt.appendChild(funder2);
+
     let respStmt = this._meiDoc.createElementNS(NAMESPACE, "respStmt");
     titleStmt.appendChild(respStmt);
+    // Add Karen as project director
+    let director = this._meiDoc.createElementNS(NAMESPACE, "persName");
+    director.textContent = "Karen Desmond";
+    director.setAttribute("role", "project director");
+    director.setAttribute("auth", "VIAF");
+    director.setAttribute("auth.uri", "http://viaf.org/viaf/");
+    director.setAttribute("codeval", "316001213");
+    respStmt.appendChild(director);
     for (let contributor of this.metadata.contributors) {
       let persName = this._meiDoc.createElementNS(NAMESPACE, "persName");
       persName.textContent = contributor.name;
       persName.setAttribute("role", contributor.type);
       respStmt.appendChild(persName);
     }
+    // TODO include pubStmt and seriesStmt with hard coded metadata
     let pubStmt = this._meiDoc.createElementNS(NAMESPACE, "pubStmt");
     fileDesc.appendChild(pubStmt);
+
+    // TODO include encodingDesc
 
     let workList = this._meiDoc.createElementNS(NAMESPACE, "workList");
     meiHead.appendChild(workList);
     let work = this._meiDoc.createElementNS(NAMESPACE, "work");
     workList.appendChild(work);
+    let identifierPlaceholder = this._meiDoc.createElementNS(NAMESPACE, "identifier");
+    identifierPlaceholder.setAttribute("type", "catalogue_number");
+    work.appendChild(identifierPlaceholder);
     let title2 = this._meiDoc.createElementNS(NAMESPACE, "title");
     title2.textContent = this.metadata.shortTitle;
     work.appendChild(title2);
     let composer = this._meiDoc.createElementNS(NAMESPACE, "composer");
     composer.textContent = this.metadata.composerName;
     work.appendChild(composer);
+    let incip = this._meiDoc.createElementNS(NAMESPACE, "incip");
+    work.appendChild(incip);
+    for (let part of this.parts) {
+        let incipText = this._meiDoc.createElementNS(NAMESPACE, "incipText");
+        incipText.setAttribute("label", part.voice.toString());
+        incipText.setAttribute("corresp", "#" + part.voice.toString());
+        incipText.innerHTML = "<lg><l>[" + part.voice.toString().toUpperCase() + "]</l></lg>";
+        incip.appendChild(incipText);
+    }
     let classification = this._meiDoc.createElementNS(NAMESPACE, "classification");
     work.appendChild(classification);
     let termList = this._meiDoc.createElementNS(NAMESPACE, "termList");

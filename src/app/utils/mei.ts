@@ -290,7 +290,7 @@ export class MEIDocument {
     director.setAttribute("role", "project director");
     director.setAttribute("auth", "VIAF");
     director.setAttribute("auth.uri", "http://viaf.org/viaf/");
-    director.setAttribute("codeval", "316001213");
+    director.setAttribute("codedval", "316001213");
     respStmt.appendChild(director);
     for (let contributor of this.metadata.contributors) {
       let persName = this._meiDoc.createElementNS(NAMESPACE, "persName");
@@ -406,7 +406,7 @@ export class MEIDocument {
     itemList.appendChild(item);
     item.setAttribute("targettype", "IIIF");
     item.setAttribute("target", this.metadata.sourceIRI);
-    item.setAttribute("codedVal", this.parts[0]?.systems[0]?.pb.codedVal);
+    item.setAttribute("codedval", this.parts[0]?.systems[0]?.pb.codedVal);
 
     return meiHead;
   }

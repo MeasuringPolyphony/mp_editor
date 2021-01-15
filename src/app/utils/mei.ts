@@ -345,11 +345,11 @@ export class MEIDocument {
     let appName = this._meiDoc.createElementNS(NAMESPACE, "name");
     appName.textContent = "Measuring Polyphony Editor";
     application.appendChild(appName);
-    let editorialDesc = this._meiDoc.createElementNS(NAMESPACE, "editorialDesc");
-    encodingDesc.appendChild(editorialDesc);
-    let editorialDescP = this._meiDoc.createElementNS(NAMESPACE, "p");
-    editorialDescP.textContent = "This MEI encoding in mensural notation was made using the Measuring Polyphony Editor, transcribed from IIIF images of the original manuscript source one staff at a time, entering the pitches and rhythms for each stave using a combination of number and letter keystrokes. The Measuring Polyphony Editor generates two MEI files from this user input: an MEI parts file that captures each voice part entered, and an MEI score file that scores up the voice parts, which is viewable here.";
-    editorialDesc.appendChild(editorialDescP);
+    let editorialDecl = this._meiDoc.createElementNS(NAMESPACE, "editorialDecl");
+    encodingDesc.appendChild(editorialDecl);
+    let editorialDeclP = this._meiDoc.createElementNS(NAMESPACE, "p");
+    editorialDeclP.textContent = "This MEI encoding in mensural notation was made using the Measuring Polyphony Editor, transcribed from IIIF images of the original manuscript source one staff at a time, entering the pitches and rhythms for each stave using a combination of number and letter keystrokes. The Measuring Polyphony Editor generates two MEI files from this user input: an MEI parts file that captures each voice part entered, and an MEI score file that scores up the voice parts, which is viewable here.";
+    editorialDecl.appendChild(editorialDeclP);
     let projectDesc = this._meiDoc.createElementNS(NAMESPACE, "projectDesc");
     encodingDesc.appendChild(projectDesc);
     let projectDescP = this._meiDoc.createElementNS(NAMESPACE, "p");

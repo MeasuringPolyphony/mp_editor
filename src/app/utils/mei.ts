@@ -394,6 +394,17 @@ export class MEIDocument {
     manifestList.appendChild(manifestation);
     let titleStmt2 = this._meiDoc.createElementNS(NAMESPACE, "titleStmt");
     manifestation.appendChild(titleStmt2);
+    let notesStmt = this._meiDoc.createElementNS(NAMESPACE, "notesStmt");
+    manifestation.appendChild(notesStmt);
+    let annot1 = this._meiDoc.createElementNS(NAMESPACE, "annot");
+    annot1.textContent = "Primary manuscript source for this encoding.";
+    notesStmt.appendChild(annot1);
+    let annot2 = this._meiDoc.createElementNS(NAMESPACE, "annot");
+    annot2.setAttribute("label", "original_clefs");
+    notesStmt.appendChild(annot2);
+    let annot3 = this._meiDoc.createElementNS(NAMESPACE, "annot");
+    annot3.setAttribute("label", "commentary");
+    notesStmt.appendChild(annot3);
     let title3 = this._meiDoc.createElementNS(NAMESPACE, "title");
     titleStmt2.appendChild(title3);
     let identifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");

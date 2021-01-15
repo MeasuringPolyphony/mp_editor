@@ -298,9 +298,42 @@ export class MEIDocument {
       persName.setAttribute("role", contributor.type);
       respStmt.appendChild(persName);
     }
-    // TODO include pubStmt and seriesStmt with hard coded metadata
+
     let pubStmt = this._meiDoc.createElementNS(NAMESPACE, "pubStmt");
     fileDesc.appendChild(pubStmt);
+    let publisher = this._meiDoc.createElementNS(NAMESPACE, "publisher");
+    pubStmt.appendChild(publisher);
+    let pubPersName = this._meiDoc.createElementNS(NAMESPACE, "persName");
+    pubPersName.textContent = "Karen Desmond";
+    publisher.appendChild(pubPersName);
+    let pubCorpName = this._meiDoc.createElementNS(NAMESPACE, "corpName");
+    pubCorpName.textContent = "Brandeis University";
+    publisher.appendChild(pubCorpName);
+    let pubDate = this._meiDoc.createElementNS(NAMESPACE, "date");
+    pubDate.textContent = (new Date()).getFullYear().toString();
+    pubStmt.appendChild(pubDate);
+    let availability = this._meiDoc.createElementNS(NAMESPACE, "availability");
+    pubStmt.appendChild(availability);
+    let useRestrict = this._meiDoc.createElementNS(NAMESPACE, "useRestrict");
+    useRestrict.textContent = "Available for purposes of academic research and teaching only.";
+    availability.appendChild(useRestrict);
+
+    let seriesStmt = this._meiDoc.createElementNS(NAMESPACE, "seriesStmt");
+    fileDesc.appendChild(seriesStmt);
+    let seriesTitle = this._meiDoc.createElementNS(NAMESPACE, "title");
+    seriesTitle.textContent = "Measuring Polyphony: Digital Encodings of Late Medieval Music";
+    seriesStmt.appendChild(seriesTitle);
+    let seriesEditor = this._meiDoc.createElementNS(NAMESPACE, "editor");
+    seriesStmt.appendChild(seriesEditor);
+    let editorPersName = this._meiDoc.createElementNS(NAMESPACE, "persName");
+    editorPersName.textContent = "Karen Desmond";
+    seriesEditor.appendChild(editorPersName);
+    let seriesIdentifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
+    seriesStmt.appendChild(seriesIdentifier);
+    let identifierRef = this._meiDoc.createElementNS(NAMESPACE, "ref");
+    identifierRef.setAttribute("targettype", "home_page");
+    identifierRef.setAttribute("target", "http://www.measuringpolyphony.org/");
+    seriesIdentifier.appendChild(identifierRef);
 
     // TODO include encodingDesc
 

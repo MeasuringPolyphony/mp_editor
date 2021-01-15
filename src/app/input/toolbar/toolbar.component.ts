@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { System } from '../../utils/system';
 import { InputService } from '../input.service';
 
+import { v4 as uuid } from 'uuid';
 import * as vkbeautify from 'vkbeautify';
 
 @Component({
@@ -41,6 +42,7 @@ export class ToolbarComponent implements OnInit {
     );
     const blob = new Blob([content], {type: 'application/xml'});
     target.setAttribute('href', window.URL.createObjectURL(blob));
+    target.setAttribute('download', 'Parts_' + uuid() + '.xml');
   }
 
   saveHumdrumClick(evt: MouseEvent) {

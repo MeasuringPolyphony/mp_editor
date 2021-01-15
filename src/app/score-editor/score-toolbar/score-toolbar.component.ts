@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { v4 as uuid } from 'uuid';
 import * as vkbeautify from 'vkbeautify';
 
 import { StateService } from '../../state-service.service';
@@ -42,6 +43,7 @@ export class ScoreToolbarComponent implements OnInit {
       );
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
+      target.setAttribute('download', 'Score_' + (this.stateService.editorialMode ? 'Editorial' : 'Original') + '_' + uuid() + '.xml');
     }
   }
 
@@ -60,6 +62,7 @@ export class ScoreToolbarComponent implements OnInit {
       );
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
+      target.setAttribute('download', 'Parts_' + (this.stateService.editorialMode ? 'Editorial' : 'Original') + '_' + uuid() + '.xml');
     }
   }
 

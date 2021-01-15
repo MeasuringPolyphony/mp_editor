@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 
 import { v4 as uuid } from 'uuid';
+import * as vkbeautify from 'vkbeautify';
 
 import * as ScoringUp from 'scoring-up';
 import { vrvToolkit } from '../../utils/verovio';
@@ -50,8 +51,28 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   }
 
   setEditorialMode() {
-    if (confirm("Edits in editorial mode reflect cases where there is a problem with the manuscript. You cannot exit editorial mode. Do you want to continue?")) {
+    if (confirm("Edits in editorial mode reflect cases where there is a problem with the manuscript. You cannot exit editorial mode and changes from editorial mode cannot be loaded back into the editor from MEI. A parts file that can be loaded will be downloaded before entering. Do you want to continue?")) {
       this.stateService.editorialMode = true;
+      // Download parts file
+      if (this.stateService.mei != null) {
+        const serializer = new XMLSerializer();
+        const temp = serializer.serializeToString(this.doc.parts);
+        const content = vkbeautify.xml(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+          "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+          " type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"?>\n" +
+          "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+          " type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"?>\n" +
+          temp
+        );
+        const blob = new Blob([content], {type: 'application/xml'});
+        const target = document.createElement("a");
+        target.setAttribute("href", URL.createObjectURL(blob));
+        target.setAttribute("download", "Parts_Original_" + uuid() + ".xml");
+        document.body.appendChild(target);
+        target.click();
+        target.remove();
+      }
     }
   }
 

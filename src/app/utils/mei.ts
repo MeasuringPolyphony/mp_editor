@@ -335,7 +335,27 @@ export class MEIDocument {
     identifierRef.setAttribute("target", "http://www.measuringpolyphony.org/");
     seriesIdentifier.appendChild(identifierRef);
 
-    // TODO include encodingDesc
+    let encodingDesc = this._meiDoc.createElementNS(NAMESPACE, "encodingDesc");
+    meiHead.appendChild(encodingDesc);
+    let appInfo = this._meiDoc.createElementNS(NAMESPACE, "appInfo");
+    encodingDesc.appendChild(appInfo);
+    let application = this._meiDoc.createElementNS(NAMESPACE, "application");
+    application.setAttribute("xml:id", "MPEditor");
+    appInfo.appendChild(application);
+    let appName = this._meiDoc.createElementNS(NAMESPACE, "name");
+    appName.textContent = "Measuring Polyphony Editor";
+    application.appendChild(appName);
+    let editorialDesc = this._meiDoc.createElementNS(NAMESPACE, "editorialDesc");
+    encodingDesc.appendChild(editorialDesc);
+    let editorialDescP = this._meiDoc.createElementNS(NAMESPACE, "p");
+    editorialDescP.textContent = "This MEI encoding in mensural notation was made using the Measuring Polyphony Editor, transcribed from IIIF images of the original manuscript source one staff at a time, entering the pitches and rhythms for each stave using a combination of number and letter keystrokes. The Measuring Polyphony Editor generates two MEI files from this user input: an MEI parts file that captures each voice part entered, and an MEI score file that scores up the voice parts, which is viewable here.";
+    editorialDesc.appendChild(editorialDescP);
+    let projectDesc = this._meiDoc.createElementNS(NAMESPACE, "projectDesc");
+    encodingDesc.appendChild(projectDesc);
+    let projectDescP = this._meiDoc.createElementNS(NAMESPACE, "p");
+    projectDescP.textContent = "The Measuring Polyphony Editor, funded by a 2019-2020 NEH Digital Humanities Grant, is a prototype tool that allows a variety of modern readers (students and experts, musicologists, music theorists, those interested in the history of music notation, counterpoint, medieval palaeography and/or manuscript studies) to access and contribute transcriptions of music directly linked to digital images of the medieval manuscripts, and to learn about the original notation. This tool will offer new possibilities for the analysis and interpretation of late medieval music. In a broader humanities context, the project investigates how modeling the meanings of notational signs can lead to new understandings of the interaction between the sign and the signified, and of the relationship between notational style and changes in musical style across time and place.";
+    projectDesc.appendChild(projectDescP);
+
 
     let workList = this._meiDoc.createElementNS(NAMESPACE, "workList");
     meiHead.appendChild(workList);

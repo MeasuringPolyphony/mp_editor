@@ -28,7 +28,8 @@ export class ScoreToolbarComponent implements OnInit {
     });
   }
 
-  saveClick(event: MouseEvent) {
+  saveFiles(event: MouseEvent) {
+    // Handle Score
     if (this.currentDoc !== null) {
       const target = event.target as HTMLAnchorElement;
       const serializer = new XMLSerializer();
@@ -45,11 +46,9 @@ export class ScoreToolbarComponent implements OnInit {
       target.setAttribute('href', URL.createObjectURL(blob));
       target.setAttribute('download', 'Score_' + (this.stateService.editorialMode ? 'Editorial' : 'Original') + '_' + uuid() + '.xml');
     }
-  }
-
-  savePartsClick(event: MouseEvent) {
-    if (this.stateService.mei != null) {
-      const target = event.target as HTMLAnchorElement;
+    // Handle Parts
+    if (this.stateService.mei != null && !this.stateService.editorialMode) {
+      const target = document.createElement("a");
       const serializer = new XMLSerializer();
       const temp = serializer.serializeToString(this.doc.parts);
       const content = vkbeautify.xml(
@@ -63,6 +62,7 @@ export class ScoreToolbarComponent implements OnInit {
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
       target.setAttribute('download', 'Parts_' + (this.stateService.editorialMode ? 'Editorial' : 'Original') + '_' + uuid() + '.xml');
+      target.click();
     }
   }
 

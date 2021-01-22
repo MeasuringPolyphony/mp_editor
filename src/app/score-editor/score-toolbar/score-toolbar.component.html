@@ -3,13 +3,8 @@
         Return to Music Input
     </button>
     <button mat-stroked-button>
-        <a download type="application/xml" (click)="saveClick($event)">
-            Download MEI Score
-        </a>
-    </button>
-    <button mat-stroked-button>
-        <a download type="application/xml" (click)="savePartsClick($event)">
-            Download MEI Parts
+        <a download type="application/xml" (click)="saveFiles($event)">
+            Download MEI File(s)
         </a>
     </button>
     <button mat-stroked-button (click)="copyToClipboard()">

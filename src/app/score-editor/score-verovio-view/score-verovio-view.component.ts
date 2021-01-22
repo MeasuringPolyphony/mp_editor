@@ -68,7 +68,8 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
         const blob = new Blob([content], {type: 'application/xml'});
         const target = document.createElement("a");
         target.setAttribute("href", URL.createObjectURL(blob));
-        target.setAttribute("download", "Parts_Original_" + uuid() + ".xml");
+        const name = (this.stateService.mei.metadata.shortTitle.length > 0 ? this.stateService.mei.metadata.shortTitle : "Untitled") + "_MENSURAL_PARTS.xml";
+        target.setAttribute("download", name);
         document.body.appendChild(target);
         target.click();
         target.remove();

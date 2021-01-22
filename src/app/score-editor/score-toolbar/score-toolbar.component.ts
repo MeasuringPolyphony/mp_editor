@@ -44,7 +44,8 @@ export class ScoreToolbarComponent implements OnInit {
       );
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
-      target.setAttribute('download', 'Score_' + (this.stateService.editorialMode ? 'Editorial' : 'Original') + '_' + uuid() + '.xml');
+      const name = (this.stateService.mei.metadata.shortTitle.length > 0 ? this.stateService.mei.metadata.shortTitle : "Untitled") + "_MENSURAL_SCORE.xml";
+      target.setAttribute('download', name);
     }
     // Handle Parts
     if (this.stateService.mei != null && !this.stateService.editorialMode) {
@@ -61,7 +62,8 @@ export class ScoreToolbarComponent implements OnInit {
       );
       const blob = new Blob([content], {type: 'application/xml'});
       target.setAttribute('href', URL.createObjectURL(blob));
-      target.setAttribute('download', 'Parts_' + (this.stateService.editorialMode ? 'Editorial' : 'Original') + '_' + uuid() + '.xml');
+      const name = (this.stateService.mei.metadata.shortTitle.length > 0 ? this.stateService.mei.metadata.shortTitle : "Untitled") + "_MENSURAL_PARTS.xml";
+      target.setAttribute('download', name);
       target.click();
     }
   }

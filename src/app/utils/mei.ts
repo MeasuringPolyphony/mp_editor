@@ -33,9 +33,9 @@ export class MEIDocument {
     let doc = source.documentElement;
     let iiif = "";
     try {
-      let manifestations = doc.querySelectorAll("manifestation");
+      let manifestations = doc.querySelectorAll("sourceDesc");
       for (let s of Array.from(manifestations)) {
-        for (let item of Array.from(s.querySelectorAll("item"))) {
+        for (let item of Array.from(s.querySelectorAll("source"))) {
           if (iiif !== "") break;
           if (item.getAttribute("targettype") === "IIIF") {
             iiif = item.getAttribute("target");
@@ -52,7 +52,7 @@ export class MEIDocument {
     for (let s of Array.from(doc.querySelectorAll("manifestation"))) {
       if (s.querySelector("titleStmt")) {
         let identifier = s.querySelector("titleStmt")?.querySelector("title")?.querySelector("identifier");
-        if (identifier) {
+        if (identifier && identifier.getAttribute("label") === "siglum") {
           mei.metadata.siglum = identifier.textContent;
           break;
         }

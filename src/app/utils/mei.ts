@@ -335,6 +335,25 @@ export class MEIDocument {
     identifierRef.setAttribute("target", "http://www.measuringpolyphony.org/");
     seriesIdentifier.appendChild(identifierRef);
 
+    let fileDescNotes = this._meiDoc.createElementNS(NAMESPACE, "notesStmt");
+    let annot2 = this._meiDoc.createElementNS(NAMESPACE, "annot");
+    annot2.setAttribute("label", "original_clefs");
+    fileDescNotes.appendChild(annot2);
+    let annot3 = this._meiDoc.createElementNS(NAMESPACE, "annot");
+    annot3.setAttribute("label", "commentary");
+    fileDescNotes.appendChild(annot3);
+    fileDesc.appendChild(fileDescNotes);
+
+    let sourceDesc = this._meiDoc.createElementNS(NAMESPACE, "sourceDesc");
+    fileDesc.appendChild(sourceDesc);
+    let source = this._meiDoc.createElementNS(NAMESPACE, "source");
+    sourceDesc.appendChild(source);
+    source.setAttribute("targettype", "IIIF");
+    source.setAttribute("target", this.metadata.sourceIRI);
+    let locus = this._meiDoc.createElementNS(NAMESPACE, "locus");
+    source.appendChild(locus);
+    locus.textContent = this.parts[0]?.systems[0]?.pb.codedVal;
+
     let encodingDesc = this._meiDoc.createElementNS(NAMESPACE, "encodingDesc");
     meiHead.appendChild(encodingDesc);
     let appInfo = this._meiDoc.createElementNS(NAMESPACE, "appInfo");
@@ -399,15 +418,10 @@ export class MEIDocument {
     let annot1 = this._meiDoc.createElementNS(NAMESPACE, "annot");
     annot1.textContent = "Primary manuscript source for this encoding.";
     notesStmt.appendChild(annot1);
-    let annot2 = this._meiDoc.createElementNS(NAMESPACE, "annot");
-    annot2.setAttribute("label", "original_clefs");
-    notesStmt.appendChild(annot2);
-    let annot3 = this._meiDoc.createElementNS(NAMESPACE, "annot");
-    annot3.setAttribute("label", "commentary");
-    notesStmt.appendChild(annot3);
     let title3 = this._meiDoc.createElementNS(NAMESPACE, "title");
     titleStmt2.appendChild(title3);
     let identifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
+    identifier.setAttribute("label", "siglum");
     identifier.textContent = this.metadata.siglum;
     title3.appendChild(identifier);
 

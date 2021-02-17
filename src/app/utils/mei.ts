@@ -410,6 +410,7 @@ export class MEIDocument {
     let manifestList = this._meiDoc.createElementNS(NAMESPACE, "manifestationList");
     meiHead.appendChild(manifestList);
     let manifestation = this._meiDoc.createElementNS(NAMESPACE, "manifestation");
+    manifestation.setAttribute("singleton", "true");
     manifestList.appendChild(manifestation);
     let titleStmt2 = this._meiDoc.createElementNS(NAMESPACE, "titleStmt");
     manifestation.appendChild(titleStmt2);
@@ -424,14 +425,20 @@ export class MEIDocument {
     identifier.setAttribute("label", "siglum");
     identifier.textContent = this.metadata.siglum;
     title3.appendChild(identifier);
-
-    let itemList = this._meiDoc.createElementNS(NAMESPACE, "itemList");
-    manifestation.appendChild(itemList);
-    let item = this._meiDoc.createElementNS(NAMESPACE, "item");
-    itemList.appendChild(item);
-    item.setAttribute("targettype", "IIIF");
-    item.setAttribute("target", this.metadata.sourceIRI);
-    item.setAttribute("codedval", this.parts[0]?.systems[0]?.pb.codedVal);
+    let physLoc = this._meiDoc.createElementNS(NAMESPACE, "physLoc");
+    manifestation.appendChild(physLoc);
+    let physRepository = this._meiDoc.createElementNS(NAMESPACE, "repository");
+    physLoc.appendChild(physRepository);
+    let libName = this._meiDoc.createElementNS(NAMESPACE, "corpName");
+    libName.textContent = "[LIBRARY NAME]";
+    physRepository.appendChild(libName);
+    let shelfIdentifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
+    physRepository.appendChild(shelfIdentifier);
+    shelfIdentifier.textContent = "[SHELFMARK]";
+    let iiifPtr = this._meiDoc.createElementNS(NAMESPACE, "ptr");
+    physRepository.appendChild(iiifPtr);
+    iiifPtr.setAttribute("targettype", "IIIF");
+    iiifPtr.setAttribute("target", this.metadata.sourceIRI);
 
     return meiHead;
   }

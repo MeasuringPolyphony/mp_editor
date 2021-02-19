@@ -414,11 +414,6 @@ export class MEIDocument {
     manifestList.appendChild(manifestation);
     let titleStmt2 = this._meiDoc.createElementNS(NAMESPACE, "titleStmt");
     manifestation.appendChild(titleStmt2);
-    let notesStmt = this._meiDoc.createElementNS(NAMESPACE, "notesStmt");
-    manifestation.appendChild(notesStmt);
-    let annot1 = this._meiDoc.createElementNS(NAMESPACE, "annot");
-    annot1.textContent = "Primary manuscript source for this encoding.";
-    notesStmt.appendChild(annot1);
     let title3 = this._meiDoc.createElementNS(NAMESPACE, "title");
     titleStmt2.appendChild(title3);
     let identifier = this._meiDoc.createElementNS(NAMESPACE, "identifier");
@@ -439,6 +434,11 @@ export class MEIDocument {
     physRepository.appendChild(iiifPtr);
     iiifPtr.setAttribute("targettype", "IIIF");
     iiifPtr.setAttribute("target", this.metadata.sourceIRI);
+    let notesStmt = this._meiDoc.createElementNS(NAMESPACE, "notesStmt");
+    manifestation.appendChild(notesStmt);
+    let annot1 = this._meiDoc.createElementNS(NAMESPACE, "annot");
+    annot1.textContent = "Primary manuscript source for this encoding.";
+    notesStmt.appendChild(annot1);
 
     return meiHead;
   }

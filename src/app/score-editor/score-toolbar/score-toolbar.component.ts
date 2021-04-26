@@ -79,7 +79,14 @@ export class ScoreToolbarComponent implements OnInit {
   copyToClipboard() {
     if (this.currentDoc !== null) {
       const serializer = new XMLSerializer();
-      const content = vkbeautify.xml(serializer.serializeToString(this.currentDoc));
+      const content = vkbeautify.xml(
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+        "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+        " type=\"application/xml\" schematypens=\"http://relaxng.org/ns/structure/1.0\"?>\n" +
+        "<?xml-model href=\"https://music-encoding.org/schema/dev/mei-Mensural.rng\"" +
+        " type=\"application/xml\" schematypens=\"http://purl.oclc.org/dsdl/schematron\"?>\n" +
+        serializer.serializeToString(this.currentDoc)
+      );
       navigator.clipboard.writeText(content).then(() => { alert("MEI Score Copied!"); }).catch(err => { console.debug(err); alert("Copy failed :("); });
     }
   }

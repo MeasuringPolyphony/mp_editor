@@ -239,6 +239,7 @@ export class MEIDocument {
     this._meiDoc = document.implementation.createDocument(NAMESPACE, 'mei', null);
     let mei = this._meiDoc.documentElement;
     mei.setAttribute('meiversion', '5.0.0-dev');
+    mei.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
     // Create Header
     let head = this._generateHeader();
     // TODO Add more to header

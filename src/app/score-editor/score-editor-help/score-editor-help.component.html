@@ -1,8 +1,7 @@
 <h2>About the Score Editor</h2>
 <p>
-    The <strong>Score Editor</strong> is for making simple edits
-    in order to align the parts in your score. In other words,
-    if you made mistakes in your initial entry of the music on
+    The <strong>Score Editor</strong> is for making simple edits,
+    including to pitches and rhythms. If you made mistakes in your initial entry of the music on
     the previous screen (the <strong>Music Input</strong> screen)
     the score will not align properly and you may need to make adjustments
     to the note durations or add dots in order to get the proper alignment.
@@ -17,7 +16,7 @@
     the accuracy of the edits you make.
 </p>
 <p>
-    You can make simple edits directly as follows.
+    You can make simple edits in the <strong>Score Editor</strong> directly as follows.
     By clicking on a pitch to highlight it you can edit:
 </p>
 <ul>
@@ -42,17 +41,39 @@
         To clear accidentals, press <code>N</code>.
     </li>
     <li><strong>Cloning and Deleting Elements: </strong>
-        Elements can be cloned by selecting one and pressing the
+        While it is not possible to insert extensive new musical elements
+      at the score editing phase, a simple way of adding elements can be to 
+      utilize the clone feature. Elements can be cloned by selecting one and pressing the
         <code>I</code> key. Elements can be deleted by pressing
         <code>Backspace</code>.
     </li>
+  <li>
+      <strong>Text:</strong> Unfortunately at this time you cannot make any edits to the 
+    underlaid text (lyrics) in the <strong>Score Editor</strong>. Texts can be edited at the <strong>Music Input</strong> screen.
+  </li>
 </ul>
 <p>
     You can also use the "Return to Music Input" button to return
-    to the <strong>Music Input</strong> screen
-    and make more significant edits, but any changes made
+    to the <strong>Music Input</strong> screen at any time to
+    make more significant edits, such as deleting entire staves
+  and re-entering thme, but any changes made
     in the <strong>Score Editor</strong> thus far will be lost!
 </p>
+<mat-divider></mat-divider>
+<h2>Changing the Appearance of your Scores</h2>
+<ul>  
+<li>
+  If you would like to add barlines, you can select to add barlines 
+  following the semibreve (prolation), breve (tempus), or long (modus) mensuration. 
+  If you intend to create to work with your MEI score file in Verovio 
+  to display on a web page or to save as a PDF file, it is recommended 
+  that you add barlines so that automatic system breaks can be generated.
+  </li>
+  <li>
+    You may also prefer to “Switch to Modern Clefs” by checking this box.
+  </li>
+</ul>
+
 <mat-divider></mat-divider>
 <h2>Moving to Editorial Mode</h2>
 <p>
@@ -78,6 +99,7 @@
         &lt;/sic&gt;
     &lt;/choice&gt;
 </code></pre>
+
 <mat-divider></mat-divider>
 <p>
     The purpose of the <strong>Score Editor</strong> is to do enough editing to
@@ -88,4 +110,26 @@
     as <a href="https://verovio.humdrum.org" target="_blank">
     the Verovio Humdrum Viewer</a> or <a href="https://editor.verovio.org"
     target="_blank">the Verovio Editor</a>.
+</p>
+<p>
+  Once you click the button “Continue in Editorial Mode” you will receive a 
+  prompt that the parts-based MEI file will be downloaded locally.
+</p>
+<mat-divider></mat-divider>
+<h2>Saving your Work</h2>
+<p>
+  To download MEI files of your work, click the “Download MEI File(s)” button. 
+  This action will download two files:
+</p>
+<ul>  
+<li>
+  a part-based MEI file that you can use to open in the MP Editor at a later stage to continue your music input or editing work
+  </li>
+  <li>
+   A score-based MEI that you can display on a web page or to save as a PDF file, using Verovio for example.
+  </li>
+</ul>
+<p>
+  You can also simply copy the coding of the score-based MEI from the 
+  score editor screen by clicking the “Copy MEI Score to Clipboard” button.
 </p>

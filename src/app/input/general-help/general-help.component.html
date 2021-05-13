@@ -15,33 +15,52 @@
 <mat-divider></mat-divider>
 <h2>Metadata Entry</h2>
 <p>
-    First enter basic metadata about the document.
-    This includes the name of the work, composer name,
-    and your name. If there is something you don't know,
-    you can leave it as is and continue.
+  First enter basic metadata about the composition. This includes a short title 
+  for the work, composer name (if known), the notation type (selected from a drop-down menu), 
+  the siglum for the manuscript (if known). You should add your name by clicking 
+  the “Add Contributor” button and selecting the appropriate role 
+  (Encoder, Proofreader, Editor) along with your name. You may add multiple 
+  contributors, and you may also add your name additional times 
+  with alternate roles (for example, if you are both encoder and editor).
+    <br>
+  If there is something you don't know, you can leave it as is and continue.
     <br>
     Metadata must be entered before staff input can fully begin.
 </p>
 <mat-divider></mat-divider>
-<h2>Staff Entry</h2>
+<h2>Adding Staves</h2>
 <ul>
     <li>
-        To select an area for a new staff, hold <code>Shift</code>
-        and click-and-drag an area for the staff on the Diva.js
+        To select an area for a new staff, hold <code>SHIFT</code>
+        and click-and-drag an area surrounding the staff on the Diva.js
         viewer. When you release the mouse, a staff is added.
     </li>
     <li>
-        To select a staff, click on the bounding box on the viewer.
+      To select a staff, click on the bounding box on the viewer: it will
+      appear as a solid box when you select it, and unselected staves will have 
+      bounding boxes with dashed lines.
+    </li>
+    <li>
+        Bounding boxes can overlap.
     </li>
     <li>
         When a staff is selected, the voice it belongs to and
         mensuration of that voice can be set on the right.
-        This information is saved automatically.
+        This information is saved automatically. It is important to 
+        set the correct voice part and mensuration for each stave 
+        so that the scoring-up process (next step) will work correctly. 
+        However, you can go back at any point and fix/update either 
+      the voice part or mensuration for any stave.
     </li>
     <li>
-        To add musical components, begin typing. This will add
+        You can select as many staves as you need in this process, 
+        for all the voice parts. You can do this in any order, and 
+        can continue to the music input phase, and then later add more staves.
+    </li> 
+    <li>
+        To add musical components (pitches, rhythm, text), begin typing. This will add
         musical elements to the staff below the voice and mensuration
-        options. Information on this is available under the "Music
+        options. Information on this process is available under the "Music
         Input Help" Tab.
     </li>
     <li>
@@ -50,9 +69,15 @@
     </li>
 </ul>
 <mat-divider></mat-divider>
-<h2>Saving Work for Later</h2>
+<h2>Saving Work on the Music Input Screen</h2>
 <p>
-    Work can be saved for later using the <em>Download MEI File</em>
-    button. This will download the file as a parts-based MEI file that
-    can be reloaded at a later point from the home screen.
+  The “Download MEI File” downloads any music input at this 
+  stage of the process as a parts-based MEI file. You can
+  reload this parts-based MEI file at a later point from the 
+  home screen of the MP Editor (using the File chooser under the 
+  heading “Load an .mei file"). 
+</p>
+<p>
+  You also have the option of downloading the Humdrum data by clicking 
+  on the button “Download System Humdrum.”
 </p>

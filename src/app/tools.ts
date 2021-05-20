@@ -24,4 +24,4 @@ export const gallicaIIIFRegexp = new RegExp("https?:\/\/gallica\.bnf\.fr\/iiif\/
 export const ecodicesRegexp = new RegExp("https?:\/\/www\.e-codices\.unifr\.ch\/[a-z]{2}\/list\/one\/([a-z]+)\/([-a-zA-Z0-9]+)");
 //https://www.e-codices.unifr.ch/metadata/iiif/bbb-0218/manifest.json
 export const ecodicesIIIFRegexp = new RegExp("https?:\/\/www\.e-codices\.unifr\.ch\/metadata\/iiif\/([-a-zA-Z0-9]+)\/manifest\.json");
-export const genericIIIFRegexp = new RegExp("https?:\/\/.*\/manifest(\.json)?");
+export const genericIIIFRegexp = new RegExp("https?:\/\/.*");

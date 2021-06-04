@@ -374,7 +374,9 @@ export class NoteItem implements MusicItem {
     if (element.hasAttribute("pname")) {
       note.m_pname = PitchClass[element.getAttribute("pname").toUpperCase()];
     }
-
+    if (element.hasAttribute("colored")) {
+      note.m_color = ColorStatus.COLORED;
+    }
     // Check children for a plica
     if (element.querySelector("plica")) {
       const plica = element.querySelector("plica");

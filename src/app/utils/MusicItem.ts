@@ -334,10 +334,6 @@ export class NoteItem implements MusicItem {
       output += "~";
     }
 
-    if (this.m_color === ColorStatus.COLORED) {
-      output += "~";
-    }
-
     if (this.m_accid !== Accid.NONE) {
       output += this.m_accid.toString();
     }

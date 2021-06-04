@@ -441,6 +441,14 @@ export class StaffSelectComponent implements OnInit {
       musicList.runNotationCallback();
       return;
     }
+    if (item.m_type === 'rest') {
+      let rest = item as RestItem;
+      if (key === '~') {
+        rest.m_color = rest.m_color === ColorStatus.COLORED ? ColorStatus.NONE : ColorStatus.COLORED;
+      }
+      musicList.runNotationCallback();
+      return;
+    }
   }
 
   handleKeySigPress(event: KeyboardEvent) {

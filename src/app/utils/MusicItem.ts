@@ -137,9 +137,11 @@ export class RestItem implements MusicItem {
   m_id: string;
   m_rhythm: number;
   m_dot: boolean;
+  m_color: ColorStatus;
 
   constructor (rhythm?: number) {
     this.m_dot = false;
+    this.m_color = ColorStatus.NONE;
     if (rhythm !== undefined) {
       this.m_rhythm = rhythm;
     } else {
@@ -162,6 +164,9 @@ export class RestItem implements MusicItem {
     if (this.m_dot) {
       output += ":";
     }
+    if (this.m_color === ColorStatus.COLORED) {
+      output += "~";
+    }
     output += "r";
     if (options["mark"]) {
       output += "@";
@@ -177,6 +182,9 @@ export class RestItem implements MusicItem {
     }
     if (element.hasAttribute("dur")) {
       rest.m_rhythm = parseRhythm(element.getAttribute("dur"));
+    }
+    if (element.hasAttribute("colored")) {
+      rest.m_color = ColorStatus.COLORED;
     }
     return rest;
   }

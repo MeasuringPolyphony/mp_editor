@@ -215,7 +215,7 @@ export class MensurItem implements MusicItem {
       mensur.m_id = element.getAttribute("xml:id");
     }
     if (element.hasAttribute("modusminor")) {
-      mensur.m_modus = element.getAttribute("modus") as Mensuration;
+      mensur.m_modus = element.getAttribute("modusminor") as Mensuration;
     }
     if (element.hasAttribute("tempus")) {
       mensur.m_tempus = element.getAttribute("tempus") as Mensuration;

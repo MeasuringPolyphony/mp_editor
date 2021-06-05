@@ -421,6 +421,11 @@ export class NoteItem implements MusicItem {
         note.m_lig = LigStatus.START;
       } else if (element === element.parentElement.lastElementChild) {
         note.m_lig = LigStatus.END;
+      } else if (element.nextElementSibling &&
+         element.nextElementSibling.tagName == "dot" &&
+         element.nextElementSibling === element.parentElement.lastElementChild) {
+          note.m_dot = true;
+          note.m_lig = LigStatus.END;
       }
     }
 

@@ -222,10 +222,12 @@ export class MensurItem implements MusicItem {
   }
 
   static parseXML(element: Element): MensurItem {
+    let sign = "";
     let mensur = new MensurItem();
     if (element.hasAttribute("xml:id")) {
       mensur.m_id = element.getAttribute("xml:id");
     }
+    // Parse logical-domain mensuration attributes
     if (element.hasAttribute("modusminor")) {
       mensur.m_modus = element.getAttribute("modusminor") as Mensuration;
     }
@@ -235,6 +237,25 @@ export class MensurItem implements MusicItem {
     if (element.hasAttribute("prolatio")) {
       mensur.m_prolatio = element.getAttribute("prolatio") as Mensuration;
     }
+    // Parse visual-domain mensuration attributes
+    if (element.hasAttribute("sign")) {
+      sign = sign + element.getAttribute("sign");
+    }
+    if (element.hasAttribute("slash") && element.getAttribute("slash") === "1") {
+      sign = sign + "|";
+    }
+    if (element.hasAttribute("dot") && element.getAttribute("dot") === "true") {
+      sign = sign + ".";
+    }
+    if (element.hasAttribute("num")) {
+      sign = sign + element.getAttribute("num");
+    }
+    if (element.hasAttribute("numbase")) {
+      sign = sign + "/" + element.getAttribute("numbase");
+    }
+    console.log(sign);
+    mensur.m_sign = sign as Sign;
+
     return mensur;
   }
 }

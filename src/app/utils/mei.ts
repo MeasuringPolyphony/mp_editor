@@ -1,7 +1,7 @@
 import { Part, Tenor } from './part';
 import { System, Pb, Sb } from './system';
 import { ClefItem, NoteItem, RestItem, MensurItem } from './MusicItem';
-import { Voice, Mensuration, Contributor } from './definitions';
+import { Voice, Mensuration, Contributor, Sign } from './definitions';
 import { IRI } from './definitions';
 
 
@@ -119,12 +119,14 @@ export class MEIDocument {
       partObj.voice = Voice[voice];
       mei.parts.push(partObj);
       let mensur = staffDef.querySelector("mensur");
+      let sign = "";
 
       if (staffDef.hasAttribute("notationsubtype")) {
         mei.notationSubtype = staffDef.getAttribute("notationsubtype");
       } else {
         mei.notationSubtype = "";
       }
+      // Parsing logical-domain mensuration attributes for the part
       if (staffDef.hasAttribute("modusminor")) {
         partObj.modus = staffDef.getAttribute("modusminor") as Mensuration;
       } else if (mensur && mensur.hasAttribute("modusminor")) {
@@ -140,6 +142,34 @@ export class MEIDocument {
       } else if (mensur && mensur.hasAttribute("prolatio")) {
         partObj.prolatio = mensur.getAttribute("prolatio") as Mensuration;
       }
+      // Parse visual-domain mensuration attributes for the part
+      if (staffDef.hasAttribute("sign")) {
+        sign = sign + staffDef.getAttribute("sign");
+      } else if (mensur && mensur.hasAttribute("sign")) {
+        sign = sign + mensur.getAttribute("sign");
+      }
+      if (staffDef.hasAttribute("slash") && staffDef.getAttribute("slash") === "1") {
+        sign = sign + "|";
+      } else if (mensur && mensur.hasAttribute("slash") && mensur.getAttribute("slash") === "1") {
+        sign = sign + "|";
+      }
+      if (staffDef.hasAttribute("dot") && staffDef.getAttribute("dot") === "true") {
+        sign = sign + ".";
+      } else if (mensur && mensur.hasAttribute("dot") && mensur.getAttribute("dot") === "true") {
+        sign = sign + ".";
+      }
+      if (staffDef.hasAttribute("num")) {
+        sign = sign + staffDef.getAttribute("num");
+      } else if (mensur && mensur.hasAttribute("num")) {
+        sign = sign + mensur.getAttribute("num");
+      }
+      if (staffDef.hasAttribute("numbase")) {
+        sign = sign + "/" + staffDef.getAttribute("numbase");
+      } else if (mensur && mensur.hasAttribute("numbase")) {
+        sign = sign + "/" + mensur.getAttribute("numbase");
+      }
+      console.log(sign);
+      partObj.sign = sign as Sign;
 
       const layer = part.querySelector("layer");
       // Handle repeating tenor if tenor

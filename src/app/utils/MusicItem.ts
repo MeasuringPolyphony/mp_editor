@@ -253,7 +253,6 @@ export class MensurItem implements MusicItem {
     if (element.hasAttribute("numbase")) {
       sign = sign + "/" + element.getAttribute("numbase");
     }
-    console.log(sign);
     mensur.m_sign = sign as Sign;
 
     return mensur;

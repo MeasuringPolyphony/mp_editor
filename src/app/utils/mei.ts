@@ -168,7 +168,6 @@ export class MEIDocument {
       } else if (mensur && mensur.hasAttribute("numbase")) {
         sign = sign + "/" + mensur.getAttribute("numbase");
       }
-      console.log(sign);
       partObj.sign = sign as Sign;
 
       const layer = part.querySelector("layer");

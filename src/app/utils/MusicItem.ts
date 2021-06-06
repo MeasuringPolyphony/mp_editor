@@ -212,7 +212,6 @@ export class MensurItem implements MusicItem {
 
   getHumdrumLine(): string {
     // Encoding mensuration sign (visual domain)
-    console.log("THE SIGN IS: " + this.m_sign + "\nTHE MENSUR IS: " + this.m_modus + " " + this.m_tempus + " " +  this.m_prolatio);
     this.mensurvis = "*met(" + this.m_sign + ")";
 
     // Encoding mensuration semantics (logical domain)

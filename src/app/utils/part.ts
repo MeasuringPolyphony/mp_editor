@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-import { Voice, Mensuration, IRI, voiceToOrdinal } from './definitions';
+import { Voice, Mensuration, Sign, IRI, voiceToOrdinal } from './definitions';
 import { System } from './system';
 import { MEIDocument, NAMESPACE } from './mei';
 
@@ -9,6 +9,7 @@ export class Part {
   modus: Mensuration;
   tempus: Mensuration;
   prolatio: Mensuration;
+  sign: Sign;
   id: string;
   parent: MEIDocument;
 
@@ -26,6 +27,7 @@ export class Part {
     this.modus = Mensuration.NA;
     this.tempus = Mensuration.NA;
     this.prolatio = Mensuration.NA;
+    this.sign = Sign.NA;
   }
 
   static compare(a: Part, b: Part): number {
@@ -58,6 +60,7 @@ export class Part {
     staffDef.setAttribute("xml:id", this.voice.toString());
     let mensur = this.parent._meiDoc.createElementNS(NAMESPACE, 'mensur');
     staffDef.appendChild(mensur);
+    // Processing of mensuration semantic values
     if (this.modus !== Mensuration.NA) {
       mensur.setAttribute('modusminor', this.modus.toString());
     }
@@ -66,6 +69,54 @@ export class Part {
     }
     if (this.prolatio !== Mensuration.NA) {
       mensur.setAttribute('prolatio', this.prolatio.toString());
+    }
+    // Procesing of mensuration signs
+    if (this.sign === Sign.signc) {
+      mensur.setAttribute('sign', 'C');
+    } else if (this.sign === Sign.signc2) {
+      mensur.setAttribute('sign', 'C');
+      mensur.setAttribute('num', '2');
+    } else if (this.sign === Sign.signc3) {
+      mensur.setAttribute('sign', 'C');
+      mensur.setAttribute('num', '3');
+    } else if (this.sign === Sign.signc32) {
+      mensur.setAttribute('sign', 'C');
+      mensur.setAttribute('num', '3');
+      mensur.setAttribute('numbase', '2');
+    } else if (this.sign === Sign.signccut) {
+      mensur.setAttribute('sign', 'C');
+      mensur.setAttribute('slash', '1');
+    } else if (this.sign === Sign.signccut32) {
+      mensur.setAttribute('sign', 'C');
+      mensur.setAttribute('slash', '1');
+      mensur.setAttribute('num', '3');
+      mensur.setAttribute('numbase', '2');
+    } else if (this.sign === Sign.signcdot) {
+      mensur.setAttribute('sign', 'C');
+      mensur.setAttribute('dot', 'true');
+    } else if (this.sign === Sign.signo) {
+      mensur.setAttribute('sign', 'O');
+    } else if (this.sign === Sign.signo2) {
+      mensur.setAttribute('sign', 'O');
+      mensur.setAttribute('num', '2');
+    } else if (this.sign === Sign.signo3) {
+      mensur.setAttribute('sign', 'O');
+      mensur.setAttribute('num', '3');
+    } else if (this.sign === Sign.signo32) {
+      mensur.setAttribute('sign', 'O');
+      mensur.setAttribute('num', '3');
+      mensur.setAttribute('numbase', '2');
+    } else if (this.sign === Sign.signocut) {
+      mensur.setAttribute('sign', 'O');
+      mensur.setAttribute('slash', '1');
+    } else if (this.sign === Sign.signocut32) {
+      mensur.setAttribute('sign', 'O');
+      mensur.setAttribute('slash', '1');
+      mensur.setAttribute('num', '3');
+      mensur.setAttribute('numbase', '2');
+    } else if (this.sign === Sign.signodot) {
+      mensur.setAttribute('sign', 'O');
+      mensur.setAttribute('dot', 'true');
     }
 
     let section = this.parent._meiDoc.createElementNS(NAMESPACE, 'section');

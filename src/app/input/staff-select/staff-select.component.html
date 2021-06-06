@@ -45,7 +45,7 @@
     </div>
     <fieldset>
         <label class="music-subentry">Mensuration Sign:&nbsp;
-            <select [(ngModel)]="selected.sign" formControlName="mensursign">
+            <select [(ngModel)]="selected.parent.sign" formControlName="mensursign">
                 <option *ngFor="let sign of signs" value="{{sign[1]}}">{{sign[1]}}</option>
             </select>
         </label>

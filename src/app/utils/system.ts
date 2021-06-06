@@ -153,12 +153,6 @@ export class System {
             if (mensur.m_prolatio !== Mensuration.NA) {
               element.setAttribute("prolatio", mensur.m_prolatio.toString());
             }
-            if (element.hasAttribute('sign')) {
-              element.removeAttribute('sign');
-            }
-            if (element.hasAttribute('dot')) {
-              element.removeAttribute('dot');
-            }
           }
           else if (match[0].m_type === 'note') {
             let note = match[0] as NoteItem;

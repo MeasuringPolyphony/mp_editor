@@ -213,39 +213,10 @@ export class MensurItem implements MusicItem {
   getHumdrumLine(): string {
     // Encoding mensuration sign (visual domain)
     console.log("THE SIGN IS: " + this.m_sign + "\nTHE MENSUR IS: " + this.m_modus + " " + this.m_tempus + " " +  this.m_prolatio);
-    if (this.m_sign === Sign.signc) {this.mensurvis = "*met(C)";}
-    else if (this.m_sign === Sign.signcdot) {this.mensurvis = "*met(C.)";}
-    else if (this.m_sign === Sign.signo) {this.mensurvis = "*met(O)";}
-    else if (this.m_sign === Sign.signodot) {this.mensurvis = "*met(O.)";}
-    else if (this.m_sign === Sign.signc2) {this.mensurvis = "*met(C2)";}
-    else if (this.m_sign === Sign.signc3) {this.mensurvis = "*met(C3)";}
-    else if (this.m_sign === Sign.signo2) {this.mensurvis = "*met(O2)";}
-    else if (this.m_sign === Sign.signo3) {this.mensurvis = "*met(O3)";}
-    else if (this.m_sign === Sign.signccut) {this.mensurvis = "*met(C|)";}
-    else if (this.m_sign === Sign.signc32) {this.mensurvis = "*met(C3/2)";}
-    else if (this.m_sign === Sign.signccut32) {this.mensurvis = "*met(C|3/2)";}
-    else if (this.m_sign === Sign.signocut) {this.mensurvis = "*met(O|)";}
-    else if (this.m_sign === Sign.signo32) {this.mensurvis = "*met(O3/2)";}
-    else if (this.m_sign === Sign.signocut32) {this.mensurvis = "*met(O|3/2)";}
-    else {this.mensurvis = "*met()";}
+    this.mensurvis = "*met(" + this.m_sign + ")";
 
     // Encoding mensuration semantics (logical domain)
-    if (this.m_modus === Mensuration.Two && this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Two)
-      this.mensurlog = "0222";
-    else if (this.m_modus === Mensuration.Two && this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Three)
-      this.mensurlog = "0223";
-    else if (this.m_modus === Mensuration.Two && this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Two)
-      this.mensurlog = "0232";
-    else if (this.m_modus === Mensuration.Two && this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Three)
-      this.mensurlog = "0233";
-    else if (this.m_modus === Mensuration.Three && this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Two)
-      this.mensurlog = "0322";
-    else if (this.m_modus === Mensuration.Three && this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Three)
-      this.mensurlog = "0323";
-    else if (this.m_modus === Mensuration.Three && this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Two)
-      this.mensurlog = "0332";
-    else if (this.m_modus === Mensuration.Three && this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Three)
-      this.mensurlog = "0333";
+    this.mensurlog = "0" + this.m_modus + "" + this.m_tempus + "" + this.m_prolatio;
 
     return (this.mensurvis + "_" + this.mensurlog + "\t*");
   }

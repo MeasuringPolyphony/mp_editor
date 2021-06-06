@@ -77,7 +77,7 @@ export type Contributor = {
 export enum Mensuration {
   Three='3',
   Two='2',
-  NA='N/A'
+  NA='0'
 }
 
 // Values for mensuration signs

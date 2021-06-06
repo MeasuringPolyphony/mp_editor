@@ -4,7 +4,7 @@
  */
 
 import { v4 } from "uuid";
-import { Mensuration } from './definitions';
+import { Mensuration, Sign } from './definitions';
 
 function parseRhythm(rhythm: string): number {
   let val: number;
@@ -196,25 +196,58 @@ export class MensurItem implements MusicItem {
   m_modus: Mensuration;
   m_tempus: Mensuration;
   m_prolatio: Mensuration;
+  m_sign: Sign;
   m_id: string;
+  mensurvis: string;
+  mensurlog: string;
 
   constructor() {
     this.m_modus = Mensuration.NA;
-    this.m_tempus = Mensuration.NA;
-    this.m_prolatio = Mensuration.NA;
+    this.m_tempus = Mensuration.Two;
+    this.m_prolatio = Mensuration.Two;
+    this.m_sign = Sign.signc;
+    this.mensurvis = "*met(C)";
+    this.mensurlog = "0022";
   }
 
   getHumdrumLine(): string {
-    if (this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Two)
-      return "*met(C)\t*";
-    if (this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Two)
-      return "*met(O)\t*";
-    if (this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Three)
-      return "*met(C.)\t*";
-    if (this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Three)
-      return "*met(O.)\t*";
-    else
-      return "*met(C)\t*";
+    // Encoding mensuration sign (visual domain)
+    console.log("THE SIGN IS: " + this.m_sign + "\nTHE MENSUR IS: " + this.m_modus + " " + this.m_tempus + " " +  this.m_prolatio);
+    if (this.m_sign === Sign.signc) {this.mensurvis = "*met(C)";}
+    else if (this.m_sign === Sign.signcdot) {this.mensurvis = "*met(C.)";}
+    else if (this.m_sign === Sign.signo) {this.mensurvis = "*met(O)";}
+    else if (this.m_sign === Sign.signodot) {this.mensurvis = "*met(O.)";}
+    else if (this.m_sign === Sign.signc2) {this.mensurvis = "*met(C2)";}
+    else if (this.m_sign === Sign.signc3) {this.mensurvis = "*met(C3)";}
+    else if (this.m_sign === Sign.signo2) {this.mensurvis = "*met(O2)";}
+    else if (this.m_sign === Sign.signo3) {this.mensurvis = "*met(O3)";}
+    else if (this.m_sign === Sign.signccut) {this.mensurvis = "*met(C|)";}
+    else if (this.m_sign === Sign.signc32) {this.mensurvis = "*met(C3/2)";}
+    else if (this.m_sign === Sign.signccut32) {this.mensurvis = "*met(C|3/2)";}
+    else if (this.m_sign === Sign.signocut) {this.mensurvis = "*met(O|)";}
+    else if (this.m_sign === Sign.signo32) {this.mensurvis = "*met(O3/2)";}
+    else if (this.m_sign === Sign.signocut32) {this.mensurvis = "*met(O|3/2)";}
+    else {this.mensurvis = "*met()";}
+
+    // Encoding mensuration semantics (logical domain)
+    if (this.m_modus === Mensuration.Two && this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Two)
+      this.mensurlog = "0222";
+    else if (this.m_modus === Mensuration.Two && this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Three)
+      this.mensurlog = "0223";
+    else if (this.m_modus === Mensuration.Two && this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Two)
+      this.mensurlog = "0232";
+    else if (this.m_modus === Mensuration.Two && this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Three)
+      this.mensurlog = "0233";
+    else if (this.m_modus === Mensuration.Three && this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Two)
+      this.mensurlog = "0322";
+    else if (this.m_modus === Mensuration.Three && this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Three)
+      this.mensurlog = "0323";
+    else if (this.m_modus === Mensuration.Three && this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Two)
+      this.mensurlog = "0332";
+    else if (this.m_modus === Mensuration.Three && this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Three)
+      this.mensurlog = "0333";
+
+    return (this.mensurvis + "_" + this.mensurlog + "\t*");
   }
 
   static parseXML(element: Element): MensurItem {

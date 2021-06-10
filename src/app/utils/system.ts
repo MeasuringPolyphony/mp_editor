@@ -110,6 +110,11 @@ export class System {
       this._recurseId(clef);
       elements.push(clef);
     }
+    let keySig = humdrumMei.querySelector('keySig');
+    if (keySig !== null) {
+      this._recurseId(keySig);
+      elements.push(keySig);
+    }
     let mensur = humdrumMei.querySelector('mensur');
     if (mensur !== null && mensur.closest('layer') === null) {
       this._recurseId(mensur);
@@ -132,7 +137,7 @@ export class System {
   _recurseId(element: Element) {
     let id = element.getAttribute('xml:id');
     let found = false;
-    if (id && /(note|rest|clef|pb|sb|mensur)/.test(element.tagName)) {
+    if (id && /(note|rest|clef|keySig|pb|sb|mensur)/.test(element.tagName)) {
       let regexpInfo = id.match(/L(\d+)[\w\d]+$/);
       if (regexpInfo) {
         let line = parseInt(regexpInfo[1]);

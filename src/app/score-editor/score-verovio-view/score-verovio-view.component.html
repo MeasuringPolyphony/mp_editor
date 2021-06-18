@@ -11,6 +11,11 @@
         Switch to Modern Clefs
         <input (change)="onRefinementChange()" type="checkbox" [(ngModel)]="stateService.scoreOptions.modernClefs">
     </label>
+    &nbsp;
+    <label>
+        Add Dissonance Labels
+        <input (change)="update(doc._score)" type="checkbox" [(ngModel)]="dissonanceLabels">
+    </label>
 </div>
 <div>
     <button color=primary class="primary-button" mat-stroked-button *ngIf="!stateService.editorialMode" (click)="setEditorialMode()">

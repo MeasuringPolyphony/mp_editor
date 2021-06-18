@@ -33,21 +33,54 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
   selectedId: string = null;
   corrToSicMap: Map<string, string> = new Map();
   barOptions = Object.entries(Barline);
+  dissonanceLabels = false;
 
   constructor(
     public stateService: StateService,
     private staffService: SelectedStaffService,
-    private doc: DocService
+    public doc: DocService
   ) {  }
 
   ngOnInit() {
     this.doc.parts = this.stateService.mei.generateXML();
     this.doc._scoreSubject.subscribe((doc) => {
-      this.container.nativeElement.innerHTML = '';
-      const svg = vrvToolkit.meiToSVG(doc, !this.stateService.editorialMode);
+      this.update(doc);
+    });
+  }
+
+  update(doc: XMLDocument) {
+     this.container.nativeElement.innerHTML = '';
+      let svg;
+      if (this.dissonanceLabels) {
+        try {
+          let humdrum = vrvToolkit.meiToHumdrum(doc);
+          humdrum = vrvToolkit.dissonanceInfo(humdrum);
+          const dissonantInfo = this.getDissonantInfo(humdrum);
+          console.debug(dissonantInfo);
+          const docCopy = doc.cloneNode(true) as XMLDocument;
+          const resolver = docCopy.createNSResolver(docCopy.ownerDocument == null ? docCopy.documentElement : (docCopy.ownerDocument as Document).documentElement);
+          const meiRes = () => { return 'http://www.music-encoding.org/ns/mei'; };
+          for (const [id, label] of Object.entries(dissonantInfo)) {
+            const ref = docCopy.evaluate("//*[@xml:id='" + id + "']", docCopy, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            console.debug(ref);
+            const verse = docCopy.createElementNS(NAMESPACE, "verse");
+            verse.setAttribute("n", "2");
+            verse.setAttribute("color", "lawngreen");
+            const syl = docCopy.createElementNS(NAMESPACE, "syl");
+            syl.textContent = label as string;
+            verse.appendChild(syl);
+            ref.appendChild(verse);
+          }
+          svg = vrvToolkit.meiToSVG(docCopy, !this.stateService.editorialMode);
+        } catch (e) {
+          console.error(e);
+          svg = vrvToolkit.meiToSVG(doc, !this.stateService.editorialMode);
+        }
+      } else {
+        svg = vrvToolkit.meiToSVG(doc, !this.stateService.editorialMode);
+      }
       this.container.nativeElement.appendChild(svg);
       this.setSelected();
-    });
   }
 
   setEditorialMode() {
@@ -295,7 +328,11 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
 
           default:
             return;
-        }
+        }  //////////////////////////////
+//
+// getDissonantInfo --
+//
+
       }
 
       event.preventDefault();
@@ -324,7 +361,11 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
             default:
               console.warn("Only 'Ars antiqua' and 'Ars nova' are supported!");
           }
-          break;
+          break;  //////////////////////////////
+//
+// getDissonantInfo --
+//
+
         default:
           console.warn("Only mensural notation types are supported.");
           break;
@@ -376,5 +417,100 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
 
   onRefinementChange() {
     this.doc.score = this.runScoringUp(this.doc.parts);
+  }
+
+  getDissonantInfo (humdrum) {
+    let lines = humdrum.split(/\n/);
+
+    // find the exclusive interpretation line
+    let exinterpindex = -1;
+    for (let i=0; i<lines.length; i++) {
+      if (lines[i].match(/^\*\*/)) {
+        exinterpindex = i;
+        break;
+      }
+    }
+    if (exinterpindex < 0) {
+      return {};
+    }
+
+    // identify columns for xmlids and cdata
+    let exinterps = lines[exinterpindex].split(/\t+/);
+    let xmlindex = -1;
+    let dissindex = -1;
+    let disses = [];
+    let diss2xml = {};
+    for (let i=0; i<exinterps.length; i++) {
+      if (exinterps[i] === "**xmlid") {
+        xmlindex = i;
+      } else if (exinterps[i] === "**cdata") {
+        if (xmlindex < 0) {
+          // strange problem
+          continue;
+        }
+        dissindex = i;
+        disses.push(dissindex);
+        diss2xml[dissindex] = xmlindex;
+        xmlindex = -1;
+        dissindex = -1;
+      }
+    }
+    let scount = exinterps.length;
+    let output = {};
+
+    let lastfields = [];
+
+    // extract dissonance labels from score
+    for (let i=exinterpindex + 1; i<lines.length; i++) {
+      if (lines[i].match(/^\*/)) {
+        continue;
+      }
+      if (lines[i].match(/^\!/)) {
+        continue;
+      }
+      if (lines[i].match(/^=/)) {
+        continue;
+      }
+      if (lines[i].match(/^\s*$/)) {
+        continue;
+      }
+      let fields = lines[i].split(/\t+/);
+      if (fields.length != scount) {
+        console.log("WARNING: no spine manipulations allowed");
+        continue;
+      }
+      if (fields[0] === "*-") {
+        break;
+      }
+      for (let j=0; j<disses.length; j++) {
+        let dissindex = disses[j];
+        if (fields[dissindex] === ".") {
+          continue;
+        }
+        let xmlindex = diss2xml[dissindex];
+        let dissvalue = fields[dissindex];
+        let xmlvalue = fields[xmlindex];
+        if (xmlvalue === ".") {
+          if (!dissvalue.match(/^s$/i)) {
+            console.log("ERROR: dissonance is not a sustain");
+            continue;
+          }
+          xmlvalue = lastfields[xmlindex];
+        }
+        if (typeof output[xmlvalue] === "undefined") {
+          output[xmlvalue] = dissvalue;
+        } else {
+          output[xmlvalue] = output[xmlvalue] + " " + dissvalue;
+        }
+      }
+
+      // store previous token info
+      for (let j=0; j<fields.length; j++) {
+        if (fields[j] !== ".") {
+          lastfields[j] = fields[j];
+        }
+      }
+    }
+    return output;
   }
 }

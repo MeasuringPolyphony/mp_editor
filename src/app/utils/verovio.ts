@@ -54,6 +54,17 @@ class VrvObj {
     }
     return parser.parseFromString(svgRaw, 'image/svg+xml').documentElement as unknown as SVGSVGElement;
   }
+
+  meiToHumdrum(meiDoc: XMLDocument): string {
+    const serializer = new XMLSerializer();
+    const serializedMei = serializer.serializeToString(meiDoc);
+    return this.vrvToolkit.convertMEIToHumdrum(serializedMei);
+  }
+
+  dissonanceInfo(humdrum: string): string {
+    humdrum += "\n!!!filter: mens2kern | dissonant\n";
+    return this.vrvToolkit.convertHumdrumToHumdrum(humdrum);
+  }
 }
 
 export const vrvToolkit = new VrvObj();

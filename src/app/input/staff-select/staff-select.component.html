@@ -17,7 +17,7 @@
             <input [(ngModel)]="selected.parent.modus" type="radio" id="modus-2" formControlName="modus" value="2"/>
             <label for="modus-2">2</label>
             &nbsp;
-            <input [(ngModel)]="selected.parent.modus" type="radio" id="modus-na" formControlName="modus" value="N/A"/>
+            <input [(ngModel)]="selected.parent.modus" type="radio" id="modus-na" formControlName="modus" value="0"/>
             <label for="modus-na">N/A</label>
         </fieldset>
         <fieldset>
@@ -28,7 +28,7 @@
             <input [(ngModel)]="selected.parent.tempus" type="radio" id="tempus-2" formControlName="tempus" value="2"/>
             <label for="tempus-2">2</label>
             &nbsp;
-            <input [(ngModel)]="selected.parent.tempus" type="radio" id="tempus-na" formControlName="tempus" value="N/A"/>
+            <input [(ngModel)]="selected.parent.tempus" type="radio" id="tempus-na" formControlName="tempus" value="0"/>
             <label for="tempus-na">N/A</label>
         </fieldset>
         <fieldset>
@@ -39,10 +39,17 @@
             <input [(ngModel)]="selected.parent.prolatio" type="radio" id="prolatio-2" formControlName="prolatio" value="2"/>
             <label for="prolatio-2">2</label>
             &nbsp;
-            <input [(ngModel)]="selected.parent.prolatio" type="radio" id="prolatio-na" formControlName="prolatio" value="N/A"/>
+            <input [(ngModel)]="selected.parent.prolatio" type="radio" id="prolatio-na" formControlName="prolatio" value="0"/>
             <label for="prolatio-na">N/A</label>
         </fieldset>
     </div>
+    <fieldset>
+        <label class="music-subentry">Mensuration Sign:&nbsp;
+            <select [(ngModel)]="selected.parent.sign" formControlName="mensursign">
+                <option *ngFor="let sign of signs" value="{{sign[1]}}">{{sign[1]}}</option>
+            </select>
+        </label>
+    </fieldset>
 </form>
 <div #example (click)="handleClick($event)"></div>
 <div id="mensur-change" *ngIf="selected && selected.contents.m_index >= 0 && selected.contents.m_list[selected.contents.m_index].m_type == 'mensur'">
@@ -55,7 +62,7 @@
         <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_modus" type="radio" id="modus2-2" formControlName="modus2" value="2"/>
         <label for="modus2-2">2</label>
         &nbsp;
-        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_modus" type="radio" id="modus2-na" formControlName="modus2" value="N/A"/>
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_modus" type="radio" id="modus2-na" formControlName="modus2" value="0"/>
         <label for="modus2-na">N/A</label>
     </fieldset>
     <fieldset>
@@ -66,7 +73,7 @@
         <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_tempus" type="radio" id="tempus2-2" formControlName="tempus2" value="2"/>
         <label for="tempus2-2">2</label>
         &nbsp;
-        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_tempus" type="radio" id="tempus2-na" formControlName="tempus2" value="N/A"/>
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_tempus" type="radio" id="tempus2-na" formControlName="tempus2" value="0"/>
         <label for="tempus2-na">N/A</label>
     </fieldset>
     <fieldset>
@@ -77,8 +84,15 @@
         <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_prolatio" type="radio" id="prolatio2-2" formControlName="prolatio2" value="2"/>
         <label for="prolatio2-2">2</label>
         &nbsp;
-        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_prolatio" type="radio" id="prolatio2-na" formControlName="prolatio2" value="N/A"/>
+        <input [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_prolatio" type="radio" id="prolatio2-na" formControlName="prolatio2" value="0"/>
         <label for="prolatio2-na">N/A</label>
+    </fieldset>
+    <fieldset>
+        <label class="music-subentry">Mensuration Sign:&nbsp;
+            <select [(ngModel)]="selected.contents.m_list[selected.contents.m_index].m_sign" formControlName="mensursign2">
+                <option *ngFor="let sign of signs" value="{{sign[1]}}">{{sign[1]}}</option>
+            </select>
+        </label>
     </fieldset>
     </form>
 </div>

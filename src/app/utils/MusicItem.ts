@@ -4,7 +4,7 @@
  */
 
 import { v4 } from "uuid";
-import { Mensuration } from './definitions';
+import { Mensuration, Sign } from './definitions';
 
 function parseRhythm(rhythm: string): number {
   let val: number;
@@ -137,9 +137,11 @@ export class RestItem implements MusicItem {
   m_id: string;
   m_rhythm: number;
   m_dot: boolean;
+  m_color: ColorStatus;
 
   constructor (rhythm?: number) {
     this.m_dot = false;
+    this.m_color = ColorStatus.NONE;
     if (rhythm !== undefined) {
       this.m_rhythm = rhythm;
     } else {
@@ -162,6 +164,9 @@ export class RestItem implements MusicItem {
     if (this.m_dot) {
       output += ":";
     }
+    if (this.m_color === ColorStatus.COLORED) {
+      output += "~";
+    }
     output += "r";
     if (options["mark"]) {
       output += "@";
@@ -178,6 +183,9 @@ export class RestItem implements MusicItem {
     if (element.hasAttribute("dur")) {
       rest.m_rhythm = parseRhythm(element.getAttribute("dur"));
     }
+    if (element.hasAttribute("colored")) {
+      rest.m_color = ColorStatus.COLORED;
+    }
     return rest;
   }
 }
@@ -188,34 +196,39 @@ export class MensurItem implements MusicItem {
   m_modus: Mensuration;
   m_tempus: Mensuration;
   m_prolatio: Mensuration;
+  m_sign: Sign;
   m_id: string;
+  mensurvis: string;
+  mensurlog: string;
 
   constructor() {
     this.m_modus = Mensuration.NA;
-    this.m_tempus = Mensuration.NA;
-    this.m_prolatio = Mensuration.NA;
+    this.m_tempus = Mensuration.Two;
+    this.m_prolatio = Mensuration.Two;
+    this.m_sign = Sign.signc;
+    this.mensurvis = "*met(C)";
+    this.mensurlog = "0022";
   }
 
   getHumdrumLine(): string {
-    if (this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Two)
-      return "*met(C)\t*";
-    if (this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Two)
-      return "*met(O)\t*";
-    if (this.m_tempus === Mensuration.Two && this.m_prolatio === Mensuration.Three)
-      return "*met(C.)\t*";
-    if (this.m_tempus === Mensuration.Three && this.m_prolatio === Mensuration.Three)
-      return "*met(O.)\t*";
-    else
-      return "*met(C)\t*";
+    // Encoding mensuration sign (visual domain)
+    this.mensurvis = "*met(" + this.m_sign + ")";
+
+    // Encoding mensuration semantics (logical domain)
+    this.mensurlog = "0" + this.m_modus + "" + this.m_tempus + "" + this.m_prolatio;
+
+    return (this.mensurvis + "_" + this.mensurlog + "\t*");
   }
 
   static parseXML(element: Element): MensurItem {
+    let sign = "";
     let mensur = new MensurItem();
     if (element.hasAttribute("xml:id")) {
       mensur.m_id = element.getAttribute("xml:id");
     }
+    // Parse logical-domain mensuration attributes
     if (element.hasAttribute("modusminor")) {
-      mensur.m_modus = element.getAttribute("modus") as Mensuration;
+      mensur.m_modus = element.getAttribute("modusminor") as Mensuration;
     }
     if (element.hasAttribute("tempus")) {
       mensur.m_tempus = element.getAttribute("tempus") as Mensuration;
@@ -223,6 +236,25 @@ export class MensurItem implements MusicItem {
     if (element.hasAttribute("prolatio")) {
       mensur.m_prolatio = element.getAttribute("prolatio") as Mensuration;
     }
+    // Parse visual-domain mensuration attributes
+    if (element.hasAttribute("sign")) {
+      sign = sign + element.getAttribute("sign");
+    }
+    if (element.hasAttribute("slash") && element.getAttribute("slash") === "1") {
+      sign = sign + "|";
+    }
+    if (element.hasAttribute("dot") && element.getAttribute("dot") === "true") {
+      sign = sign + ".";
+    }
+    if (element.hasAttribute("num")) {
+      sign = sign + element.getAttribute("num");
+    }
+    if (element.hasAttribute("numbase")) {
+      sign = sign + "/" + element.getAttribute("numbase");
+    }
+    if (sign === "") {sign = "N/A"}
+    mensur.m_sign = sign as Sign;
+
     return mensur;
   }
 }
@@ -334,10 +366,6 @@ export class NoteItem implements MusicItem {
       output += "~";
     }
 
-    if (this.m_color === ColorStatus.COLORED) {
-      output += "~";
-    }
-
     if (this.m_accid !== Accid.NONE) {
       output += this.m_accid.toString();
     }
@@ -378,7 +406,9 @@ export class NoteItem implements MusicItem {
     if (element.hasAttribute("pname")) {
       note.m_pname = PitchClass[element.getAttribute("pname").toUpperCase()];
     }
-
+    if (element.hasAttribute("colored")) {
+      note.m_color = ColorStatus.COLORED;
+    }
     // Check children for a plica
     if (element.querySelector("plica")) {
       const plica = element.querySelector("plica");
@@ -415,6 +445,11 @@ export class NoteItem implements MusicItem {
         note.m_lig = LigStatus.START;
       } else if (element === element.parentElement.lastElementChild) {
         note.m_lig = LigStatus.END;
+      } else if (element.nextElementSibling &&
+         element.nextElementSibling.tagName == "dot" &&
+         element.nextElementSibling === element.parentElement.lastElementChild) {
+          note.m_dot = true;
+          note.m_lig = LigStatus.END;
       }
     }
 

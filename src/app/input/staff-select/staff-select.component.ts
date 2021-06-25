@@ -6,7 +6,7 @@ import { StateService } from '../../state-service.service';
 import { InputService } from '../input.service';
 import { vrvToolkit } from '../../utils/verovio';
 import { Tenor } from '../../utils/part';
-import { Voice } from '../../utils/definitions';
+import { Voice, Sign } from '../../utils/definitions';
 
 @Component({
   selector: 'app-staff-select',
@@ -16,6 +16,7 @@ import { Voice } from '../../utils/definitions';
 export class StaffSelectComponent implements OnInit {
   @ViewChild('example') container: ElementRef;
   voices = Object.entries(Voice);
+  signs = Object.entries(Sign);
   keySigMode = false;
   pitchSig: string = null;
   accidSig: string = null;
@@ -61,12 +62,14 @@ export class StaffSelectComponent implements OnInit {
     modus: new FormControl(''),
     tempus: new FormControl(''),
     prolatio: new FormControl(''),
+    mensursign: new FormControl(''),
   });
 
   mensurForm = new FormGroup({
     modus2: new FormControl(''),
     tempus2: new FormControl(''),
     prolatio2: new FormControl(''),
+    mensursign2: new FormControl(''),
   });
 
   handleClick(event: MouseEvent) {
@@ -437,6 +440,14 @@ export class StaffSelectComponent implements OnInit {
       let note = item as NoteItem;
       if (key === '~') {
         note.m_color = note.m_color === ColorStatus.COLORED ? ColorStatus.NONE : ColorStatus.COLORED;
+      }
+      musicList.runNotationCallback();
+      return;
+    }
+    if (item.m_type === 'rest') {
+      let rest = item as RestItem;
+      if (key === '~') {
+        rest.m_color = rest.m_color === ColorStatus.COLORED ? ColorStatus.NONE : ColorStatus.COLORED;
       }
       musicList.runNotationCallback();
       return;

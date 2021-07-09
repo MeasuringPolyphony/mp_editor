@@ -232,6 +232,24 @@ export class MEIDocument {
           partObj.addSystem(activeSystem);
         } else if (child.tagName === "clef") {
           let clef = ClefItem.parseXML(child);
+          // Check for keysignature
+          if (child.nextElementSibling?.tagName === "keySig") {
+            const keySig = child.nextElementSibling.getAttribute("sig");
+            if (/([1-9]|1[0-2])(f|s)/.test(keySig)) {
+              const match = /([1-9]|1[0-2])(f|s)/.exec(keySig);
+              const sigCount = parseInt(match[1]);
+              const sigKind = match[2] as string;
+              const sharpList = ["f", "c", "g", "d", "a", "e", "b"];
+              const flatList = ["b", "e", "a", "d", "g", "c", "f"];
+              for (let i = 0; i < sigCount; i++) {
+                if (sigKind === "f") {
+                  clef.m_keySig.set(flatList[i], "-");
+                } else {
+                  clef.m_keySig.set(sharpList[i], "#");
+                }
+              }
+            }
+          }
           activeSystem.contents.m_list.push(clef);
         } else if (child.tagName === "rest") {
           let rest = RestItem.parseXML(child);

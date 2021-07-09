@@ -201,7 +201,9 @@ export class Part {
     staffDef.setAttribute('n', '1');
     staffDef.setAttribute('lines', '5');
     staffDef.setAttribute('notationtype', this.parent.notationType);
-    staffDef.setAttribute('notationsubtype', this.parent.notationSubtype);
+    if (this.parent.notationSubtype !== "") {
+      staffDef.setAttribute('notationsubtype', this.parent.notationSubtype);
+    }
     staffGrp.appendChild(staffDef);
     return scoreDef;
   }

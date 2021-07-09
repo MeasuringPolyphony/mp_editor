@@ -38,12 +38,20 @@ class VrvObj {
     return parser.parseFromString(data, 'image/svg+xml').documentElement as unknown as SVGSVGElement;
   }
 
-  meiToSVG(meiDoc: XMLDocument): SVGSVGElement {
+  meiToSVG(meiDoc: XMLDocument, ligatureAsBracket: boolean = false): SVGSVGElement {
     const serializer = new XMLSerializer();
     const serializedMei = serializer.serializeToString(meiDoc);
     const parser = new DOMParser();
+    if (ligatureAsBracket) {
+      const options = { ...this.options };
+      options["ligatureAsBracket"] = true;
+      this.vrvToolkit.setOptions(options);
+    }
     this.vrvToolkit.loadData(serializedMei);
     const svgRaw = this.vrvToolkit.renderToSVG(1);
+    if (ligatureAsBracket) {
+      this.vrvToolkit.setOptions(this.options);
+    }
     return parser.parseFromString(svgRaw, 'image/svg+xml').documentElement as unknown as SVGSVGElement;
   }
 }

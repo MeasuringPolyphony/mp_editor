@@ -44,7 +44,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
     this.doc.parts = this.stateService.mei.generateXML();
     this.doc._scoreSubject.subscribe((doc) => {
       this.container.nativeElement.innerHTML = '';
-      const svg = vrvToolkit.meiToSVG(doc);
+      const svg = vrvToolkit.meiToSVG(doc, !this.stateService.editorialMode);
       this.container.nativeElement.appendChild(svg);
       this.setSelected();
     });
@@ -330,7 +330,6 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
           break;
       }
       if (output !== null) {
-        ScoringUp.PostProcessing.replace_ligatures_by_brackets(output);
         ScoringUp.PostProcessing.refine_score(
           output,
           this.stateService.scoreOptions.modernClefs,

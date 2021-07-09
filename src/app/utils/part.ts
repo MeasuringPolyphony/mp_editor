@@ -57,7 +57,7 @@ export class Part {
 
     let staffDef = scoreDef.querySelector('staffDef');
     staffDef.setAttribute('label', this.voice.toString());
-    staffDef.setAttribute("xml:id", this.voice.toString());
+    staffDef.setAttribute("xml:id", this.voice.toString().replace(" ", ""));
     let mensur = this.parent._meiDoc.createElementNS(NAMESPACE, 'mensur');
     staffDef.appendChild(mensur);
     // Processing of mensuration semantic values
@@ -201,7 +201,7 @@ export class Part {
     staffDef.setAttribute('n', '1');
     staffDef.setAttribute('lines', '5');
     staffDef.setAttribute('notationtype', this.parent.notationType);
-    if (this.parent.notationSubtype !== "") {
+    if (this.parent.notationSubtype) {
       staffDef.setAttribute('notationsubtype', this.parent.notationSubtype);
     }
     staffGrp.appendChild(staffDef);

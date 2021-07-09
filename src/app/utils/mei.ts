@@ -443,7 +443,7 @@ export class MEIDocument {
     for (let part of this.parts) {
         let incipText = this._meiDoc.createElementNS(NAMESPACE, "incipText");
         incipText.setAttribute("label", part.voice.toString());
-        incipText.setAttribute("corresp", "#" + part.voice.toString());
+        incipText.setAttribute("corresp", "#" + part.voice.toString().replace(" ", ""));
         incipText.innerHTML = "<lg><l>[" + part.voice.toString().toUpperCase() + "]</l></lg>";
         incip.appendChild(incipText);
     }

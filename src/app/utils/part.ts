@@ -237,7 +237,7 @@ export class Tenor extends Part {
       // Get ending ligature if it's in one
       console.debug(part);
       console.debug(this.endingId);
-      let endItem = (this.endingId !== undefined) ? Array.from(part.querySelectorAll('note')).find(el => { return el.getAttribute('xml:id') === this.endingId; }) : part.querySelector('layer').lastElementChild;
+      let endItem = (this.endingId !== undefined) ? Array.from(part.querySelectorAll('note,rest')).find(el => { return el.getAttribute('xml:id') === this.endingId; }) : part.querySelector('layer').lastElementChild;
       let endingId = (endItem.closest('ligature') === null) ? endItem.getAttribute('xml:id') : endItem.closest('ligature').getAttribute('xml:id');
       dir.setAttribute('plist', '#' + firstNoteId + ' #' + endingId);
       dir.setAttribute('follows', '#' + endingId);

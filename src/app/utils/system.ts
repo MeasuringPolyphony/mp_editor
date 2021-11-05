@@ -64,17 +64,30 @@ export class System {
   static compare(a: System, b: System): number {
     let diff = a.pb.index - b.pb.index;
     if (diff !== 0) return diff;
-    // Check for intersection on y-axis. If so, left-most. Else highest.
+    // Check for intersection on y-axis no/minimal x-axis overlap. If so, left-most. Else highest.
     const aZone = a.sb.zone;
     const bZone = b.sb.zone;
-    const threshold = 0.25;
+    const yThreshold = 0.25;
+    const xThreshold = 0.10;
 
     const diff1 = aZone.lry - bZone.uly;
     const diff2 = bZone.lry - aZone.uly;
+    // Check for any y-overlap
     if (diff1 > 0 && diff2 > 0) {
-      const overlap = Math.min(diff1, diff2);
+      const yOverlap = Math.min(diff1, diff2);
       const avHeight = (aZone.lry - aZone.uly + bZone.lry - bZone.uly) / 2;
-      if (overlap > threshold * avHeight) {
+
+      const diff3 = aZone.lrx - bZone.ulx;
+      const diff4 = bZone.lrx - aZone.ulx;
+      const avWidth = (aZone.lrx - aZone.ulx + bZone.lrx - bZone.ulx) / 2;
+      let xOverlap: number;
+      // Determine amount of x-overlap
+      if (diff3 > 0 && diff4 > 0) {
+        xOverlap = Math.min(diff3, diff4);
+      } else {
+        xOverlap = 0;
+      }
+      if ((yOverlap > yThreshold * avHeight) && (xOverlap < xThreshold * avWidth)) {
         return aZone.ulx - bZone.ulx;
       }
     }

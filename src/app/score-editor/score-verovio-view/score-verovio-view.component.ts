@@ -340,48 +340,11 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
       }
 
       event.preventDefault();
-      // This is fairly hacky...
-      // Apologies to anyone looking at this in the future.
-      if (!this.stateService.editorialMode && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
-        // Don't rerun for pitch change...just modify the scored doc
-        const resolver = this.doc.score.createNSResolver(this.doc.score.ownerDocument == null ? this.doc.score.documentElement : (this.doc.score.ownerDocument as Document).documentElement!);
-        const result = this.doc.score.evaluate("//*[@xml:id='" + this.selectedId + "']", this.doc.score, resolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-        if (!result.singleNodeValue) return;
-        let target = result.singleNodeValue as Element;
-        if (event.key === 'ArrowUp') {
-            if (target.hasAttribute('pname')) {
-              let currentPname = target.getAttribute('pname');
-              let idx = pnameOrder.indexOf(currentPname);
-              if (idx + 1 < pnameOrder.length) {
-                target.setAttribute('pname', pnameOrder[idx + 1]);
-              }
-              else {
-                target.setAttribute('pname', pnameOrder[0]);
-                target.setAttribute('oct', (parseInt(target.getAttribute('oct')) + 1).toString());
-              }
-            }
-        } else {
-            if (target.hasAttribute('pname')) {
-              let currentPname = target.getAttribute('pname');
-              let idx = pnameOrder.indexOf(currentPname);
-              if (idx - 1 > 0) {
-                target.setAttribute('pname', pnameOrder[idx - 1]);
-              }
-              else {
-                target.setAttribute('pname', pnameOrder[pnameOrder.length - 1]);
-                target.setAttribute('oct', (parseInt(target.getAttribute('oct')) - 1).toString());
-              }
-            }
-        }
-        this.doc.score = this.doc.score;  // Necessary to force rerender in Verovio
-      } else {
-        this.doc.score = this.runScoringUp(this.doc.parts);
-      }
+      this.doc.score = this.runScoringUp(this.doc.parts);
     }
   }
 
   runScoringUp(meiDoc: XMLDocument): XMLDocument {
-    console.log("Running scoring up..");
     let output = null;
     try {
       const staffDef = meiDoc.getElementsByTagName("staffDef")[0];

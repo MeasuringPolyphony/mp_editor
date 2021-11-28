@@ -12,16 +12,16 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^12.2.13",
+    "@angular/animations": "^13.0.2",
     "@angular/cdk": "^12.2.13",
-    "@angular/common": "^12.2.13",
-    "@angular/compiler": "^12.2.13",
-    "@angular/core": "^12.2.13",
-    "@angular/forms": "^12.2.13",
+    "@angular/common": "^13.0.2",
+    "@angular/compiler": "^13.0.2",
+    "@angular/core": "^13.0.2",
+    "@angular/forms": "^13.0.2",
     "@angular/material": "^12.2.13",
-    "@angular/platform-browser": "^12.2.13",
-    "@angular/platform-browser-dynamic": "^12.2.13",
-    "@angular/router": "^12.2.13",
+    "@angular/platform-browser": "^13.0.2",
+    "@angular/platform-browser-dynamic": "^13.0.2",
+    "@angular/router": "^13.0.2",
     "@rxweb/reactive-form-validators": "^2.1.2",
     "diva.js": "github:DDMAL/diva.js#lodash-imports",
     "rxjs": "^6.6.3",
@@ -31,10 +31,10 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^12.2.13",
-    "@angular/cli": "^12.2.13",
-    "@angular/compiler-cli": "^12.2.13",
-    "@angular/language-service": "^12.2.13",
+    "@angular-devkit/build-angular": "^13.0.3",
+    "@angular/cli": "^13.0.3",
+    "@angular/compiler-cli": "^13.0.2",
+    "@angular/language-service": "^13.0.2",
     "@types/diva.js": "^6.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
@@ -52,7 +52,7 @@
     "protractor": "~7.0.0",
     "ts-node": "~7.0.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.3.5",
+    "typescript": "~4.4.4",
     "uuid": "^3.4.0"
   }
 }

@@ -42,7 +42,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(
       routes,
-      { useHash: true }
+      { useHash: true, relativeLinkResolution: 'legacy' }
       //{ enableTracing: true }
     ),
     BrowserModule,

@@ -65,7 +65,11 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
             console.debug(ref);
             const verse = docCopy.createElementNS(NAMESPACE, "verse");
             verse.setAttribute("n", "2");
-            verse.setAttribute("color", "#B36200");
+            if (["L", "X", "Y", "Z"].includes((label as string).toUpperCase())) {
+              verse.setAttribute("color", "#B36200");
+            } else {
+              verse.setAttribute("color", "#0000CD"); // MediumBlue
+            }
             const syl = docCopy.createElementNS(NAMESPACE, "syl");
             syl.textContent = label as string;
             verse.appendChild(syl);

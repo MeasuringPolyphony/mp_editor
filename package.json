@@ -25,7 +25,7 @@
     "@rxweb/reactive-form-validators": "^2.1.6",
     "diva.js": "github:DDMAL/diva.js#lodash-imports",
     "rxjs": "^6.6.7",
-    "scoring-up": "github:martha-thomae/JS_ScUp#6d1a4a5cb3b1bea",
+    "scoring-up": "github:martha-thomae/JS_ScUp#3183aa9d1",
     "tslib": "^2.3.1",
     "vkbeautify": "^0.99.3",
     "zone.js": "~0.11.4"

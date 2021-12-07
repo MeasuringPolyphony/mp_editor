@@ -299,6 +299,16 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
               }
             }
             break;
+          case 'r':
+          case 'R':
+            if (target.nextElementSibling !== null && target.nextElementSibling.tagName === 'dot') {
+              target = target.nextElementSibling;
+            }
+            let rest = this.doc.parts.createElementNS("http://www.music-encoding.org/ns/mei", "rest");
+            recurseXmlId(rest);
+            rest.setAttribute('dur', 'brevis');
+            target.insertAdjacentElement('afterend', rest);
+            break;
           case 'Backspace':
             if (target.nextElementSibling && target.nextElementSibling.tagName === 'dot') {
               target.nextElementSibling.remove();

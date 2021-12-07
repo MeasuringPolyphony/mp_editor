@@ -305,7 +305,7 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
               target = target.nextElementSibling;
             }
             let rest = this.doc.parts.createElementNS("http://www.music-encoding.org/ns/mei", "rest");
-            recurseXmlId(rest);
+            rest.setAttribute('xml:id', 'm-' + uuid());
             rest.setAttribute('dur', 'brevis');
             target.insertAdjacentElement('afterend', rest);
             break;

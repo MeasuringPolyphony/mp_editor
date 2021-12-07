@@ -301,12 +301,13 @@ export class ScoreVerovioViewComponent implements OnInit, AfterViewInit {
             break;
           case 'r':
           case 'R':
+            const dur = target.getAttribute('dur');
             if (target.nextElementSibling !== null && target.nextElementSibling.tagName === 'dot') {
-              target = target.nextElementSibling;
+               target = target.nextElementSibling;
             }
             let rest = this.doc.parts.createElementNS("http://www.music-encoding.org/ns/mei", "rest");
             rest.setAttribute('xml:id', 'm-' + uuid());
-            rest.setAttribute('dur', 'brevis');
+            rest.setAttribute('dur', dur);
             target.insertAdjacentElement('afterend', rest);
             break;
           case 'Backspace':

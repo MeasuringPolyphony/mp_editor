@@ -568,6 +568,11 @@ export class MusicList {
     this.runNotationCallback();
   }
 
+  addBarline (bar: string) {
+    this.m_list.push(new BarlineItem(bar));
+    this.runNotationCallback();
+  }
+
   getLastNote(): NoteItem | null {
     for (let i = this.m_list.length - 1; i >= 0; i--) {
       if (this.m_list[i].m_type === "note") {
@@ -809,5 +814,48 @@ export class MusicList {
       this.runNotationCallback();
       return true;
     }
+  }
+}
+
+export class BarlineItem implements MusicItem{
+  readonly m_type = "barLine";
+  m_line = -1;
+  m_id: string;
+  m_barline: string;
+
+  constructor (bar?: string) {
+    if (bar !== undefined) {
+      this.m_barline = bar;
+    }
+  }
+
+  getHumdrumLine (): string {
+    let output = "";
+    switch (this.m_barline) {
+      case "|": output += "="; break;
+      case "=": output += "=="; break;
+      default: output += ""; break;
+    }
+    output += "\t.";
+    return output;
+  }
+
+  static parseXML(element: Element): BarlineItem {
+    let barline = new BarlineItem();
+    if (element.hasAttribute("xml:id")) {
+      barline.m_id = element.getAttribute("xml:id");
+    }
+    if (element.hasAttribute("form")) {
+      switch(element.getAttribute("form")) {
+        case "dbl":
+        case "end":
+          barline.m_barline = "==";
+          break;
+        case "single":
+          barline.m_barline = "=";
+          break;
+      }
+    }
+    return barline;
   }
 }

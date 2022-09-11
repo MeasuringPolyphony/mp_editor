@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PitchClass, NoteItem, RestItem, Accid, LigStatus, PlicaStatus, ColorStatus } from '../../utils/MusicItem';
+import { PitchClass, NoteItem, RestItem, Accid, LigStatus, PlicaStatus, ColorStatus, BarlineItem } from '../../utils/MusicItem';
 import { StateService } from '../../state-service.service';
 import { InputService } from '../input.service';
 import { vrvToolkit } from '../../utils/verovio';
@@ -233,6 +233,11 @@ export class StaffSelectComponent implements OnInit {
           break;
         case '~':
           this.processColor(event.key);
+          event.preventDefault();
+          break;
+        case '=':
+        case '|':
+          musicList.addBarline(event.key);
           event.preventDefault();
           break;
         case 'r':

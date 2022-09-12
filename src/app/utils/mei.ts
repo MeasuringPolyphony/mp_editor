@@ -1,6 +1,6 @@
 import { Part, Tenor } from './part';
 import { System, Pb, Sb } from './system';
-import { ClefItem, NoteItem, RestItem, MensurItem } from './MusicItem';
+import { ClefItem, NoteItem, RestItem, MensurItem, BarlineItem } from './MusicItem';
 import { Voice, Mensuration, Contributor, Sign } from './definitions';
 import { IRI } from './definitions';
 
@@ -260,6 +260,9 @@ export class MEIDocument {
         } else if (child.tagName === "mensur") {
           let mensur = MensurItem.parseXML(child);
           activeSystem.contents.m_list.push(mensur);
+        } else if (child.tagName === "barLine") {
+          let barline = BarlineItem.parseXML(child);
+          activeSystem.contents.m_list.push(barline);
         }
       }
     }

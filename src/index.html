@@ -29,7 +29,7 @@
   <script type="application/javascript">
     var verovioReady = false;
     var Module = {
-        onRuntimeInitialized: () => { verovioReady = true; }
+        onRuntimeInitialized: () => { console.log("Initialized"); verovioReady = true; }
     };
   </script>
   <script src="https://verovio-script.humdrum.org/scripts/verovio-toolkit-wasm.js"></script>

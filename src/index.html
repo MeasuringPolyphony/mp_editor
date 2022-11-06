@@ -26,13 +26,11 @@
     var vrvToolkit = new verovio.toolkit();
     vrvToolkit.setOptions(options);
 </script>-->
-  <script type="application/javascript">
-    var verovioReady = false;
-    var Module = {
-        onRuntimeInitialized: () => { verovioReady = true; }
-    };
-  </script>
   <script src="https://verovio-script.humdrum.org/scripts/verovio-toolkit-wasm.js"></script>
+  <script type="application/javascript">
+      var verovioReady = false;
+      verovio.module.onRuntimeInitialized = () => { verovioReady = true; };
+  </script>
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>

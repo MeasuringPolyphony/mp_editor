@@ -19,6 +19,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/diamm-sw.js",
               "src/favicon.ico",
               "src/assets"
             ],
@@ -113,5 +114,8 @@
       }
     }
   },
-  "defaultProject": "editor"
+  "defaultProject": "editor",
+  "cli": {
+    "analytics": false
+  }
 }

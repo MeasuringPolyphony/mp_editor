@@ -68,6 +68,16 @@ export class SelectDocumentComponent implements OnInit {
           return;
         }
         break;
+      case 'diamm':
+        if (Tools.diammRegexp.test(resourceURL)) {
+          const matches = resourceURL.match(Tools.diammRegexp);
+          identifier = matches[1];
+        }
+        else {
+          this.invalid = true;
+          return;
+        }
+        break;
       case 'iiif':
         console.debug('iiif case')
         if (Tools.genericIIIFRegexp.test(resourceURL)) {
@@ -110,6 +120,10 @@ export class SelectDocumentComponent implements OnInit {
       else if (Tools.genericIIIFRegexp.test(iiif)) {
         source = "iiif";
         identifier = encodeURIComponent(iiif);
+      }
+      else if (Tools.diammRegexp.test(iiif)) {
+        source = 'diamm';
+        identifier = iiif.match(Tools.diammRegexp)[1];
       }
       else {
         window.alert("Sorry! This seems to be a valid file, but this IIIF manifest cannot be loaded.");

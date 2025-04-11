@@ -10,6 +10,10 @@ export function formIIIFManifest(source: string, identifier: string): IRI {
       return 'https://www.e-codices.unifr.ch/metadata/iiif/' +
         identifier +
         '/manifest.json';
+    case 'diamm':
+      return 'https://www.diamm.ac.uk/sources/' +
+        identifier +
+        '/manifest';
     case 'iiif':
       return decodeURIComponent(identifier);
     default:
@@ -25,3 +29,5 @@ export const ecodicesRegexp = new RegExp("https?:\/\/www\.e-codices\.unifr\.ch\/
 //https://www.e-codices.unifr.ch/metadata/iiif/bbb-0218/manifest.json
 export const ecodicesIIIFRegexp = new RegExp("https?:\/\/www\.e-codices\.unifr\.ch\/metadata\/iiif\/([-a-zA-Z0-9]+)\/manifest\.json");
 export const genericIIIFRegexp = new RegExp("https?:\/\/.*");
+// https://www.diamm.ac.uk/sources/117/(manifest)
+export const diammRegexp = new RegExp("https:\/\/www\.diamm\.ac\.uk\/sources\/([0-9]+)");

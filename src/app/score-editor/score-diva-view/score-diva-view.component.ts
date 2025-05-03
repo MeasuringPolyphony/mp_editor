@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { IRI } from '../../utils/definitions';
+import * as diamm from '../../utils/diamm';
 
 import { SelectedStaffService } from '../selected-staff.service';
 
@@ -23,8 +24,23 @@ export class ScoreDivaViewComponent implements OnInit, OnDestroy {
   constructor(private staffService: SelectedStaffService) { }
 
   ngOnInit() {
+    let headers;
+    if (this.iiifManifest.includes('diamm.ac.uk')) {
+      headers = {
+          Accept: 'application/json',
+          Authorization: `Token ${diamm.key}`,
+          'X-DIAMM-Secret': diamm.result,
+          'X-DIAMM-Origin': diamm.domain
+      };
+    } else {
+      headers = {
+          Accept: 'application/json',
+      };
+    }
     this.diva = new Diva('diva-score-wrapper', {
-      objectData: this.iiifManifest
+      objectData: this.iiifManifest,
+      // @ts-ignore-next
+      requestHeaders: headers
     });
 
     Diva.Events.subscribe('ManifestDidLoad', this.parseCanvases.bind(this), this.diva.settings.ID);

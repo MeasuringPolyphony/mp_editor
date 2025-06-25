@@ -21,7 +21,8 @@
             "assets": [
               "src/diamm-sw.js",
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/verovio-toolkit-hum.js"
             ],
             "styles": [
               "src/custom-theme.scss",

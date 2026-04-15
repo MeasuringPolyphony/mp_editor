@@ -472,8 +472,9 @@ export class BarlineItem implements MusicItem {
   getHumdrumLine (): string {
     let output = "";
     switch (this.m_barline) {
-      case "|": output += "="; break;
-      case "=": output += "=="; break;
+      case "/": output += "=|"; break;  // single barline (@form = single in mei)
+      case "|": output += "=||"; break; // double barline (@form = dbl in mei)
+      case "=": output += "=="; break;  // final barline (@form = end in mei)
       default: output += ""; break;
     }
     output += "\t.";
@@ -487,15 +488,17 @@ export class BarlineItem implements MusicItem {
     }
     if (element.hasAttribute("form")) {
       switch(element.getAttribute("form")) {
+        case "single":
+          barline.m_barline = "=|";
+          break;
         case "dbl":
+          barline.m_barline = "=||";
+          break;
         case "end":
           barline.m_barline = "==";
           break;
-        case "single":
-          barline.m_barline = "=";
-          break;
         default:
-          barline.m_barline = "=";
+          barline.m_barline = "=."; // probably an error, so we are marking it as a dotted barline
           break;
       }
     }

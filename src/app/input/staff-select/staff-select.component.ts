@@ -237,6 +237,7 @@ export class StaffSelectComponent implements OnInit {
           break;
         case '=':
         case '|':
+        case '/':
           musicList.addBarline(event.key);
           event.preventDefault();
           break;

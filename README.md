@@ -1,6 +1,12 @@
 # MP Editor
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.22.
+## Structure
+
+The MP Editor has three main phases.
+
+1. During document selection (`src/app/select-document`), the user must enter a URL corresponding to a IIIF manifest. URLs for other sources can also be entered and transformed into the appropriate manifest locator.
+2. Following this, an initial score can be input (`src/app/input`) by inserting staves into the document and using the keyboard to add music notation.
+3. Finally, the entire score can be viewed and edited in context in the final screen (`src/app/score-editor`).
 
 ## Installing Locally
 
@@ -36,19 +42,3 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 ### Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-### Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-### Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-### Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-### Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

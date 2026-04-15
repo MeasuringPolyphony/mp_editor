@@ -9,6 +9,7 @@ import { System, Pb, Sb } from '../../utils/system';
 import { Part } from '../../utils/part';
 import { StateService } from '../../state-service.service';
 import { InputService } from '../input.service';
+import * as diamm from '../../utils/diamm';
 
 import Diva from 'diva.js';
 
@@ -28,8 +29,23 @@ export class DivaViewComponent implements OnInit, OnDestroy {
   constructor (private selectedSystem: InputService, private stateService: StateService) {}
 
   ngOnInit() {
+    let headers;
+    if (this.iiifManifest.includes('diamm.ac.uk')) {
+      headers = {
+          Accept: 'application/json',
+          Authorization: `Token ${diamm.key}`,
+          'X-DIAMM-Secret': diamm.result,
+          'X-DIAMM-Origin': diamm.domain
+      };
+    } else {
+      headers = {
+          Accept: 'application/json',
+      };
+    }
     this.diva = new Diva('diva-wrapper', {
-      objectData: this.iiifManifest
+      objectData: this.iiifManifest,
+      // @ts-ignore-next
+      requestHeaders: headers
     });
 
     Diva.Events.subscribe('ActivePageDidChange', this.refreshOverlay.bind(this), this.diva.settings.ID);

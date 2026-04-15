@@ -19,8 +19,10 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/diamm-sw.js",
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/verovio-toolkit-hum.js"
             ],
             "styles": [
               "src/custom-theme.scss",
@@ -30,7 +32,7 @@
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
-            "sourceMap": true,
+            "sourceMap": false,
             "optimization": false,
             "namedChunks": true
           },
@@ -113,5 +115,8 @@
       }
     }
   },
-  "defaultProject": "editor"
+  "defaultProject": "editor",
+  "cli": {
+    "analytics": false
+  }
 }

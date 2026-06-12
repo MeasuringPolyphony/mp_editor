@@ -760,13 +760,13 @@ export class MusicList {
   	}
   	if (noteCounter + restCounter == 0) {
   		// need to add a dummy rest to force display of clef
-  		output.push("4ryy\t.");
+  		output.push("Lryy\t.");
   	}
 
   	output.push("=-\t=-");
   	output.push("*-\t*-");
   	if (!options["export"]) {
-  		output.push("!!!RDF**kern: @ = marked note");
+  		output.push("!!!RDF**mens: @ = marked note");
       // output.push("!!!RDF**kern: & = marked note, color=green")
   		//output.push("!!!RDF**kern: i = marked note, color=blue");
   		//output.push("!!!RDF**mens: @ = marked note");

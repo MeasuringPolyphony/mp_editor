@@ -457,6 +457,55 @@ export class NoteItem implements MusicItem {
   }
 }
 
+export class BarlineItem implements MusicItem {
+  readonly m_type = "barLine";
+  m_line = -1;
+  m_id: string;
+  m_barline: string;
+
+  constructor (bar?: string) {
+    if (bar !== undefined) {
+      this.m_barline = bar;
+    }
+  }
+
+  getHumdrumLine (): string {
+    let output = "";
+    switch (this.m_barline) {
+      case "/": output += "=|"; break;  // single barline (@form = single in mei)
+      case "|": output += "=||"; break; // double barline (@form = dbl in mei)
+      case "=": output += "=="; break;  // final barline (@form = end in mei)
+      default: output += ""; break;
+    }
+    output += "\t.";
+    return output;
+  }
+
+  static parseXML(element: Element): BarlineItem {
+    let barline = new BarlineItem();
+    if (element.hasAttribute("xml:id")) {
+      barline.m_id = element.getAttribute("xml:id");
+    }
+    if (element.hasAttribute("form")) {
+      switch(element.getAttribute("form")) {
+        case "single":
+          barline.m_barline = "=|";
+          break;
+        case "dbl":
+          barline.m_barline = "=||";
+          break;
+        case "end":
+          barline.m_barline = "==";
+          break;
+        default:
+          barline.m_barline = "=."; // probably an error, so we are marking it as a dotted barline
+          break;
+      }
+    }
+    return barline;
+  }
+}
+
 export class MusicList {
   m_list: Array<MusicItem> = [];
   m_index = -1;
@@ -565,6 +614,11 @@ export class MusicList {
       case 2: newnote.m_oct = oct + 1; break;
     }
     this.m_list.push(newnote);
+    this.runNotationCallback();
+  }
+
+  addBarline (bar: string) {
+    this.m_list.push(new BarlineItem(bar));
     this.runNotationCallback();
   }
 
